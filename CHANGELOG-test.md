@@ -1,0 +1,35 @@
+# Web Frontend Changelog
+
+## Version `next`
+
+### Added
+_No entries_
+
+### Changed
+_No entries_
+
+### Fixed
+- comp2: comp2 fix description
+
+## Version `1.1`
+
+### Added
+_No entries_
+
+### Changed
+- comp1: comp1 change description
+
+### Fixed
+_No entries_
+
+## Version `1.0`
+
+### Added
+- comp1: comp1 addition description
+
+### Changed
+_No entries_
+
+### Fixed
+_No entries_
+

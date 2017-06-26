@@ -1,6 +1,9 @@
-# Web Frontend Changelog
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
-## Version `next`
+exports[`generate returns proper markdown string 1`] = `
+"# Web Frontend Changelog
+
+## Version \`next\`
 
 ### Added
 _No entries_
@@ -11,7 +14,7 @@ _No entries_
 ### Fixed
 - comp2: comp2 fix description
 
-## Version `1.1`
+## Version \`1.1\`
 
 ### Added
 _No entries_
@@ -22,7 +25,7 @@ _No entries_
 ### Fixed
 _No entries_
 
-## Version `1.0`
+## Version \`1.0\`
 
 ### Added
 - comp1: comp1 addition description
@@ -33,3 +36,5 @@ _No entries_
 ### Fixed
 _No entries_
 
+"
+`;

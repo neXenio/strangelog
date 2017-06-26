@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getChangelogData returns correct changelog data 1`] = `
+Array [
+  Object {
+    "entries": Object {
+      "addition": Array [],
+      "change": Array [],
+      "fix": Array [
+        Object {
+          "component": "comp2",
+          "dateTime": "2017-06-24T00:01:02.000Z",
+          "description": "comp2 fix description",
+          "kind": "fix",
+        },
+      ],
+    },
+    "version": null,
+  },
+  Object {
+    "entries": Object {
+      "addition": Array [],
+      "change": Array [
+        Object {
+          "component": "comp1",
+          "dateTime": "2017-06-24T00:01:02.000Z",
+          "description": "comp1 change description",
+          "kind": "change",
+        },
+      ],
+      "fix": Array [],
+    },
+    "version": Object {
+      "major": 1,
+      "minor": 1,
+    },
+  },
+  Object {
+    "entries": Object {
+      "addition": Array [
+        Object {
+          "component": "comp1",
+          "dateTime": "2017-06-24T00:01:02.000Z",
+          "description": "comp1 addition description",
+          "kind": "addition",
+        },
+      ],
+      "change": Array [],
+      "fix": Array [],
+    },
+    "version": Object {
+      "major": 1,
+      "minor": 0,
+    },
+  },
+]
+`;

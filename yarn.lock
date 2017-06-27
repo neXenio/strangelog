@@ -3354,6 +3354,16 @@ sshpk@^1.7.0:
     jsbn "~0.1.0"
     tweetnacl "~0.14.0"
 
+strangelog@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/strangelog/-/strangelog-0.0.4.tgz#447da38b4c2fd683298337943f541d55e6fb10ca"
+  dependencies:
+    fs-extra "^3.0.1"
+    handlebars "^4.0.10"
+    inquirer "^3.1.1"
+    js-yaml "^3.8.4"
+    yargs "^8.0.2"
+
 string-length@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/string-length/-/string-length-1.0.1.tgz#56970fb1c38558e9e70b728bf3de269ac45adfac"

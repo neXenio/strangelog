@@ -1,6 +1,6 @@
 {
   "name": "strangelog",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Painless file-based changelog management via CLI.",
   "main": "index.js",
   "repository": "git@github.com:neXenio/strangelog.git",
@@ -16,7 +16,8 @@
     "flow-typed": "flow-typed",
     "ci-pipeline": "yarn run test-ci && yarn run lint && yarn run flow",
     "prepublish": "yarn run compile",
-    "start": "babel-node src/cli/index.js"
+    "start": "babel-node src/cli/index.js",
+    "changelog": "strangelog"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -33,7 +34,8 @@
     "flow-bin": "^0.47.0",
     "flow-typed": "^2.1.2",
     "jest": "^20.0.4",
-    "lolex": "^1.6.0"
+    "lolex": "^1.6.0",
+    "strangelog": "^0.0.4"
   },
   "dependencies": {
     "fs-extra": "^3.0.1",

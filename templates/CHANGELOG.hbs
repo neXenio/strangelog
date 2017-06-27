@@ -12,14 +12,14 @@ _No entries_
 
 ### Changed
 {{#each versionChangelog.entries.change as |entry|}}
-- {{entry.component}}: {{entry.description}}
+- **{{readableComponent entry.component}}:** {{entry.description}}
 {{else}}
 _No entries_
 {{/each}}
 
 ### Fixed
 {{#each versionChangelog.entries.fix as |entry|}}
-- {{entry.component}}: {{entry.description}}
+- **{{readableComponent entry.component}}:** {{entry.description}}
 {{else}}
 _No entries_
 {{/each}}

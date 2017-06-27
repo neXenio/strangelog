@@ -1,0 +1,5 @@
+path: ./changelog
+components:
+  api: API
+  cli: CLI
+  all: All

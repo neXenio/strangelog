@@ -1,0 +1,4 @@
+dateTime: '2017-06-27T10:00:02.480Z'
+component: all
+kind: change
+description: Generated markdown now contains the readable component name per entry

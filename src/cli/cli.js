@@ -16,7 +16,6 @@ import runGenerate from './commands/generate';
 
 export default function cli(args: string[]) {
   yargs(args)
-    .command('add', 'add a changelog entry')
     .command(
       'add',
       'add a changelog entry',

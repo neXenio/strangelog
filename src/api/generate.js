@@ -1,5 +1,6 @@
 // @flow
 
+import { join as joinPath } from 'path';
 import { readFileSync } from 'fs-extra';
 import { create as createHandlebars } from 'handlebars';
 
@@ -16,7 +17,7 @@ export default function generate(
   changelog: ChangelogType
 ): string {
   const generateMarkdown = handlebarsInstance.compile(
-    readFileSync('./templates/CHANGELOG.hbs').toString()
+    readFileSync(joinPath(__dirname, '../../templates/CHANGELOG.hbs')).toString()
   );
 
   return generateMarkdown({

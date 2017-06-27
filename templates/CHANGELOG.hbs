@@ -5,7 +5,7 @@
 
 ### Added
 {{#each versionChangelog.entries.addition as |entry|}}
-- {{entry.component}}: {{entry.description}}
+- **{{readableComponent entry.component}}:** {{entry.description}}
 {{else}}
 _No entries_
 {{/each}}

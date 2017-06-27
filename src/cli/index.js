@@ -2,6 +2,8 @@
 
 // @flow
 
+import 'babel-polyfill';
+
 import cli from './cli';
 
 // See https://github.com/yargs/yargs/issues/605

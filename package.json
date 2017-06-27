@@ -1,6 +1,6 @@
 {
   "name": "strangelog",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Painless file-based changelog management via CLI.",
   "main": "index.js",
   "repository": "git@github.com:neXenio/strangelog.git",

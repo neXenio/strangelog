@@ -1,0 +1,6 @@
+dateTime: '2017-06-30T09:55:21.154Z'
+component: all
+kind: change
+description: >-
+  Introduces patch version (this requires you to append a `.0` to all version
+  directory names

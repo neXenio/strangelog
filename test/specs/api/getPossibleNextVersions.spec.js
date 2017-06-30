@@ -29,7 +29,7 @@ describe('getPossibleNextVersions', () => {
 
   describe('when called with no version directories', () => {
 
-    it('returns only 1.0', () => {
+    it('returns no possible version', () => {
       const { getPossibleNextVersions } = setup();
 
       expect(getPossibleNextVersions()).toEqual(null);
@@ -39,7 +39,7 @@ describe('getPossibleNextVersions', () => {
 
   describe('when called with only "next" version directory', () => {
 
-    it('returns only 1.0', () => {
+    it('returns no possible version', () => {
       const { getPossibleNextVersions } = setup();
 
       expect(getPossibleNextVersions()).toEqual(null);
@@ -47,19 +47,25 @@ describe('getPossibleNextVersions', () => {
 
   });
 
-  describe('when called with a "1.0" version directory', () => {
+  describe('when called with a "1.0.0" version directory', () => {
 
-    it('returns only 1.1 and 2.0 as possible next versions', () => {
+    it('returns only 1.0.1, 1.1.0 and 2.0.0 as possible next versions', () => {
       const { getPossibleNextVersions } = setup();
 
       mkdirsSync(`${testPath}/1.0`);
 
       expect(getPossibleNextVersions()).toEqual([{
         major: 1,
-        minor: 1
+        minor: 0,
+        patch: 1
+      }, {
+        major: 1,
+        minor: 1,
+        patch: 0
       }, {
         major: 2,
-        minor: 0
+        minor: 0,
+        patch: 0
       }]);
     });
 

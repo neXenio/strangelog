@@ -11,7 +11,8 @@ export type ComponentsConfigType = {
 
 export type VersionType = {
   major: number,
-  minor: number
+  minor: number,
+  patch: number
 };
 
 export type EntryKindType = 'addition' | 'change' | 'fix';

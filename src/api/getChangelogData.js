@@ -15,8 +15,8 @@ import type {
 } from '../types';
 
 import { stringifyVersion } from './utils';
+import getSortedChangelogVersions from './getSortedChangelogVersions';
 
-const VERSION_DIRECTORY_NAME_MATCH = /([0-9]+)\.([0-9]+)$/;
 
 export default function getChangelogData(
   config: ConfigType
@@ -45,27 +45,6 @@ function getVersionChangelog(
       ), 'kind')
     }
   };
-}
-
-function getSortedChangelogVersions(config: ConfigType): VersionType[] {
-  return getVersionDirectoryNames(config)
-    .filter((versionDirectoryName) => !versionDirectoryName.endsWith('next'))
-    .map((versionDirectoryName) => versionDirectoryName.match(VERSION_DIRECTORY_NAME_MATCH))
-    .map((versionMatch) => ({
-      major: parseInt(versionMatch[1], 10),
-      minor: parseInt(versionMatch[2], 10)
-    }))
-    .sort((version1, version2) => {
-      if (version1.major === version2.major) {
-        return version2.minor - version1.minor;
-      }
-
-      return version2.major - version1.major;
-    });
-}
-
-function getVersionDirectoryNames(config: ConfigType) {
-  return syncGlob(joinPath(config.path, '*'));
 }
 
 function getVersionChangelogFileNames(

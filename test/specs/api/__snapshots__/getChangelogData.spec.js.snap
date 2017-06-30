@@ -33,6 +33,7 @@ Array [
     "version": Object {
       "major": 1,
       "minor": 1,
+      "patch": 0,
     },
   },
   Object {
@@ -51,6 +52,7 @@ Array [
     "version": Object {
       "major": 1,
       "minor": 0,
+      "patch": 0,
     },
   },
 ]

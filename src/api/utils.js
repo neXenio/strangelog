@@ -7,9 +7,9 @@ export function stringifyVersion(version: ?VersionType): string {
     return 'next';
   }
 
-  const { major, minor } = version;
+  const { major, minor, patch } = version;
 
-  return `${major}.${minor}`;
+  return `${major}.${minor}.${patch}`;
 }
 
 export function multiToSingleLineString(multiLineIndentedString: string): string {

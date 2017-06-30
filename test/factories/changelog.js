@@ -10,7 +10,8 @@ export function addTestVersionsWithEntries({ addEntry, bumpNextVersion }: Change
   });
   bumpNextVersion({
     major: 1,
-    minor: 0
+    minor: 0,
+    patch: 0
   });
 
   addEntry({
@@ -20,7 +21,8 @@ export function addTestVersionsWithEntries({ addEntry, bumpNextVersion }: Change
   });
   bumpNextVersion({
     major: 1,
-    minor: 1
+    minor: 1,
+    patch: 0
   });
 
   addEntry({

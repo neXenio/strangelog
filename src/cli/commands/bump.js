@@ -18,10 +18,11 @@ export default async function runBump(
         value: version
       }))
       : [{
-        name: '0.1 (Initial Version)',
+        name: '0.0.1 (Initial Version)',
         value: {
           major: 0,
-          minor: 1
+          minor: 0,
+          patch: 1
         }
       }]
   );

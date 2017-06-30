@@ -11,6 +11,17 @@ _No entries_
 ### Fixed
 _No entries_
 
+## Version `1.0`
+
+### Added
+_No entries_
+
+### Changed
+- all: Introduces patch version (this requires you to append a &#x60;.0&#x60; to all version directory names
+
+### Fixed
+_No entries_
+
 ## Version `0.5`
 
 ### Added

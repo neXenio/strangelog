@@ -1,0 +1,6 @@
+dateTime: '2017-07-08T07:49:46.701Z'
+component: cli
+kind: addition
+description: >-
+  New `migrate` command that uses the `migrate()`-API to simplify updating
+  strangelog

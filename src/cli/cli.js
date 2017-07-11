@@ -13,29 +13,40 @@ import type {
 import runAdd from './commands/add';
 import runBump from './commands/bump';
 import runGenerate from './commands/generate';
+import runMigrate from './commands/migrate';
 
 export default function cli(args: string[]) {
   yargs(args)
     .command(
       'add',
-      'add a changelog entry',
+      'adds a changelog entry',
       () => {},
       withAPI((changelog) => runAdd(changelog))
     )
     .command(
       'bump',
-      'bump "next" changelog to new version',
+      'bumps "next" changelog to new version',
       () => {},
       withAPI((changelog) => runBump(changelog))
     )
-    .command('generate', 'generate changelog for all versions', (yargs) => {
+    .command(
+      'migrate',
+      'migrates changelog files to latest version after updating strangelog',
+      () => {},
+      withAPI((changelog) => runMigrate(changelog))
+    )
+    .command(
+      'generate',
+      'generates changelog for all versions',
+      (yargs) => {
         yargs.option('outFile', {
           alias: 'f',
           describe: 'name of the changelog file to write',
           // default: 'CHANGELOG.md',
           demandOption: true
         });
-      }, withAPI((changelog, argv: CLIGenerateOptionsType) => runGenerate(changelog, argv))
+      },
+      withAPI((changelog, argv: CLIGenerateOptionsType) => runGenerate(changelog, argv))
     )
     .options({
       directory: {

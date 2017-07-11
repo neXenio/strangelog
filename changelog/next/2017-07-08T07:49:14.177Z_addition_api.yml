@@ -1,0 +1,4 @@
+dateTime: '2017-07-08T07:49:14.177Z'
+component: api
+kind: addition
+description: Adds a `migrate()`-function on the API to migrate files to the latest version

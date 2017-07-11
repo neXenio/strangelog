@@ -1,9 +1,20 @@
 // @flow
 
+export type MigrationResultType = {
+  from: number,
+  to: number
+};
+
 export type ConfigType = {
   path: string,
   components: ComponentsConfigType
 };
+
+export type ChangelogInfoType = {
+  version: number
+};
+
+export type MigratorType = (config: ConfigType) => void
 
 export type ComponentsConfigType = {
   [name: string]: string
@@ -40,7 +51,10 @@ export type ChangelogAPIType = {
   generate: () => string,
   getChangelogData: () => ChangelogType,
   getPossibleNextVersions: () => VersionType[] | null,
-  getComponentsConfig: () => ComponentsConfigType
+  getComponentsConfig: () => ComponentsConfigType,
+  migrate: () => MigrationResultType,
+  getChangelogInfo: () => ChangelogInfoType,
+  saveChangelogInfo: (newChangelogInfo: ChangelogInfoType) => void
 };
 
 export type CLIOptionsType = {

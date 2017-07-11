@@ -7,6 +7,8 @@ import bumpNextVersion from './bumpNextVersion';
 import generate from './generate';
 import getChangelogData from './getChangelogData';
 import getPossibleNextVersions from './getPossibleNextVersions';
+import migrate from './migrate';
+import { getChangelogInfo, saveChangelogInfo } from './changelogInfo';
 
 export default function connectChangelog(config: ConfigType): ChangelogAPIType {
   return {
@@ -27,6 +29,15 @@ export default function connectChangelog(config: ConfigType): ChangelogAPIType {
     },
     getComponentsConfig() {
       return config.components;
+    },
+    migrate() {
+      return migrate(config);
+    },
+    getChangelogInfo() {
+      return getChangelogInfo(config);
+    },
+    saveChangelogInfo(newChangelogInfo) {
+      return saveChangelogInfo(config, newChangelogInfo);
     }
   };
 }

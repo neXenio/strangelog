@@ -3,7 +3,8 @@
 ## Version `next`
 
 ### Added
-_No entries_
+- api: Adds a &#x60;migrate()&#x60;-function on the API to migrate files to the latest version
+- cli: New &#x60;migrate&#x60; command that uses the &#x60;migrate()&#x60;-API to simplify updating strangelog
 
 ### Changed
 _No entries_

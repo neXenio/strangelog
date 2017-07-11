@@ -38,7 +38,7 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType) {
   }, {
     name: 'description',
     type: 'input',
-    message: 'What did changed?',
+    message: 'What did change?',
     validate: (input) => (input.length < 10)
         ? 'Describe the change in at least 10 characters'
         : true

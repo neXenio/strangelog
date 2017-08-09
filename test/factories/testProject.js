@@ -1,22 +1,26 @@
 // @flow
 
-import { join as joinPath } from 'path';
+import { join as joinPath, resolve as resolvePath } from 'path';
 
-import { outputFileSync } from 'fs-extra';
+import { outputFileSync, removeSync } from 'fs-extra';
 import jsYaml from 'js-yaml';
 
 import { CURRENT_VERSION } from '../../src/api';
 
 import { getOwnTestPath } from './fileSystem';
 
+const testProjectPaths = [];
+
 export function createTestProject(): {
   rootPath: string,
   changelogPath: string,
-  infoFilePath: string
+  infoFilePath: string,
+  configFilePath: string
 } {
-  const rootPath = getOwnTestPath();
-  const changelogPath = joinPath(rootPath, '/changelog');
-  const infoFilePath = joinPath(changelogPath, '/info.yml');
+  const rootPath = resolvePath(getOwnTestPath());
+  const changelogPath = joinPath(rootPath, 'changelog');
+  const infoFilePath = joinPath(changelogPath, 'info.yml');
+  const configFilePath = joinPath(rootPath, '.strangelogrc');
 
   outputYAMLSync(joinPath(rootPath, '.strangelogrc'), {
     path: 'changelog',
@@ -28,13 +32,22 @@ export function createTestProject(): {
 
   outputYAMLSync(infoFilePath, { version: CURRENT_VERSION });
 
+  testProjectPaths.push(rootPath);
+
   return {
     rootPath,
     changelogPath,
-    infoFilePath
+    infoFilePath,
+    configFilePath
   };
+}
+
+export function removeTestProjects() {
+  testProjectPaths.splice(0, testProjectPaths.length).forEach(removeSync);
 }
 
 function outputYAMLSync(path, json) {
   outputFileSync(path, jsYaml.safeDump(json));
 }
+
+afterEach(removeTestProjects);

@@ -29,7 +29,7 @@ export type VersionType = {
 export type EntryKindType = 'addition' | 'change' | 'fix';
 
 export type EntryType = {
-  component: string,
+  component: string | null,
   kind: EntryKindType,
   description: string
 };
@@ -60,4 +60,9 @@ export type ChangelogAPIType = {
 export type CLIOptionsType = {
   _: string[],
   directory: string
+};
+
+export type TemplateHelpersType = {
+  stringifyVersion: (version: ?VersionType) => string,
+  readableComponent: (componentID: string) => string
 };

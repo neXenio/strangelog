@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getProjectConfig when there is a .strangelogrc returns configuration from .strangelogrc merged over defaults 1`] = `
+Object {
+  "components": Object {
+    "comp1": "Comp 1",
+    "comp2": "Comp 2",
+  },
+  "path": "changelog",
+}
+`;
+
+exports[`getProjectConfig when there is no .strangelogrc returns default configuration 1`] = `
+Object {
+  "components": Object {},
+  "path": "./changelog",
+}
+`;

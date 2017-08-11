@@ -1,0 +1,6 @@
+dateTime: '2017-08-11T15:48:32.363Z'
+component: all
+kind: addition
+description: >-
+  New entry kinds "Security", "Removed" & "Deprecated" from
+  [keepachangelog](http://keepachangelog.com/)

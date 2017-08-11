@@ -5,30 +5,18 @@ exports[`generate returns proper markdown string 1`] = `
 
 ## Version \`next\`
 
-
-
-
-
 ### Fixed
 - **Comp 2:** comp2 fix description
 
 ## Version \`1.1.0\`
 
-
-
 ### Changed
 - **Comp 1:** comp1 change description
-
-
 
 ## Version \`1.0.0\`
 
 ### Added
-- **Comp 1:** comp1 addition description
-
-
-
-"
+- **Comp 1:** comp1 addition description"
 `;
 
 exports[`generate when there are no configured components renders "All" for the entries with null as component 1`] = `
@@ -37,9 +25,5 @@ exports[`generate when there are no configured components renders "All" for the 
 ## Version \`next\`
 
 ### Added
-- addition to no specific component
-
-
-
-"
+- addition to no specific component"
 `;

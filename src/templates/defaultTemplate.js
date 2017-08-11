@@ -11,7 +11,10 @@ import type {
 const entryKindToReadable = {
   change: 'Changed',
   addition: 'Added',
-  fix: 'Fixed'
+  fix: 'Fixed',
+  security: 'Security',
+  removal: 'Removed',
+  deprecation: 'Deprecated'
 };
 
 export default function defaultTemplate(
@@ -33,7 +36,9 @@ function renderVersionChangelog(
 
   return [
     `## Version \`${helpers.stringifyVersion(version)}\``,
-    ...entryKeys.map((entryKind) => renderEntriesOfKind(helpers, entryKind, entries[entryKind]))
+    ...entryKeys.map(
+      (entryKind) => renderEntriesOfKind(helpers, entryKind, entries[entryKind])
+    ).filter((entry) => entry)
   ].join('\n\n');
 }
 

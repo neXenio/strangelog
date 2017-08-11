@@ -6,6 +6,7 @@ Array [
     "entries": Object {
       "addition": Array [],
       "change": Array [],
+      "deprecation": Array [],
       "fix": Array [
         Object {
           "component": "comp2",
@@ -14,6 +15,8 @@ Array [
           "kind": "fix",
         },
       ],
+      "removal": Array [],
+      "security": Array [],
     },
     "version": null,
   },
@@ -28,7 +31,10 @@ Array [
           "kind": "change",
         },
       ],
+      "deprecation": Array [],
       "fix": Array [],
+      "removal": Array [],
+      "security": Array [],
     },
     "version": Object {
       "major": 1,
@@ -47,7 +53,10 @@ Array [
         },
       ],
       "change": Array [],
+      "deprecation": Array [],
       "fix": Array [],
+      "removal": Array [],
+      "security": Array [],
     },
     "version": Object {
       "major": 1,

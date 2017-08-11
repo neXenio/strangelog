@@ -1,0 +1,4 @@
+dateTime: '2017-08-11T12:38:01.165Z'
+component: all
+kind: fix
+description: Add missing dependency to `glob` causing crash on projects without it

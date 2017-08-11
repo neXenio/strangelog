@@ -1,0 +1,6 @@
+dateTime: '2017-08-11T12:55:52.651Z'
+component: all
+kind: fix
+description: >-
+  Broken addition of entries due to wrong negation on non-existent
+  `.strangelogrc`

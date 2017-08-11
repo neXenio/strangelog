@@ -6,8 +6,26 @@
 
 
 
+
+
+## Version `1.1.3`
+
+
+
+
+
+### Fixed
+- **CLI:** Missing `.strangelogrc` was still causing error because new `getProjectConfig()` was not used in CLI
+
+## Version `1.1.2`
+
+
+
+
+
 ### Fixed
 - **All:** Fixes broken changelog generation due to defect in version directory listing with `info.yml`
+- **All:** Add missing dependency to `glob` causing crash on projects without it
 
 ## Version `1.1.1`
 

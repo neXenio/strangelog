@@ -29,7 +29,7 @@ export type VersionType = {
 export type EntryKindType = 'addition' | 'change' | 'fix';
 
 export type EntryType = {
-  component: string | null,
+  component: ?string,
   kind: EntryKindType,
   description: string
 };

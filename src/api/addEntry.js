@@ -9,9 +9,8 @@ export default function addEntry(
   { path, components }: ConfigType,
   entry: EntryType
 ): void {
-
-  if ((entry.component !== null) && !Object.keys(components).includes(entry.component)) {
-    throw new Error(`Unknown component "${entry.component}"`);
+  if (!entry.component && !Object.keys(components).includes(entry.component)) {
+    throw new Error(`Unknown component "${entry.component || ''}"`);
   }
 
   const dateTime = new Date().toISOString();

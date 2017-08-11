@@ -1,36 +1,40 @@
-# Web Frontend Changelog
+# Changelog
 
 ## Version `next`
 
-### Added
-- api: Adds a &#x60;migrate()&#x60;-function on the API to migrate files to the latest version
-- cli: New &#x60;migrate&#x60; command that uses the &#x60;migrate()&#x60;-API to simplify updating strangelog
 
-### Changed
-_No entries_
+
+
 
 ### Fixed
-_No entries_
+- **All:** Fixes broken changelog generation due to defect in version directory listing with `info.yml`
 
-## Version `1.0`
-
-### Added
-_No entries_
-
-### Changed
-- all: Introduces patch version (this requires you to append a &#x60;.0&#x60; to all version directory names
-
-### Fixed
-_No entries_
-
-## Version `0.5`
+## Version `1.1.1`
 
 ### Added
-- all: Use strangelog itself to maintain changelog
+- **API:** Adds a `migrate()`-function on the API to migrate files to the latest version
+- **CLI:** New `migrate` command that uses the `migrate()`-API to simplify updating strangelog
+- **All:** `.strangelogrc` is now optional (defaults to `changelog/` as path and just one "All" component)
 
-### Changed
-- all: Generated markdown now contains the readable component name per entry
+
 
 ### Fixed
-_No entries_
+- **All:** `babel-polyfill` was missing before in `dependencies` causing strangelog not to work in projects without it
+
+## Version `1.0.0`
+
+
+
+### Changed
+- **All:** Introduces patch version (this requires you to append a `.0` to all version directory names
+
+
+
+## Version `0.5.0`
+
+### Added
+- **All:** Use strangelog itself to maintain changelog
+
+### Changed
+- **All:** Generated markdown now contains the readable component name per entry
 

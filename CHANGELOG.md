@@ -8,6 +8,15 @@
 
 
 
+## Version `1.1.4`
+
+
+
+
+
+### Fixed
+- **All:** Missing `.strangelogrc` was also causing crash during `addEntry()`/`$ add` due to wrong `null` vs. `undefined` check
+
 ## Version `1.1.3`
 
 

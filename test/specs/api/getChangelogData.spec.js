@@ -66,6 +66,7 @@ describe('getChangelogData', () => {
     expect(additionEntries[0].component).toBe('comp1');
     expect(additionEntries[1].component).toBe('comp2');
     expect(additionEntries[2].component).toBe('comp3');
+  });
 
   describe('when there are no entries of a certain kind', () => {
 

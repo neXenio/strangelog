@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`addEntry when called with no component adds entry with null component 1`] = `
+Object {
+  "component": null,
+  "dateTime": "2017-06-24T00:01:02.000Z",
+  "description": "",
+  "kind": "fix",
+}
+`;

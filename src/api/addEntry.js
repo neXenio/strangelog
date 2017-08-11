@@ -10,14 +10,14 @@ export default function addEntry(
   entry: EntryType
 ): void {
 
-  if (!Object.keys(components).includes(entry.component)) {
+  if ((entry.component !== null) && !Object.keys(components).includes(entry.component)) {
     throw new Error(`Unknown component "${entry.component}"`);
   }
 
   const dateTime = new Date().toISOString();
 
   outputFileSync(
-    `${path}/next/${dateTime}_${entry.kind}_${entry.component}.yml`,
+    `${path}/next/${dateTime}_${entry.kind}_${entry.component || 'all'}.yml`,
     jsYaml.safeDump({
       dateTime,
       ...entry

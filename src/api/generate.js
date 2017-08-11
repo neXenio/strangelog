@@ -1,38 +1,24 @@
 // @flow
 
-import { join as joinPath } from 'path';
-
-import { readFileSync } from 'fs-extra';
-import { create as createHandlebars } from 'handlebars';
-
 import type { ConfigType, ChangelogType } from '../types';
+import defaultTemplate from '../templates/defaultTemplate';
 
 import { stringifyVersion } from './utils';
 
-const handlebarsInstance = createHandlebars();
+function readableComponent(componentID: string, { components }: ConfigType): string {
+  if (componentID === null) {
+    return 'All';
+  }
 
-handlebarsInstance.registerHelper(
-  'stringifyVersion',
-  (version) => stringifyVersion(version)
-);
-handlebarsInstance.registerHelper(
-  'readableComponent',
-  (
-    componentID: string,
-    { data }
-  ) => data.root.components[componentID]
-);
+  return components[componentID];
+}
 
 export default function generate(
-  { path, components }: ConfigType,
+  config: ConfigType,
   changelog: ChangelogType
 ): string {
-  const generateMarkdown = handlebarsInstance.compile(
-    readFileSync(joinPath(__dirname, '../../templates/CHANGELOG.hbs')).toString()
-  );
-
-  return generateMarkdown({
-    components,
-    changelog
-  });
+  return defaultTemplate({
+    readableComponent: (componentID) => readableComponent(componentID, config),
+    stringifyVersion
+  }, changelog);
 }

@@ -31,3 +31,11 @@ export function addTestVersionsWithEntries({ addEntry, bumpNextVersion }: Change
     description: 'comp2 fix description'
   });
 }
+
+export function addEntryWithoutComponent({ addEntry }: ChangelogAPIType) {
+  addEntry({
+    component: null,
+    kind: 'addition',
+    description: 'addition to no specific component'
+  });
+}

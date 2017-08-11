@@ -5,7 +5,7 @@ import inquirer from 'inquirer';
 import type { ChangelogAPIType, ComponentsConfigType } from '../../types';
 
 export default async function runAdd(
-{ addEntry, getComponentsConfig }: ChangelogAPIType
+  { addEntry, getComponentsConfig }: ChangelogAPIType
 ) {
   const answers = await promptEntryInformation(getComponentsConfig());
 
@@ -46,7 +46,7 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType) {
     }, {
       name: 'description',
       type: 'input',
-      message: 'What did change?',
+      message: 'What changed?',
       validate: (input) => (input.length < 10)
         ? 'Describe the change in at least 10 characters'
         : true

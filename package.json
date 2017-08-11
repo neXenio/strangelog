@@ -36,7 +36,7 @@
     "flow-typed": "^2.1.2",
     "jest": "^20.0.4",
     "lolex": "^1.6.0",
-    "strangelog": "^0.0.4"
+    "strangelog": "^1.1.0"
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",

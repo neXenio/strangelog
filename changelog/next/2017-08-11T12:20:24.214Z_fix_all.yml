@@ -1,0 +1,6 @@
+dateTime: '2017-08-11T12:20:24.214Z'
+component: all
+kind: fix
+description: >-
+  `babel-polyfill` was missing before in `dependencies` causing strangelog not
+  to work in projects without it

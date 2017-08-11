@@ -1,10 +1,9 @@
 // @flow
 
 import yargs from 'yargs';
-import jsYaml from 'js-yaml';
-import { readFileSync } from 'fs-extra';
 
 import { connectChangelog } from '../api';
+import getProjectConfig from '../getProjectConfig';
 
 import type {
   CLIOptionsType,
@@ -63,18 +62,10 @@ export default function cli(args: string[]) {
 function withAPI(commandFunction) {
   return (argv: CLIOptionsType, ...args) => {
     const changelog = connectChangelog({
-      ...readConfigFromFile(),
+      ...getProjectConfig(),
       path: argv.directory
     });
 
     return commandFunction(changelog, argv, ...args);
   };
-}
-
-function readConfigFromFile() {
-  try {
-    return jsYaml.safeLoad(readFileSync('./.strangelogrc').toString());
-  } catch (e) {
-    throw new Error('No .strangelogrc found in working directory');
-  }
 }

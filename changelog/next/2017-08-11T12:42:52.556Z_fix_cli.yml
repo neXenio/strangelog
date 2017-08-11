@@ -1,0 +1,6 @@
+dateTime: '2017-08-11T12:42:52.556Z'
+component: cli
+kind: fix
+description: >-
+  Missing `.strangelogrc` was still causing error because new
+  `getProjectConfig()` was not used in CLI

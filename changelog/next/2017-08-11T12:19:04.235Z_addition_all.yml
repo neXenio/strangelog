@@ -1,0 +1,6 @@
+dateTime: '2017-08-11T12:19:04.235Z'
+component: all
+kind: addition
+description: >-
+  `.strangelogrc` is now optional (defaults to `changelog/` as path and just one
+  "All" component)

@@ -1,0 +1,6 @@
+dateTime: '2017-08-11T12:33:15.874Z'
+component: all
+kind: fix
+description: >-
+  Fixes broken changelog generation due to defect in version directory listing
+  with `info.yml`

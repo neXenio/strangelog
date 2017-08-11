@@ -16,11 +16,11 @@ import type {
     3 = optional patch version-part incl. dot (e.g. ".3")
     4 = patch version
 */
-const VERSION_DIRECTORY_NAME_MATCH = /([0-9]+)\.([0-9]+)(\.([0-9]+))?$/;
+const VERSION_DIRECTORY_NAME_MATCH = /([0-9]+)\.([0-9]+)(\.([0-9]+))?\/$/;
 
 export default function getSortedChangelogVersions(config: ConfigType): VersionType[] {
   return getVersionDirectoryNames(config)
-    .filter((versionDirectoryName) => !versionDirectoryName.endsWith('next'))
+    .filter((versionDirectoryName) => !versionDirectoryName.endsWith('next/'))
     .map((versionDirectoryName) => {
       const versionDirectoryMatch = versionDirectoryName.match(VERSION_DIRECTORY_NAME_MATCH);
 
@@ -44,7 +44,7 @@ export default function getSortedChangelogVersions(config: ConfigType): VersionT
 }
 
 function getVersionDirectoryNames({ path }: ConfigType): string[] {
-  return syncGlob(joinPath(path, '*'));
+  return syncGlob(joinPath(path, '*/'));
 }
 
 function sortVersions(version1: VersionType, version2: VersionType): number {

@@ -1,0 +1,6 @@
+dateTime: '2017-08-11T12:52:50.073Z'
+component: all
+kind: fix
+description: >-
+  Missing `.strangelogrc` was also causing crash during `addEntry()`/`$ add` due
+  to wrong `null` vs. `undefined` check

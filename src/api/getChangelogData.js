@@ -11,7 +11,8 @@ import type {
   ConfigType,
   ChangelogType,
   VersionChangelogType,
-  VersionType
+  VersionType,
+  EntryType
 } from '../types';
 
 import { stringifyVersion } from './utils';
@@ -42,9 +43,27 @@ function getVersionChangelog(
         getVersionChangelogFileNames(config, stringifyVersion(version))
           .map((entryFileName) => readFileSync(entryFileName).toString())
           .map(jsYaml.safeLoad)
+          .sort(sortByComponent.bind(null, config))
       ), 'kind')
     }
   };
+}
+
+function sortByComponent(config: ConfigType, entry1: EntryType, entry2: EntryType) {
+  if (!entry1.component && !entry2.component) {
+    return 0;
+  }
+
+  if (!entry1.component && entry2.component) {
+    return 1;
+  }
+
+  if (entry1.component && !entry2.component) {
+    return -1;
+  }
+
+  // $FlowFixMe: Checks above cover that
+  return config.components[entry1.component].localeCompare(config.components[entry2.component]);
 }
 
 function getVersionChangelogFileNames(

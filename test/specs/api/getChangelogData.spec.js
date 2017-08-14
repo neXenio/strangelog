@@ -28,7 +28,8 @@ describe('getChangelogData', () => {
       path: testPath,
       components: {
         comp1: 'Comp 1',
-        comp2: 'Comp 2'
+        comp2: 'Comp 2',
+        comp3: 'Comp 3'
       }
     });
   }
@@ -39,6 +40,32 @@ describe('getChangelogData', () => {
     addTestVersionsWithEntries(changelogAPI);
 
     expect(changelogAPI.getChangelogData()).toMatchSnapshot();
+  });
+
+  it('sorts the entries by their component name', () => {
+    const changelogAPI = setup();
+
+    changelogAPI.addEntry({
+      component: 'comp2',
+      kind: 'addition',
+      description: 'some silly description'
+    });
+    changelogAPI.addEntry({
+      component: 'comp3',
+      kind: 'addition',
+      description: 'some silly description'
+    });
+    changelogAPI.addEntry({
+      component: 'comp1',
+      kind: 'addition',
+      description: 'some silly description'
+    });
+
+    const additionEntries = changelogAPI.getChangelogData()[0].entries.addition;
+
+    expect(additionEntries[0].component).toBe('comp1');
+    expect(additionEntries[1].component).toBe('comp2');
+    expect(additionEntries[2].component).toBe('comp3');
   });
 
 });

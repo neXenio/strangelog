@@ -68,4 +68,20 @@ describe('getChangelogData', () => {
     expect(additionEntries[2].component).toBe('comp3');
   });
 
+  describe('when there are no entries of a certain kind', () => {
+
+    it('returns an empty array for that kind', () => {
+      const changelogAPI = setup();
+
+      changelogAPI.addEntry({
+        component: 'comp1',
+        kind: 'removal',
+        description: 'some removal description'
+      });
+
+      expect(changelogAPI.getChangelogData()[0].entries.deprecation).toEqual([]);
+    });
+
+  });
+
 });

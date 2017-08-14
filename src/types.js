@@ -26,7 +26,7 @@ export type VersionType = {
   patch: number
 };
 
-export type EntryKindType = 'addition' | 'change' | 'fix';
+export type EntryKindType = 'addition' | 'change' | 'fix' | 'security' | 'removal' | 'deprecation';
 
 export type EntryType = {
   component: ?string,

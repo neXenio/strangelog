@@ -18,6 +18,14 @@ import type {
 import { stringifyVersion } from './utils';
 import getSortedChangelogVersions from './getSortedChangelogVersions';
 
+const entryKinds = [
+  'addition',
+  'change',
+  'fix',
+  'removal',
+  'deprecation',
+  'security',
+];
 
 export default function getChangelogData(
   config: ConfigType
@@ -36,9 +44,10 @@ function getVersionChangelog(
   return {
     version,
     entries: {
-      addition: [],
-      change: [],
-      fix: [],
+      ...entryKinds.reduce((kinds, entryKind) => ({
+        ...kinds,
+        [entryKind]: []
+      }), {}),
       ...groupBy((
         getVersionChangelogFileNames(config, stringifyVersion(version))
           .map((entryFileName) => readFileSync(entryFileName).toString())

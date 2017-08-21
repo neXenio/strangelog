@@ -8,6 +8,25 @@
 
 
 
+## Version `1.2.0`
+
+### Added
+- **All:** New entry kinds "Security", "Removed" & "Deprecated" from [keepachangelog](http://keepachangelog.com/)
+
+### Changed
+- **All:** Entries are now sorted by component name
+
+
+
+## Version `1.1.5`
+
+
+
+
+
+### Fixed
+- **All:** Broken addition of entries due to wrong negation on non-existent `.strangelogrc`
+
 ## Version `1.1.4`
 
 

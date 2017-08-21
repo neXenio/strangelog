@@ -48,6 +48,9 @@ export async function runCLI(
     }
   );
 
+  // setEncoding exists, works and is documented
+  // (see https://nodejs.org/api/stream.html#stream_readable_setencoding_encoding)
+  // $FlowFixMe
   childProcess.stdin.setEncoding('utf-8');
 
   function loop(remainingInputs) {

@@ -13,13 +13,18 @@ export default function addEntry(
     throw new Error(`Unknown component "${entry.component || ''}"`);
   }
 
-  const dateTime = new Date().toISOString();
+  const date = new Date();
+  const fileName = `${toFSFriendlyDateTime(date)}_${entry.kind}_${entry.component || 'all'}.yml`;
 
   outputFileSync(
-    `${path}/next/${dateTime}_${entry.kind}_${entry.component || 'all'}.yml`,
+    `${path}/next/${fileName}`,
     jsYaml.safeDump({
-      dateTime,
+      dateTime: date.toISOString(),
       ...entry
     })
   );
+}
+
+function toFSFriendlyDateTime(date: Date): string {
+  return date.toISOString().replace(/:/g, '-');
 }

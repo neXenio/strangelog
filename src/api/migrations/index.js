@@ -7,11 +7,12 @@ import { moveSync } from 'fs-extra';
 
 import type { MigratorType } from '../../types';
 
+import migration0 from './0_toSemVerDirectories';
+import migration1 from './1_toFSFriendlyEntryFileName';
+
 const migrations = ([
-  (config) =>
-    syncGlob(joinPath(config.path, '*'))
-      .forEach((versionDirectoryName) =>
-        moveSync(versionDirectoryName, `${versionDirectoryName}.0`))
+  migration0,
+  migration1
 ]: MigratorType[]);
 
 export default migrations;

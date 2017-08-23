@@ -20,7 +20,9 @@ describe('$ bump', () => {
     await runCLI(
       testProject.rootPath,
       ['bump'],
-      [CLIButtons.ENTER]);
+      // simply take the pre-selected option which is the incremented patch version
+      [CLIButtons.ENTER]
+    );
 
     const nextEntries = joinAndGlob(testProject.changelogPath, 'next/*.yml');
     const newVersionEntries = joinAndGlob(testProject.changelogPath, '0.0.1/*.yml');

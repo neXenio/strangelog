@@ -19,12 +19,18 @@ describe('$ add', () => {
       testProject.rootPath,
       ['add'],
       [
+        // Select first offered component
         CLIButtons.ENTER,
+
+        // Select second change kind ("Change")
         CLIButtons.ARROW_DOWN,
         CLIButtons.ENTER,
+
+        // Enter description and confirm
         'the description',
         CLIButtons.ENTER
-      ]);
+      ]
+    );
 
     const persistedEntry = readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml');
 

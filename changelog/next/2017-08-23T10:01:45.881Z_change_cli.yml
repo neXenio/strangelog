@@ -1,0 +1,4 @@
+dateTime: '2017-08-23T10:01:45.881Z'
+component: cli
+kind: change
+description: Inofficial `--directory`/`-d` option is no longer supported

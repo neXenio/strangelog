@@ -1,0 +1,4 @@
+dateTime: '2017-08-23T10:01:21.507Z'
+component: cli
+kind: fix
+description: '`path` in `.strangelogrc` had no effect'

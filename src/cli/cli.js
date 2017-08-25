@@ -47,24 +47,13 @@ export default function cli(args: string[]) {
       },
       withAPI((changelog, argv: CLIGenerateOptionsType) => runGenerate(changelog, argv))
     )
-    .options({
-      directory: {
-        alias: 'd',
-        describe: 'directory where changelog files are stored',
-        default: './changelog',
-        type: 'string'
-      }
-    })
     .help()
     .argv;
   }
 
 function withAPI(commandFunction) {
   return (argv: CLIOptionsType, ...args) => {
-    const changelog = connectChangelog({
-      ...getProjectConfig(),
-      path: argv.directory
-    });
+    const changelog = connectChangelog(getProjectConfig());
 
     return commandFunction(changelog, argv, ...args);
   };

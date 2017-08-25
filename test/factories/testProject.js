@@ -11,19 +11,19 @@ import { getOwnTestPath } from './fileSystem';
 
 const testProjectPaths = [];
 
-export function createTestProject(): {
+export function createTestProject(customPath?: string = 'changelog'): {
   rootPath: string,
   changelogPath: string,
   infoFilePath: string,
   configFilePath: string
 } {
   const rootPath = resolvePath(getOwnTestPath());
-  const changelogPath = joinPath(rootPath, 'changelog');
+  const changelogPath = joinPath(rootPath, customPath);
   const infoFilePath = joinPath(changelogPath, 'info.yml');
   const configFilePath = joinPath(rootPath, '.strangelogrc');
 
   outputYAMLSync(joinPath(rootPath, '.strangelogrc'), {
-    path: 'changelog',
+    path: customPath,
     components: {
       comp1: 'Comp 1',
       comp2: 'Comp 2'

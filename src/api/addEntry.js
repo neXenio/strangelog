@@ -14,7 +14,9 @@ export default function addEntry(
   }
 
   const date = new Date();
-  const fileName = `${toFSFriendlyDateTime(date)}_${entry.kind}_${entry.component || 'all'}.yml`;
+  const fsFriendlyDateTimeString = toFSFriendlyDateTime(date);
+  const readableComponent = entry.component || 'all';
+  const fileName = `${fsFriendlyDateTimeString}_${entry.kind}_${readableComponent}.yml`;
 
   outputFileSync(
     `${path}/next/${fileName}`,

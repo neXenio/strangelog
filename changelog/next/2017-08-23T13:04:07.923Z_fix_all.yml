@@ -1,0 +1,7 @@
+dateTime: '2017-08-23T13:04:07.923Z'
+component: all
+kind: fix
+description: >-
+  Previous changelog entry files contained the ISO-8601-formatted date time
+  string which caused problems on Windows and other systems. This is no longer
+  happening and running `strangelog migrate` will rename malformed entries

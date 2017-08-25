@@ -114,7 +114,7 @@ describe('bumpNextVersion', () => {
       expect(
         jsYaml.safeLoad(
           readFileSync(
-            `${testPath}/next/2017-06-24T00:01:02.000Z_fix_comp1.yml`
+            `${testPath}/next/2017-06-24T00-01-02.000Z_fix_comp1.yml`
           ).toString()
         )
       ).toEqual({

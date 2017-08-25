@@ -7,6 +7,7 @@ import { safeLoad } from 'js-yaml';
 
 import { connectChangelog, CURRENT_VERSION } from '../../../src/api';
 import { createTestProject } from '../../factories/testProject';
+import { joinAndOutputYAMLFile, joinAndGlob } from '../../utils';
 
 describe('migrate', () => {
 
@@ -37,12 +38,14 @@ describe('migrate', () => {
     };
   }
 
-  test('only runs migrations beyond current version', () => {
-    const { changelog } = setup();
+  describe('when current version is already latest', () => {
+    test('does not run any migration', () => {
+      const { changelog } = setup();
 
-    expect(changelog.migrate()).toEqual({
-      from: CURRENT_VERSION,
-      to: CURRENT_VERSION
+      expect(changelog.migrate()).toEqual({
+        from: CURRENT_VERSION,
+        to: CURRENT_VERSION
+      });
     });
   });
 
@@ -78,6 +81,25 @@ describe('migrate', () => {
         expect(() => statSync(newPath)).not.toThrow();
       });
     });
+
+    describe('to version 2', () => {
+      test('transforms entries with ISO-8601 date time string to FS-friendly name', () => {
+        const { changelog, changelogPath } = setup();
+        const oldDateString = '2016-12-24T01:02:03.000Z';
+        const newDateString = '2016-12-24T01-02-03.000Z';
+
+        changelog.saveChangelogInfo({ version: 1 });
+        joinAndOutputYAMLFile([changelogPath, `next/${oldDateString}_whatever.yml`], {});
+
+        changelog.migrate();
+
+        const entryFileMatch = joinAndGlob(changelogPath, 'next/*.yml');
+
+        expect(entryFileMatch.length).toEqual(1);
+        expect(entryFileMatch[0].endsWith(`next/${newDateString}_whatever.yml`)).toEqual(true);
+      });
+    });
+
   });
 
 });

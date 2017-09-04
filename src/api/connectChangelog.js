@@ -24,9 +24,7 @@ export default function connectChangelog(config: ConfigType): ChangelogAPIType {
     generate() {
       return generate(config, getChangelogData(config));
     },
-    getPossibleNextVersions() {
-      return getPossibleNextVersions(config);
-    },
+    getPossibleNextVersions,
     getComponentsConfig() {
       return config.components;
     },

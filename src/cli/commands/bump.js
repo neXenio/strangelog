@@ -3,34 +3,39 @@
 import inquirer from 'inquirer';
 
 import { stringifyVersion } from '../../api/utils';
-import type { ChangelogAPIType, VersionType } from '../../types';
+import type {
+  ChangelogAPIType,
+  VersionType
+} from '../../types';
+import type {
+  CLIBumpOptionsType
+} from '../types';
 
 export default async function runBump(
-  { bumpNextVersion, getPossibleNextVersions }: ChangelogAPIType
+  changelogAPI: ChangelogAPIType,
+  { version }: CLIBumpOptionsType
 ) {
   console.log('Bumping changelog for "next" version');
 
-  const possibleNextVersions = getPossibleNextVersions();
-  const { nextVersion } = await promptNewVersionInformation(
-    possibleNextVersions
-      ? possibleNextVersions.map((version: VersionType) => ({
-        name: stringifyVersion(version),
-        value: version
-      }))
-      : [{
-        name: '0.0.1 (Initial Version)',
-        value: {
-          major: 0,
-          minor: 0,
-          patch: 1
-        }
-      }]
-  );
+  const nextVersion = version || (await promptNewVersionInformation(changelogAPI)).nextVersion;
 
-  bumpNextVersion(nextVersion);
+  changelogAPI.bumpNextVersion(nextVersion);
 }
 
-function promptNewVersionInformation(versions) {
+async function promptNewVersionInformation(
+  { getPossibleNextVersions }: ChangelogAPIType
+) {
+  const possibleNextVersions = getPossibleNextVersions();
+  const versions = possibleNextVersions
+    ? possibleNextVersions.map((version: VersionType) => ({
+      name: stringifyVersion(version),
+      value: stringifyVersion(version)
+    }))
+    : [{
+      name: '0.0.1 (Initial Version)',
+      value: '0.0.1'
+    }];
+
   return inquirer.prompt([{
     name: 'nextVersion',
     type: 'list',

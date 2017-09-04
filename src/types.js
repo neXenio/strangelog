@@ -47,7 +47,7 @@ export type ChangelogAPIType = {
   addEntry: (
     entry: EntryType
   ) => void;
-  bumpNextVersion: (nextVersion: VersionType) => void,
+  bumpNextVersion: (nextVersion: string) => void,
   generate: () => string,
   getChangelogData: () => ChangelogType,
   getPossibleNextVersions: () => VersionType[] | null,

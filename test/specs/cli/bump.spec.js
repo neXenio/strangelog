@@ -12,7 +12,7 @@ describe('$ bump', () => {
     return createTestProject();
   }
 
-  it('moves all entries in "next"-directory to select version directory', async () => {
+  it('moves all entries in "next"-directory to selected version directory', async () => {
     const testProject = setup();
 
     joinAndOutputYAMLFile([testProject.changelogPath, 'next/something.yml'], {});
@@ -26,6 +26,24 @@ describe('$ bump', () => {
 
     const nextEntries = joinAndGlob(testProject.changelogPath, 'next/*.yml');
     const newVersionEntries = joinAndGlob(testProject.changelogPath, '1.0.1/*.yml');
+
+    expect(nextEntries.length).toBe(0);
+    expect(newVersionEntries.length).toBe(1);
+  });
+
+  it('creates version directory based on passed CLI parameter', async () => {
+    const testProject = setup();
+
+    joinAndOutputYAMLFile([testProject.changelogPath, 'next/something.yml'], {});
+
+    await runCLI(
+      testProject.rootPath,
+      ['bump', '-v', '1.2.3.4'],
+      []
+    );
+
+    const nextEntries = joinAndGlob(testProject.changelogPath, 'next/*.yml');
+    const newVersionEntries = joinAndGlob(testProject.changelogPath, '1.2.3.4/*.yml');
 
     expect(nextEntries.length).toBe(0);
     expect(newVersionEntries.length).toBe(1);

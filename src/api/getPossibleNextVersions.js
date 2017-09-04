@@ -3,13 +3,9 @@
 import { readFileSync, existsSync } from 'fs-extra';
 import { parse as parseSemVer } from 'semver';
 
-import type { ConfigType, VersionType } from '../types';
+import type { VersionType } from '../types';
 
-import getSortedChangelogVersions from './getSortedChangelogVersions';
-
-export default function getPossibleNextVersions(
-  config: ConfigType
-): VersionType[] | null {
+export default function getPossibleNextVersions(): VersionType[] | null {
   const packageVersion = existsSync('package.json')
     ? parseSemVer(JSON.parse(readFileSync('package.json').toString()).version)
     : null;

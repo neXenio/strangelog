@@ -1,6 +1,7 @@
 // @flow
 
 import { join as joinPath } from 'path';
+
 import { removeSync } from 'fs-extra';
 
 import { connectChangelog } from '../../../src/api';

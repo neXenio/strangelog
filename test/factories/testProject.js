@@ -53,4 +53,4 @@ function outputYAMLSync(path, json) {
   outputFileSync(path, jsYaml.safeDump(json));
 }
 
-// afterEach(removeTestProjects);
+afterEach(removeTestProjects);

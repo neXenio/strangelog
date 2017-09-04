@@ -1,0 +1,6 @@
+dateTime: '2017-09-04T09:41:19.710Z'
+component: all
+kind: change
+description: >-
+  Possible next versions are now based on the `version`-field in the current
+  working directory's `package.json`

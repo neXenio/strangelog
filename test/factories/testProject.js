@@ -22,6 +22,9 @@ export function createTestProject(customPath?: string = 'changelog'): {
   const infoFilePath = joinPath(changelogPath, 'info.yml');
   const configFilePath = joinPath(rootPath, '.strangelogrc');
 
+  outputFileSync(joinPath(rootPath, 'package.json'), JSON.stringify({
+    version: '1.0.0'
+  }));
   outputYAMLSync(joinPath(rootPath, '.strangelogrc'), {
     path: customPath,
     components: {

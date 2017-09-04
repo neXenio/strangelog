@@ -25,7 +25,7 @@ describe('$ bump', () => {
     );
 
     const nextEntries = joinAndGlob(testProject.changelogPath, 'next/*.yml');
-    const newVersionEntries = joinAndGlob(testProject.changelogPath, '0.0.1/*.yml');
+    const newVersionEntries = joinAndGlob(testProject.changelogPath, '1.0.1/*.yml');
 
     expect(nextEntries.length).toBe(0);
     expect(newVersionEntries.length).toBe(1);

@@ -1,11 +1,14 @@
 // @flow
 
-import { mkdirsSync } from 'fs-extra';
+import { join as joinPath } from 'path';
+import { removeSync } from 'fs-extra';
 
 import { connectChangelog } from '../../../src/api';
 import { createTestProject } from '../../factories/testProject';
 
 describe('getPossibleNextVersions', () => {
+
+  const realCWD = process.cwd();
 
   function setup() {
     const testProject = createTestProject();
@@ -18,38 +21,34 @@ describe('getPossibleNextVersions', () => {
       }
     });
 
+    process.chdir(testProject.rootPath);
+
     return {
       changelog,
       testProject
     };
   }
 
-  describe('when called with no version directories', () => {
-
-    it('returns no possible version', () => {
-      const { changelog } = setup();
-
-      expect(changelog.getPossibleNextVersions()).toEqual(null);
-    });
-
+  afterEach(() => {
+    process.chdir(realCWD);
   });
 
-  describe('when called with only "next" version directory', () => {
+  describe('when called with no package.json in working directory', () => {
 
     it('returns no possible version', () => {
-      const { changelog } = setup();
-
-      expect(changelog.getPossibleNextVersions()).toEqual(null);
-    });
-
-  });
-
-  describe('when called with a "1.0.0" version directory', () => {
-
-    it('returns only 1.0.1, 1.1.0 and 2.0.0 as possible next versions', () => {
       const { changelog, testProject } = setup();
 
-      mkdirsSync(`${testProject.changelogPath}/1.0`);
+      removeSync(joinPath(testProject.rootPath, 'package.json'));
+
+      expect(changelog.getPossibleNextVersions()).toEqual(null);
+    });
+
+  });
+
+  describe('when called with a "1.0.0"-version in package.json', () => {
+
+    it('returns only 1.0.1, 1.1.0 and 2.0.0 as possible next versions', () => {
+      const { changelog } = setup();
 
       expect(changelog.getPossibleNextVersions()).toEqual([{
         major: 1,

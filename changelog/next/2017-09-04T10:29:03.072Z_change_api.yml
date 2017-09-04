@@ -1,0 +1,7 @@
+dateTime: '2017-09-04T10:29:03.072Z'
+component: api
+kind: change
+description: >-
+  `getPossibleNextVersions()` now offers SemVer-compliant bumps based on the
+  current working directory's `package.json`-`version`-field (and not the
+  "latest" version directory)

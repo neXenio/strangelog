@@ -1,0 +1,7 @@
+dateTime: '2017-09-04T10:28:08.465Z'
+component: api
+kind: change
+description: >-
+  `bumpNextVersion()` now takes a single string argument being the new version
+  (before it was a `SemVer`-object). This allows to work with
+  non-SemVer-versions

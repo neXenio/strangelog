@@ -3,10 +3,7 @@
 import inquirer from 'inquirer';
 
 import { stringifyVersion } from '../../api/utils';
-import type {
-  ChangelogAPIType,
-  VersionType
-} from '../../types';
+import type { ChangelogAPIType } from '../../types';
 import type {
   CLIBumpOptionsType
 } from '../types';
@@ -27,7 +24,7 @@ async function promptNewVersionInformation(
 ) {
   const possibleNextVersions = getPossibleNextVersions();
   const versions = possibleNextVersions
-    ? possibleNextVersions.map((version: VersionType) => ({
+    ? possibleNextVersions.map((version) => ({
       name: stringifyVersion(version),
       value: stringifyVersion(version)
     }))

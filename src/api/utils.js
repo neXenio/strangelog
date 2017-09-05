@@ -1,15 +1,11 @@
 // @flow
 
-import type { VersionType } from '../types';
-
-export function stringifyVersion(version: ?VersionType): string {
+export function stringifyVersion(version: ?string): string {
   if (!version) {
     return 'next';
   }
 
-  const { major, minor, patch } = version;
-
-  return `${major}.${minor}.${patch}`;
+  return version;
 }
 
 export function multiToSingleLineString(multiLineIndentedString: string): string {

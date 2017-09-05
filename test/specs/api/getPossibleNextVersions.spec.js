@@ -51,19 +51,7 @@ describe('getPossibleNextVersions', () => {
     it('returns only 1.0.1, 1.1.0 and 2.0.0 as possible next versions', () => {
       const { changelog } = setup();
 
-      expect(changelog.getPossibleNextVersions()).toEqual([{
-        major: 1,
-        minor: 0,
-        patch: 1
-      }, {
-        major: 1,
-        minor: 1,
-        patch: 0
-      }, {
-        major: 2,
-        minor: 0,
-        patch: 0
-      }]);
+      expect(changelog.getPossibleNextVersions()).toMatchSnapshot();
     });
 
   });

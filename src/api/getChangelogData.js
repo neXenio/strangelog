@@ -11,7 +11,6 @@ import type {
   ConfigType,
   ChangelogType,
   VersionChangelogType,
-  VersionType,
   EntryType
 } from '../types';
 
@@ -39,7 +38,7 @@ export default function getChangelogData(
 
 function getVersionChangelog(
   config: ConfigType,
-  version: ?VersionType
+  version: ?string
 ): VersionChangelogType {
   return {
     version,

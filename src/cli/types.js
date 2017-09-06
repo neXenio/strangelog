@@ -7,3 +7,7 @@ export type CLIOptionsType = {
 export type CLIGenerateOptionsType = CLIOptionsType & {
   outFile: string
 };
+
+export type CLIBumpOptionsType = CLIOptionsType & {
+ version: string
+};

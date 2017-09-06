@@ -1,34 +1,22 @@
 // @flow
 
-import type { ConfigType, VersionType } from '../types';
+import { readFileSync, existsSync } from 'fs-extra';
+import { parse as parseSemVer } from 'semver';
 
-import getSortedChangelogVersions from './getSortedChangelogVersions';
+export default function getPossibleNextVersions(): string[] | null {
+  const packageVersion = existsSync('package.json')
+    ? parseSemVer(JSON.parse(readFileSync('package.json').toString()).version)
+    : null;
 
-export default function getPossibleNextVersions(
-  config: ConfigType
-): VersionType[] | null {
-  const latestVersion = getLatestChangelogVersion(config);
-
-  if (!latestVersion) {
+  if (!packageVersion) {
     return null;
   }
 
-  return [{
-    major: latestVersion.major,
-    minor: latestVersion.minor,
-    patch: latestVersion.patch + 1
-  }, {
-    major: latestVersion.major,
-    minor: latestVersion.minor + 1,
-    patch: 0
-  }, {
-    major: latestVersion.major + 1,
-    minor: 0,
-    patch: 0
-  }];
-}
+  const { major, minor, patch } = packageVersion;
 
-
-export function getLatestChangelogVersion(config: ConfigType) {
-  return getSortedChangelogVersions(config)[0];
+  return [
+    `${major}.${minor}.${patch + 1}`,
+    `${major}.${minor + 1}.${patch}`,
+    `${major + 1}.${minor}.${patch}`
+  ];
 }

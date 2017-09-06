@@ -48,11 +48,7 @@ describe('bumpNextVersion', () => {
       const { bumpNextVersion } = setup();
 
       expect(() => {
-        bumpNextVersion({
-          major: 1,
-          minor: 0,
-          patch: 0
-        });
+        bumpNextVersion('1.0.0');
       }).toThrow(multiToSingleLineString(`
         Cannot release version "next" as 1.0.0
         because it does not contain any entries yet
@@ -71,11 +67,7 @@ describe('bumpNextVersion', () => {
       mkdirsSync(`${testPath}/1.0.0`);
 
       expect(() => {
-        bumpNextVersion({
-          major: 1,
-          minor: 0,
-          patch: 0
-        });
+        bumpNextVersion('1.0.0');
       }).toThrow(multiToSingleLineString(`
         Cannot release version "next" as 1.0.0
         because that version already exists
@@ -92,11 +84,7 @@ describe('bumpNextVersion', () => {
 
       outputFileSync(`${testPath}/next/fake.yml`);
 
-      bumpNextVersion({
-        major: 1,
-        minor: 0,
-        patch: 0
-      });
+      bumpNextVersion('1.0.0');
 
       expect(syncGlob(`${testPath}/next`).length).toEqual(0);
       expect(syncGlob(`${testPath}/1.0.0/fake.yml`).length).toEqual(1);

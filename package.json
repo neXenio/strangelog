@@ -14,7 +14,7 @@
     "lint-fix": "yarn run lint -- --fix",
     "flow": "flow",
     "flow-typed": "flow-typed",
-    "ci-pipeline": "yarn run test-ci && yarn run lint && yarn run flow",
+    "ci-pipeline": "DEBUG_CLI_TESTS=true yarn run test-ci && yarn run lint && yarn run flow",
     "prepublish": "yarn run compile",
     "start": "babel-node src/cli/index.js",
     "changelog": "strangelog",
@@ -44,6 +44,7 @@
     "glob": "^7.1.2",
     "inquirer": "^3.1.1",
     "js-yaml": "^3.8.4",
+    "semver": "^5.4.1",
     "yargs": "^8.0.2"
   },
   "bin": {

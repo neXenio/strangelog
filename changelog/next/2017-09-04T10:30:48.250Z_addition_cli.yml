@@ -1,0 +1,6 @@
+dateTime: '2017-09-04T10:30:48.250Z'
+component: cli
+kind: addition
+description: >-
+  Passing `--version [version]` or `-v [version]` to `$ bump` now allows for
+  explicitly setting a next version (this bypasses the SemVer-compliancy checks)

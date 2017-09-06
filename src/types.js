@@ -20,12 +20,6 @@ export type ComponentsConfigType = {
   [name: string]: string
 };
 
-export type VersionType = {
-  major: number,
-  minor: number,
-  patch: number
-};
-
 export type EntryKindType = 'addition' | 'change' | 'fix' | 'security' | 'removal' | 'deprecation';
 
 export type EntryType = {
@@ -35,7 +29,7 @@ export type EntryType = {
 };
 
 export type VersionChangelogType = {
-  version: ?VersionType,
+  version: ?string,
   entries: {
     [kind: EntryKindType]: EntryType[]
   }
@@ -47,10 +41,10 @@ export type ChangelogAPIType = {
   addEntry: (
     entry: EntryType
   ) => void;
-  bumpNextVersion: (nextVersion: VersionType) => void,
+  bumpNextVersion: (nextVersion: string) => void,
   generate: () => string,
   getChangelogData: () => ChangelogType,
-  getPossibleNextVersions: () => VersionType[] | null,
+  getPossibleNextVersions: () => string[] | null,
   getComponentsConfig: () => ComponentsConfigType,
   migrate: () => MigrationResultType,
   getChangelogInfo: () => ChangelogInfoType,
@@ -63,6 +57,6 @@ export type CLIOptionsType = {
 };
 
 export type TemplateHelpersType = {
-  stringifyVersion: (version: ?VersionType) => string,
+  stringifyVersion: (version: ?string) => string,
   readableComponent: (componentID: string) => string
 };

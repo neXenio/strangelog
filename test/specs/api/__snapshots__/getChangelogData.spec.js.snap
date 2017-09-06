@@ -36,11 +36,7 @@ Array [
       "removal": Array [],
       "security": Array [],
     },
-    "version": Object {
-      "major": 1,
-      "minor": 1,
-      "patch": 0,
-    },
+    "version": "1.1.0",
   },
   Object {
     "entries": Object {
@@ -58,11 +54,7 @@ Array [
       "removal": Array [],
       "security": Array [],
     },
-    "version": Object {
-      "major": 1,
-      "minor": 0,
-      "patch": 0,
-    },
+    "version": "1.0.0",
   },
 ]
 `;

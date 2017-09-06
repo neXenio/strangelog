@@ -8,16 +8,14 @@ import {
 import { sync as syncGlob } from 'glob';
 import { moveSync } from 'fs-extra';
 
-import type { ConfigType, VersionType } from '../types';
+import type { ConfigType } from '../types';
 
-import { stringifyVersion, multiToSingleLineString } from './utils';
+import { multiToSingleLineString } from './utils';
 
 export default function bumpNextVersion(
   { path }: ConfigType,
-  nextVersion: VersionType
+  nextVersionString: string
 ): void {
-  const nextVersionString = stringifyVersion(nextVersion);
-
   ensureNextVersionHasEntries(path, nextVersionString);
   ensureVersionDoesNotExist(path, nextVersionString);
 

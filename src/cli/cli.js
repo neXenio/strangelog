@@ -7,7 +7,8 @@ import getProjectConfig from '../getProjectConfig';
 
 import type {
   CLIOptionsType,
-  CLIGenerateOptionsType
+  CLIGenerateOptionsType,
+  CLIBumpOptionsType
 } from './types';
 import runAdd from './commands/add';
 import runBump from './commands/bump';
@@ -25,8 +26,13 @@ export default function cli(args: string[]) {
     .command(
       'bump',
       'bumps "next" changelog to new version',
-      () => {},
-      withAPI((changelog) => runBump(changelog))
+      (yargs) => {
+        yargs.option('version', {
+          alias: 'v',
+          describe: 'next version to bump to'
+        });
+      },
+      withAPI((changelog, argv: CLIBumpOptionsType) => runBump(changelog, argv))
     )
     .command(
       'migrate',

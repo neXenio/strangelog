@@ -2,5 +2,5 @@ language: node_js
 node_js:
   - "7.0"
   - "6.10.2"
-script: yarn run ci-pipeline
+script: yarn run ci-pipeline || ls -lahR ./tmpTest
 cache: yarn

@@ -8,22 +8,14 @@ export function addTestVersionsWithEntries({ addEntry, bumpNextVersion }: Change
     kind: 'addition',
     description: 'comp1 addition description'
   });
-  bumpNextVersion({
-    major: 1,
-    minor: 0,
-    patch: 0
-  });
+  bumpNextVersion('1.0.0');
 
   addEntry({
     component: 'comp1',
     kind: 'change',
     description: 'comp1 change description'
   });
-  bumpNextVersion({
-    major: 1,
-    minor: 1,
-    patch: 0
-  });
+  bumpNextVersion('1.1.0');
 
   addEntry({
     component: 'comp2',

@@ -1,0 +1,7 @@
+dateTime: '2017-09-04T10:29:35.778Z'
+component: cli
+kind: change
+description: >-
+  Based on the API-change, `$ bump` now offers SemVer-compliant bumps based on
+  the current working directory's `package.json`-`version`-field (and not the
+  "latest" version directory)

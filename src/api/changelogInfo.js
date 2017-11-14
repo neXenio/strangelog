@@ -28,16 +28,26 @@ export function saveChangelogInfo(
   );
 }
 
+// Three cases may occur:
+//   1. info.yml exists already -> we can exit, the project is setup correctly
+//   2. info.yml does not exist and we have no changelog entry files yet -> new project, write
+//      initial config and set migration version to latest since it's implicitly up-to-date
+//   3. info.yml does not exist but we have changelog entry files already -> old project, with
+//      implicit migration version -1 (since info.yml was introduced with the first migration)
 function ensureInitializedProject(config) {
-  const hasEntries = globSync(joinPath(config.path, '**/*')).length > 0;
-
-
   if (existsSync(getInfoFilePath(config))) {
+    // Case 1
     return;
   }
 
+  const hasEntries = globSync(joinPath(config.path, '**/*')).length > 0;
+
   saveChangelogInfo(config, {
-    version: hasEntries ? -1 : CURRENT_VERSION
+    version: hasEntries
+      // Case 3
+      ? -1
+      // Case 2
+      : CURRENT_VERSION
   });
 }
 

@@ -18,11 +18,17 @@ const ENTRY_FILE_PATH_ISO_DATE_MATCHER =
 export default function toSemVerDirectories(config: ConfigType) {
   syncGlob(joinPath(config.path, '*/*.yml'))
     .forEach((oldFileName) => {
+      const dateMatches = oldFileName.match(ENTRY_FILE_PATH_ISO_DATE_MATCHER);
+
+      if (!dateMatches) {
+        return;
+      }
+
       const [
         beforeDatePart,
         datePart,
         afterPart
-      ] = oldFileName.match(ENTRY_FILE_PATH_ISO_DATE_MATCHER).slice(1);
+      ] = dateMatches.slice(1);
 
       moveSync(oldFileName, `${beforeDatePart}${datePart.replace(/:/g, '-')}${afterPart}`);
     });

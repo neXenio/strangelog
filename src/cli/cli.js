@@ -16,6 +16,9 @@ import runGenerate from './commands/generate';
 import runMigrate from './commands/migrate';
 
 export default function cli(args: string[]) {
+  if (!args.length)
+    args = ['--help'];
+
   yargs(args)
     .command(
       'add',

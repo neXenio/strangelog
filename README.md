@@ -45,6 +45,12 @@ Documents a new change. For that, you will be prompted for the following informa
 
 **Example:** `yarn run strangelog add`
 
+To add an entry without prompts (in scripts or by coding agents), pass the flags. `--component` can be left out only if no components are defined:
+
+**Example:** `yarn run strangelog add --kind fix --component api --description "Login works with plus signs in e-mail addresses"`
+
+Kinds: `addition`, `change`, `fix`, `removal`, `deprecation`, `security`. Invalid or missing flags exit with code 2 and print the valid kinds and components.
+
 **Note:** This adds each entry as a single file into directory called `next` inside of your changelog path. These, you need to commit to actually maintain a project changelog.
 
 ### `strangelog bump`
@@ -80,6 +86,19 @@ Updates the changelog files of your project to the format of the installed stran
 Changelogs created before strangelog `2.0.0` contain `:` in their entry file names, which Windows cannot check out. `strangelog migrate` renames these files (e.g. `2017-09-12T13:50:07.154Z_fix_all.yml` becomes `2017-09-12T13-50-07.154Z_fix_all.yml`). Commit the renamed files so that the repository can be cloned on Windows.
 
 **Example:** `yarn run strangelog migrate`
+
+## AI coding agents
+
+strangelog ships instructions for coding agents (Claude Code, Codex, Cursor, Copilot and others) in `node_modules/strangelog/AGENTS.md`: when to add an entry, which flags to use and what not to touch. To make agents in your project follow them, add this to your project's `AGENTS.md` (or `CLAUDE.md`):
+
+```markdown
+## Changelog
+
+This project uses strangelog. For every user-visible change, add an entry with
+`npx strangelog add --kind <kind> --component <component> --description "<what changed>"`
+and commit the created file. Never run `strangelog add` without flags.
+Full rules: node_modules/strangelog/AGENTS.md
+```
 
 ## Development
 

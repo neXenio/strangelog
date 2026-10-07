@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T17:28:43.400Z'
+component: cli
+kind: addition
+description: >-
+  `strangelog add --kind --component --description` adds an entry without
+  prompts; invalid flags exit with code 2

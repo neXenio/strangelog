@@ -157,19 +157,10 @@ behaviour change, removal) needs an entry in `changelog/next/`. Components are d
 `.strangelogrc`: `api`, `cli`, `all`. Kinds: see above. Pure refactors, test-only and CI-only
 changes need no entry.
 
-`strangelog add` is interactive and needs a TTY. Agents create entries through the compiled API:
+Create entries with the CLI from source. Pass all flags so that it does not prompt:
 
 ```sh
-yarn compile
-node -e "
-const { connectChangelog } = require('./lib/api');
-const getProjectConfig = require('./lib/getProjectConfig').default;
-connectChangelog(getProjectConfig()).addEntry({
-  component: 'cli',
-  kind: 'fix',
-  description: 'Describe the change for users, at least 10 characters'
-});
-"
+yarn start add --kind fix --component cli --description "Describe the change for users"
 ```
 
 Commit the generated YAML file. Never edit entries in released version directories, and never run

@@ -1,9 +1,9 @@
 {
   "testMatch": [
-    "**/test/specs/**/*.spec.js"
+    "**/test/specs/**/*.spec.ts"
   ],
   "transform": {
-    "^.+\\.jsx?$": "babel-jest"
+    "^.+\\.ts$": "ts-jest"
   },
   "testPathIgnorePatterns": [
     "/node_modules/",

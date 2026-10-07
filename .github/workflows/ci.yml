@@ -31,7 +31,7 @@ jobs:
           node lib/cli/index.js --help
           node test/smoke.cjs
 
-  # The Jest suite relies on POSIX file names, so Windows only runs the compiled-library smoke test
+  # The test suite relies on POSIX file names, so Windows only runs the compiled-library smoke test
   windows-smoke:
     runs-on: windows-latest
     steps:

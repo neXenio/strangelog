@@ -73,7 +73,7 @@ test/
   smoke.cjs                 smoke test of the compiled lib/
 tsconfig.json               type check settings for src/ and test/ (no emit)
 tsconfig.build.json         build settings: src/ -> lib/ with declarations
-vitest.config.ts            test settings (spec location, sequential files)
+vitest.config.mts            test settings (spec location, sequential files)
 .oxlintrc.json              lint rules
 .oxfmtrc.json               formatting settings
 changelog/                  this project's own changelog (strangelog dogfoods itself)
@@ -116,7 +116,7 @@ add tests to `test/specs/api/migrate.spec.ts`, and document the user-visible eff
   `@types/node` follows the oldest supported Node.js major (22), so tsc flags APIs that Node 22
   lacks.
 - oxfmt owns the layout: print width 100, single quotes, semicolons, no trailing commas, imports
-  sorted in the groups builtin, external, parent, sibling with blank lines between groups. Run
+  sorted in the groups builtin, external, parent, sibling, index with blank lines between groups. Run
   `yarn format` instead of formatting by hand. It only touches code and JSON; Markdown, YAML and
   the changelog entries are left alone.
 - oxlint enforces the rest (`.oxlintrc.json`). Notable rules: `func-style: declaration`,
@@ -152,7 +152,7 @@ add tests to `test/specs/api/migrate.spec.ts`, and document the user-visible eff
 - Import `describe`, `it`, `expect`, `vi` and the hooks from `vitest`; there are no globals.
 - Date-dependent tests use `vi.useFakeTimers({ now: new Date(...), toFake: ['Date'] })` and
   `vi.useRealTimers()`. Fake only `Date`: the CLI helpers rely on real timers.
-- Spec files run one after another (`fileParallelism: false` in `vitest.config.ts`) in child
+- Spec files run one after another (`fileParallelism: false` in `vitest.config.mts`) in child
   processes (`pool: 'forks'`, which `process.chdir()` needs), because they share `tmpTest/` and the
   cwd. CLI specs set a 20 s timeout on their `describe` (`describe(name, { timeout: 20000 }, ...)`).
 - CLI tests call `runCLI(cwd, args, inputs)`: it spawns `test/runSourceCLI.cjs` and sends each input

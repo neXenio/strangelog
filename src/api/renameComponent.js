@@ -1,0 +1,58 @@
+// @flow
+
+import { basename, dirname, join as joinPath } from 'path';
+
+import { moveSync, outputFileSync, readFileSync } from 'fs-extra';
+import { dump, load } from 'js-yaml';
+
+import type { ConfigType, EntryType } from '../types';
+
+import { globPaths } from './utils';
+
+// Moves all entries of component `from` (in every version, including "next") to component `to`.
+// Merging two components is renaming one onto the other. Returns the number of moved entries.
+export default function renameComponent(
+  { path, components }: ConfigType,
+  from: string,
+  to: string
+): number {
+  if (!Object.keys(components).includes(to)) {
+    throw new Error(`Unknown component "${to}", add it to the components in .strangelogrc first`);
+  }
+
+  if (from === to) {
+    return 0;
+  }
+
+  const entryFilePathsToMove = globPaths(joinPath(path, '*', '*.yml'))
+    .filter((entryFilePath) => readEntry(entryFilePath)?.component === from);
+
+  entryFilePathsToMove.forEach((entryFilePath) => {
+    outputFileSync(entryFilePath, dump({
+      ...readEntry(entryFilePath),
+      component: to
+    }));
+    moveSync(entryFilePath, renamedEntryFilePath(entryFilePath, from, to));
+  });
+
+  return entryFilePathsToMove.length;
+}
+
+function readEntry(entryFilePath: string): ?EntryType {
+  return load(readFileSync(entryFilePath).toString());
+}
+
+// Entry file names end with `_<component>.yml` (see addEntry)
+function renamedEntryFilePath(entryFilePath: string, from: string, to: string): string {
+  const fileName = basename(entryFilePath);
+  const fromSuffix = `_${from}.yml`;
+
+  if (!fileName.endsWith(fromSuffix)) {
+    return entryFilePath;
+  }
+
+  return joinPath(
+    dirname(entryFilePath),
+    `${fileName.slice(0, -fromSuffix.length)}_${to}.yml`
+  );
+}

@@ -61,6 +61,12 @@ Takes all changelog entries ever made in your project and generates a Markdown f
 
 **Note:** Since that `CHANGELOG.md` file would produce merge conflicts when working with multiple people in parallel, it is recommended that you do not commit this file (at least not in feature branches). The recommended solution is to generate the `CHANGELOG.md`-file during your CI build and publish it as an artifact.
 
+### `strangelog rename-component <from> <to>`
+
+Moves all entries of component `<from>`, in every version including `next`, to component `<to>`. To rename a component, add the new ID to `components` in `.strangelogrc` and run this command. To merge two components, use an existing component as `<to>`. Remove `<from>` from `.strangelogrc` afterwards if it is no longer needed.
+
+**Example:** `yarn run strangelog rename-component frontend web`
+
 ### `strangelog migrate`
 
 Updates the changelog files of your project to the format of the installed strangelog version and records that version in `info.yml` inside your changelog path. Run it once after upgrading strangelog.

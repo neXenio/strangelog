@@ -19,6 +19,7 @@ declare class Buffer extends Uint8Array {
 
 declare module 'path' {
   declare function basename(path: string, suffix?: string): string;
+  declare function dirname(path: string): string;
   declare function join(...paths: Array<string>): string;
   declare function resolve(...paths: Array<string>): string;
 }

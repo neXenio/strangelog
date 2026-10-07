@@ -1,9 +1,9 @@
+import { describe, expect, it } from 'vitest';
+
 import { createTestProject } from '../../factories/testProject';
 import { runCLI } from '../../utils';
 
-describe('$ (no command)', () => {
-
-  jest.setTimeout(20000);
+describe('$ (no command)', { timeout: 20000 }, () => {
 
   it('prints the same usage help as --help', async () => {
     const testProject = createTestProject();

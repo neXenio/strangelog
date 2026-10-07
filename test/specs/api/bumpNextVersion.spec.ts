@@ -8,6 +8,7 @@ import {
   mkdirsSync
 } from 'fs-extra';
 import { load } from 'js-yaml';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { connectChangelog } from '../../../src/api';
 import { multiToSingleLineString } from '../../../src/api/utils';
@@ -19,12 +20,15 @@ describe('bumpNextVersion', () => {
 
   beforeEach(() => {
     removeSync(testPath);
-    jest.useFakeTimers({ now: new Date('2017-06-24T00:01:02.000Z') });
+    vi.useFakeTimers({
+      now: new Date('2017-06-24T00:01:02.000Z'),
+      toFake: ['Date']
+    });
   });
 
   afterEach(() => {
     removeSync(testPath);
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   function setup() {

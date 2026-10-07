@@ -1,9 +1,9 @@
+import { describe, expect, it } from 'vitest';
+
 import { createTestProject } from '../../factories/testProject';
 import { joinAndOutputYAMLFile, readSingleYAMLFileFromGlob, runCLI } from '../../utils';
 
-describe('$ rename-component', () => {
-
-  jest.setTimeout(20000);
+describe('$ rename-component', { timeout: 20000 }, () => {
 
   it('moves the entries of <from> to <to>', async () => {
     const testProject = createTestProject();

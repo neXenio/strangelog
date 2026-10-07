@@ -4,6 +4,7 @@ import { spawn } from 'child_process';
 import { globSync } from 'glob';
 import { readFileSync, outputFileSync } from 'fs-extra';
 import { dump, load } from 'js-yaml';
+import { expect } from 'vitest';
 
 function readYAMLFileSync(filePath: string): { [key: string]: unknown } {
   return load(readFileSync(filePath).toString()) as { [key: string]: unknown };

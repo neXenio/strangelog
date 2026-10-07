@@ -1,9 +1,9 @@
+import { describe, expect, it } from 'vitest';
+
 import { createTestProject } from '../../factories/testProject';
 import { joinAndGlob, joinAndOutputYAMLFile, runCLI, CLIButtons } from '../../utils';
 
-describe('$ bump', () => {
-
-  jest.setTimeout(20000);
+describe('$ bump', { timeout: 20000 }, () => {
 
   function setup() {
     return createTestProject();

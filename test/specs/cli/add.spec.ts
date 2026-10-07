@@ -1,10 +1,10 @@
+import { describe, expect, it } from 'vitest';
+
 import { createTestProject } from '../../factories/testProject';
 import type { ComponentsConfigType } from '../../../src/types';
 import { readSingleYAMLFileFromGlob, runCLI, CLIButtons } from '../../utils';
 
-describe('$ add', () => {
-
-  jest.setTimeout(20000);
+describe('$ add', { timeout: 20000 }, () => {
 
   function setup(customPath?: string, components?: ComponentsConfigType) {
     return createTestProject(customPath, components);

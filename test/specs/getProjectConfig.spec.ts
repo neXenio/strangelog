@@ -1,6 +1,7 @@
 import { resolve } from 'path';
 
 import { removeSync } from 'fs-extra';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import getProjectConfig from '../../src/getProjectConfig';
 import { createTestProject } from '../factories/testProject';

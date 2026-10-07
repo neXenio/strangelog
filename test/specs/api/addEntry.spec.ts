@@ -1,3 +1,5 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { connectChangelog } from '../../../src/api';
 import { createTestProject } from '../../factories/testProject';
 import { readSingleYAMLFileFromGlob } from '../../utils';
@@ -5,11 +7,14 @@ import { readSingleYAMLFileFromGlob } from '../../utils';
 describe('addEntry', () => {
 
   beforeEach(() => {
-    jest.useFakeTimers({ now: new Date('2017-06-24T00:01:02.000Z') });
+    vi.useFakeTimers({
+      now: new Date('2017-06-24T00:01:02.000Z'),
+      toFake: ['Date']
+    });
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   function setup() {

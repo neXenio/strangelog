@@ -1,6 +1,7 @@
 import { join as joinPath } from 'path';
 
 import { mkdirsSync, removeSync } from 'fs-extra';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import getSortedChangelogVersions from '../../../src/api/getSortedChangelogVersions';
 import { getOwnTestPath } from '../../factories/fileSystem';

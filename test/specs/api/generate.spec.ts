@@ -1,4 +1,5 @@
 import { removeSync } from 'fs-extra';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { addTestVersionsWithEntries, addEntryWithoutComponent } from '../../factories/changelog';
 import { connectChangelog } from '../../../src/api';

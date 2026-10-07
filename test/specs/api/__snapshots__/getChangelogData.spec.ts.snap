@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`getChangelogData returns correct changelog data 1`] = `
+exports[`getChangelogData > returns correct changelog data 1`] = `
 [
   {
     "entries": {

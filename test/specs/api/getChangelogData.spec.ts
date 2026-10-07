@@ -1,4 +1,5 @@
 import { removeSync } from 'fs-extra';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { connectChangelog } from '../../../src/api';
 import { addTestVersionsWithEntries } from '../../factories/changelog';
@@ -10,12 +11,15 @@ describe('getChangelogData', () => {
 
   beforeEach(() => {
     removeSync(testPath);
-    jest.useFakeTimers({ now: new Date('2017-06-24T00:01:02.000Z') });
+    vi.useFakeTimers({
+      now: new Date('2017-06-24T00:01:02.000Z'),
+      toFake: ['Date']
+    });
   });
 
   afterEach(() => {
     removeSync(testPath);
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   function setup() {

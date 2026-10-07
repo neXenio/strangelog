@@ -1,6 +1,7 @@
 import { join as joinPath } from 'path';
 
 import { outputFileSync, removeSync } from 'fs-extra';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import { connectChangelog } from '../../../src/api';
 import { createTestProject } from '../../factories/testProject';

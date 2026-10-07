@@ -19,8 +19,8 @@
   "packageManager": "yarn@1.22.22",
   "scripts": {
     "compile": "tsc -p tsconfig.build.json",
-    "test-dev": "jest --config=jest.config.json --watch",
-    "test-ci": "jest --config=jest.config.json --runInBand",
+    "test-dev": "vitest",
+    "test-ci": "vitest run",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
@@ -34,7 +34,6 @@
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/fs-extra": "^11.0.4",
-    "@types/jest": "^30.0.0",
     "@types/node": "^22.20.5",
     "@types/semver": "^7.8.0",
     "@types/yargs": "^17.0.35",
@@ -42,11 +41,11 @@
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-import-x": "^4.17.1",
     "globals": "^17.13.0",
-    "jest": "^30.5.2",
-    "ts-jest": "^29.4.14",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.1"
+    "typescript-eslint": "^8.71.1",
+    "vite": "^8.3.3",
+    "vitest": "^5.0.3"
   },
   "dependencies": {
     "fs-extra": "^11.4.1",

@@ -2,6 +2,7 @@ import { join as joinPath } from 'path';
 
 import { removeSync, readFileSync, mkdirsSync, statSync } from 'fs-extra';
 import { load } from 'js-yaml';
+import { afterEach, describe, expect, test } from 'vitest';
 
 import { connectChangelog, CURRENT_VERSION } from '../../../src/api';
 import { createTestProject } from '../../factories/testProject';

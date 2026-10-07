@@ -2,6 +2,7 @@ import { join as joinPath, resolve as resolvePath } from 'path';
 
 import { outputFileSync, removeSync } from 'fs-extra';
 import { dump } from 'js-yaml';
+import { afterEach } from 'vitest';
 
 import { CURRENT_VERSION } from '../../src/api';
 import type { ComponentsConfigType } from '../../src/types';

@@ -1,10 +1,10 @@
 import { join as joinPath } from 'path';
 
-import { outputFileSync, removeSync } from 'fs-extra';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { connectChangelog } from '../../../src/api';
-import { createTestProject } from '../../factories/testProject';
+import { connectChangelog } from '../../../src/api/index.ts';
+import { createTestProject } from '../../factories/testProject.ts';
+import { outputFileSync, removeSync } from '../../fileSystem.ts';
 
 describe('getPossibleNextVersions', () => {
   const realCWD = process.cwd();

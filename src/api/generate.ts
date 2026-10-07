@@ -1,7 +1,7 @@
-import defaultTemplate from '../templates/defaultTemplate';
-import type { ConfigType, ChangelogType } from '../types';
+import defaultTemplate from '../templates/defaultTemplate.ts';
+import type { ConfigType, ChangelogType } from '../types.ts';
 
-import { getComponentTitle, stringifyVersion } from './utils';
+import { getComponentTitle, stringifyVersion } from './utils.ts';
 
 function readableComponent(
   componentID: string | null | undefined,

@@ -1,10 +1,10 @@
 import { join as joinPath } from 'path';
 
-import { mkdirsSync, removeSync } from 'fs-extra';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import getSortedChangelogVersions from '../../../src/api/getSortedChangelogVersions';
-import { getOwnTestPath } from '../../factories/fileSystem';
+import getSortedChangelogVersions from '../../../src/api/getSortedChangelogVersions.ts';
+import { getOwnTestPath } from '../../factories/fileSystem.ts';
+import { mkdirsSync, removeSync } from '../../fileSystem.ts';
 
 const testPath = getOwnTestPath();
 

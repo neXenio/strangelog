@@ -1,8 +1,8 @@
 import inquirer from 'inquirer';
 
-import { stringifyVersion } from '../../api/utils';
-import type { ChangelogAPIType } from '../../types';
-import type { CLIBumpOptionsType } from '../types';
+import { stringifyVersion } from '../../api/utils.ts';
+import type { ChangelogAPIType } from '../../types.ts';
+import type { CLIBumpOptionsType } from '../types.ts';
 
 export default async function runBump(
   changelogAPI: ChangelogAPIType,

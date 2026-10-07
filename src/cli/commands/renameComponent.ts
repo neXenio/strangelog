@@ -1,5 +1,5 @@
-import type { ChangelogAPIType } from '../../types';
-import type { CLIRenameComponentOptionsType } from '../types';
+import type { ChangelogAPIType } from '../../types.ts';
+import type { CLIRenameComponentOptionsType } from '../types.ts';
 
 export default async function runRenameComponent(
   changelog: ChangelogAPIType,

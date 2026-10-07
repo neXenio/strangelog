@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import type { ComponentsConfigType } from '../../../src/types';
-import { createTestProject } from '../../factories/testProject';
-import { readSingleYAMLFileFromGlob, runCLI, CLIButtons } from '../../utils';
+import type { ComponentsConfigType } from '../../../src/types.ts';
+import { createTestProject } from '../../factories/testProject.ts';
+import { readSingleYAMLFileFromGlob, runCLI, CLIButtons } from '../../utils.ts';
 
 describe('$ add', { timeout: 20000 }, () => {
   function setup(customPath?: string, components?: ComponentsConfigType) {

@@ -1,10 +1,10 @@
-import { removeSync } from 'fs-extra';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { connectChangelog } from '../../../src/api';
-import type { ComponentsConfigType } from '../../../src/types';
-import { addTestVersionsWithEntries, addEntryWithoutComponent } from '../../factories/changelog';
-import { getOwnTestPath } from '../../factories/fileSystem';
+import { connectChangelog } from '../../../src/api/index.ts';
+import type { ComponentsConfigType } from '../../../src/types.ts';
+import { addTestVersionsWithEntries, addEntryWithoutComponent } from '../../factories/changelog.ts';
+import { getOwnTestPath } from '../../factories/fileSystem.ts';
+import { removeSync } from '../../fileSystem.ts';
 
 const testPath = getOwnTestPath();
 

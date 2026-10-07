@@ -6,6 +6,8 @@
     "moduleResolution": "nodenext",
     "strict": true,
     "isolatedModules": true,
+    "erasableSyntaxOnly": true,
+    "rewriteRelativeImportExtensions": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,

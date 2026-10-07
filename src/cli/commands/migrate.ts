@@ -1,4 +1,4 @@
-import type { ChangelogAPIType } from '../../types';
+import type { ChangelogAPIType } from '../../types.ts';
 
 export default async function runMigrate(changelog: ChangelogAPIType) {
   const { from, to } = changelog.migrate();

@@ -1,9 +1,9 @@
-import { removeSync } from 'fs-extra';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { connectChangelog } from '../../../src/api';
-import { addTestVersionsWithEntries } from '../../factories/changelog';
-import { getOwnTestPath } from '../../factories/fileSystem';
+import { connectChangelog } from '../../../src/api/index.ts';
+import { addTestVersionsWithEntries } from '../../factories/changelog.ts';
+import { getOwnTestPath } from '../../factories/fileSystem.ts';
+import { removeSync } from '../../fileSystem.ts';
 
 const testPath = getOwnTestPath();
 

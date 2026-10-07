@@ -1,9 +1,9 @@
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'path';
 
-import { existsSync, readFileSync } from 'fs-extra';
 import { load } from 'js-yaml';
 
-import type { ConfigType } from './types';
+import type { ConfigType } from './types.ts';
 
 export default function getProjectConfig(): ConfigType {
   const configFilePath = resolve('./.strangelogrc');

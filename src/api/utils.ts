@@ -1,6 +1,6 @@
 import { globSync } from 'glob';
 
-import type { ComponentConfigType, EntryKindType } from '../types';
+import type { ComponentConfigType, EntryKindType } from '../types.ts';
 
 // In the order of the `add` prompt and of the generated changelog
 export const ENTRY_KINDS: EntryKindType[] = [

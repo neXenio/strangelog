@@ -1,22 +1,22 @@
 import yargs from 'yargs';
 
-import { connectChangelog } from '../api';
-import { ENTRY_KINDS } from '../api/utils';
-import getProjectConfig from '../getProjectConfig';
-import type { ChangelogAPIType } from '../types';
+import { connectChangelog } from '../api/index.ts';
+import { ENTRY_KINDS } from '../api/utils.ts';
+import getProjectConfig from '../getProjectConfig.ts';
+import type { ChangelogAPIType } from '../types.ts';
 
-import runAdd from './commands/add';
-import runBump from './commands/bump';
-import runGenerate from './commands/generate';
-import runMigrate from './commands/migrate';
-import runRenameComponent from './commands/renameComponent';
+import runAdd from './commands/add.ts';
+import runBump from './commands/bump.ts';
+import runGenerate from './commands/generate.ts';
+import runMigrate from './commands/migrate.ts';
+import runRenameComponent from './commands/renameComponent.ts';
 import type {
   CLIOptionsType,
   CLIAddOptionsType,
   CLIGenerateOptionsType,
   CLIBumpOptionsType,
   CLIRenameComponentOptionsType
-} from './types';
+} from './types.ts';
 
 export default function cli(args: string[]) {
   if (!args.length) args = ['--help'];

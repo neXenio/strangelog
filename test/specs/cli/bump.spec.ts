@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { createTestProject } from '../../factories/testProject';
-import { joinAndGlob, joinAndOutputYAMLFile, runCLI, CLIButtons } from '../../utils';
+import { createTestProject } from '../../factories/testProject.ts';
+import { joinAndGlob, joinAndOutputYAMLFile, runCLI, CLIButtons } from '../../utils.ts';
 
 describe('$ bump', { timeout: 20000 }, () => {
   function setup() {

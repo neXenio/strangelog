@@ -1,10 +1,9 @@
 import { join as joinPath, resolve as resolvePath } from 'path';
 
-import { moveSync } from 'fs-extra';
+import { moveSync } from '../fileSystem.ts';
+import type { ConfigType } from '../types.ts';
 
-import type { ConfigType } from '../types';
-
-import { globPaths, multiToSingleLineString } from './utils';
+import { globPaths, multiToSingleLineString } from './utils.ts';
 
 export default function bumpNextVersion({ path }: ConfigType, nextVersionString: string): void {
   ensureNextVersionHasEntries(path, nextVersionString);

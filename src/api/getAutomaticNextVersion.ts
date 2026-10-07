@@ -1,9 +1,10 @@
-import { existsSync, readFileSync } from 'fs-extra';
+import { existsSync, readFileSync } from 'node:fs';
+
 import { inc as incrementSemVer } from 'semver';
 
-import type { ConfigType } from '../types';
+import type { ConfigType } from '../types.ts';
 
-import getChangelogData from './getChangelogData';
+import getChangelogData from './getChangelogData.ts';
 
 // Derives the next SemVer version from the package.json version and the "next" entries:
 // any change -> major, otherwise any addition -> minor, otherwise patch

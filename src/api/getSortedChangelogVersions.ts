@@ -2,9 +2,9 @@ import { basename, join as joinPath } from 'path';
 
 import { rcompare as compareSemVerDescending, valid as validSemVer } from 'semver';
 
-import type { ConfigType } from '../types';
+import type { ConfigType } from '../types.ts';
 
-import { globPaths } from './utils';
+import { globPaths } from './utils.ts';
 
 export default function getSortedChangelogVersions(config: ConfigType): string[] {
   const versions = getVersionDirectoryNames(config)

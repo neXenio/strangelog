@@ -1,14 +1,14 @@
-import type { ConfigType, ChangelogAPIType } from '../types';
+import type { ConfigType, ChangelogAPIType } from '../types.ts';
 
-import addEntry from './addEntry';
-import bumpNextVersion from './bumpNextVersion';
-import { getChangelogInfo, saveChangelogInfo } from './changelogInfo';
-import generate from './generate';
-import getAutomaticNextVersion from './getAutomaticNextVersion';
-import getChangelogData from './getChangelogData';
-import getPossibleNextVersions from './getPossibleNextVersions';
-import migrate from './migrate';
-import renameComponent from './renameComponent';
+import addEntry from './addEntry.ts';
+import bumpNextVersion from './bumpNextVersion.ts';
+import { getChangelogInfo, saveChangelogInfo } from './changelogInfo.ts';
+import generate from './generate.ts';
+import getAutomaticNextVersion from './getAutomaticNextVersion.ts';
+import getChangelogData from './getChangelogData.ts';
+import getPossibleNextVersions from './getPossibleNextVersions.ts';
+import migrate from './migrate.ts';
+import renameComponent from './renameComponent.ts';
 
 export default function connectChangelog(config: ConfigType): ChangelogAPIType {
   return {

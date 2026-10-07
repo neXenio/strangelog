@@ -4,7 +4,7 @@ import type {
   TemplateHelpersType,
   EntryType,
   EntryKindType
-} from '../types';
+} from '../types.ts';
 
 const entryKindToReadable = {
   change: 'Changed',

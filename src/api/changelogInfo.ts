@@ -1,12 +1,13 @@
+import { existsSync, readFileSync } from 'node:fs';
 import { join as joinPath } from 'path';
 
-import { outputFileSync, existsSync, readFileSync } from 'fs-extra';
 import { dump, load } from 'js-yaml';
 
-import type { ChangelogInfoType, ConfigType } from '../types';
+import { outputFileSync } from '../fileSystem.ts';
+import type { ChangelogInfoType, ConfigType } from '../types.ts';
 
-import { CURRENT_VERSION } from './migrations';
-import { globPaths } from './utils';
+import { CURRENT_VERSION } from './migrations/index.ts';
+import { globPaths } from './utils.ts';
 
 export function getChangelogInfo(config: ConfigType): ChangelogInfoType {
   ensureInitializedProject(config);

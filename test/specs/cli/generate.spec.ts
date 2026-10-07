@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { createTestProject } from '../../factories/testProject';
-import { joinAndGlob, runCLI } from '../../utils';
+import { createTestProject } from '../../factories/testProject.ts';
+import { joinAndGlob, runCLI } from '../../utils.ts';
 
 describe('$ generate', { timeout: 20000 }, () => {
   function setup() {

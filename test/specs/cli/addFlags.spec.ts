@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { createTestProject } from '../../factories/testProject';
-import { joinAndGlob, readSingleYAMLFileFromGlob, runCLIWithResult } from '../../utils';
+import { createTestProject } from '../../factories/testProject.ts';
+import { joinAndGlob, readSingleYAMLFileFromGlob, runCLIWithResult } from '../../utils.ts';
 
 describe('$ add --kind --component --description', { timeout: 20000 }, () => {
   it('adds the entry without prompting', async () => {

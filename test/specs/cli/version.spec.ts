@@ -1,8 +1,9 @@
-import { readFileSync } from 'fs-extra';
+import { readFileSync } from 'node:fs';
+
 import { describe, expect, it } from 'vitest';
 
-import { createTestProject } from '../../factories/testProject';
-import { runCLI } from '../../utils';
+import { createTestProject } from '../../factories/testProject.ts';
+import { runCLI } from '../../utils.ts';
 
 describe('$ --version', { timeout: 20000 }, () => {
   it('prints the strangelog version', async () => {

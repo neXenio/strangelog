@@ -1,4 +1,4 @@
-import type { ChangelogAPIType } from '../../src/types';
+import type { ChangelogAPIType } from '../../src/types.ts';
 
 export function addTestVersionsWithEntries({ addEntry, bumpNextVersion }: ChangelogAPIType) {
   addEntry({

@@ -1,13 +1,13 @@
 import { join as joinPath, resolve as resolvePath } from 'path';
 
-import { outputFileSync, removeSync } from 'fs-extra';
 import { dump } from 'js-yaml';
 import { afterEach } from 'vitest';
 
-import { CURRENT_VERSION } from '../../src/api';
-import type { ComponentsConfigType } from '../../src/types';
+import { CURRENT_VERSION } from '../../src/api/index.ts';
+import type { ComponentsConfigType } from '../../src/types.ts';
+import { outputFileSync, removeSync } from '../fileSystem.ts';
 
-import { getOwnTestPath } from './fileSystem';
+import { getOwnTestPath } from './fileSystem.ts';
 
 const testProjectPaths: string[] = [];
 

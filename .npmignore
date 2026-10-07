@@ -1,7 +1,6 @@
 /.github
 /flow-typed
 /src
-/temp
 /test
 /tmpTest
 /.babelrc
@@ -10,4 +9,3 @@
 /.nvmrc
 /eslint.config.mjs
 /jest.config.json
-/.omc

@@ -6,7 +6,7 @@ import hermesParser from 'hermes-eslint';
 
 export default [
   {
-    ignores: ['index.js', 'lib/', 'flow-typed/', 'tmpTest/', 'temp/']
+    ignores: ['index.js', 'lib/', 'flow-typed/', 'tmpTest/']
   },
   js.configs.recommended,
   {

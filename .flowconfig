@@ -1,7 +1,6 @@
 [ignore]
 lib/
 tmpTest/
-temp/
 
 [untyped]
 node_modules/

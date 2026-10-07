@@ -105,8 +105,9 @@ Full rules: node_modules/strangelog/AGENTS.md
 Requires Yarn classic (`1.22.22`, see `packageManager` in `package.json`). `.nvmrc` pins the recommended Node.js version.
 
 - `yarn install`: installs dependencies and compiles `src/` to `lib/`
-- `yarn test-ci`: runs the Jest test suite
-- `yarn lint`: runs ESLint
+- `yarn test-ci`: runs the Vitest test suite
+- `yarn lint`: runs oxlint
+- `yarn format-check`: checks the formatting with oxfmt (`yarn format` fixes it)
 - `yarn typecheck`: runs the TypeScript type check
 - `yarn ci-pipeline`: runs all of the above, as CI does
 - `yarn start [command]`: runs the CLI from source

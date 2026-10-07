@@ -26,12 +26,14 @@ Requirements: Node.js `^22.18.0 || >=24.11.0` (`.nvmrc` = 24) and Yarn classic `
 | Command | What it does |
 | --- | --- |
 | `yarn install --frozen-lockfile` | installs dependencies; `prepare` compiles `src/` to `lib/` |
-| `yarn compile` | `tsc -p tsconfig.build.json`: `src/` -> `lib/` (CommonJS + `.d.ts`) |
-| `yarn test-ci` | full Jest suite, `--runInBand` |
-| `yarn jest --config=jest.config.json <file>` | run one spec file (prefer this while iterating) |
-| `yarn lint` / `yarn lint-fix` | ESLint (flat config in `eslint.config.mjs`) |
+| `yarn compile` | `tsc -p tsconfig.build.json` (TypeScript 7): `src/` -> `lib/` (CommonJS + `.d.ts`) |
+| `yarn test-ci` | full Vitest suite (`vitest run`), one spec file at a time |
+| `yarn vitest run <file>` | run one spec file (prefer this while iterating) |
+| `yarn test-dev` | Vitest in watch mode |
+| `yarn lint` / `yarn lint-fix` | oxlint with type-aware rules (config in `.oxlintrc.json`) |
+| `yarn format` / `yarn format-check` | oxfmt: format / check formatting (config in `.oxfmtrc.json`) |
 | `yarn typecheck` | TypeScript type check of `src/` and `test/` (`tsc --noEmit`) |
-| `yarn ci-pipeline` | tests + lint + typecheck, exactly what CI runs |
+| `yarn ci-pipeline` | tests + lint + format-check + typecheck, exactly what CI runs |
 | `node test/smoke.cjs` | smoke test of the compiled `lib/` (run `yarn compile` first) |
 | `yarn start <command>` | run the CLI from source via `tsx`, e.g. `yarn start --help` |
 
@@ -71,6 +73,9 @@ test/
   smoke.cjs                 smoke test of the compiled lib/
 tsconfig.json               type check settings for src/ and test/ (no emit)
 tsconfig.build.json         build settings: src/ -> lib/ with declarations
+vitest.config.ts            test settings (spec location, sequential files)
+.oxlintrc.json              lint rules
+.oxfmtrc.json               formatting settings
 changelog/                  this project's own changelog (strangelog dogfoods itself)
 ```
 
@@ -100,22 +105,26 @@ add tests to `test/specs/api/migrate.spec.ts`, and document the user-visible eff
 ## Code conventions
 
 - Sources and tests are TypeScript (`.ts`) with `strict: true`. Annotate exported functions. No
-  `any` (`@typescript-eslint/no-explicit-any` is an error) and no `as unknown as` double casts.
+  `any` (`typescript/no-explicit-any` and the type-aware `typescript/no-unsafe-*` rules are
+  errors) and no `as unknown as` double casts.
   Where a value really has an unknown shape (`js-yaml`'s `load()` returns `unknown`), cast once at
   that boundary to the domain type (`load(...) as EntryType`) and keep the rest typed.
 - Use `import type { ... }` for type-only imports. `isolatedModules` is on, so every file must
-  compile on its own (ts-jest and tsx transpile file by file).
+  compile on its own (Vitest and tsx transpile file by file).
 - Types of dependencies come from the packages themselves or from `@types/*` dev dependencies
-  (`@types/node`, `@types/jest`, `@types/fs-extra`, `@types/semver`, `@types/yargs`).
+  (`@types/node`, `@types/fs-extra`, `@types/semver`, `@types/yargs`).
   `@types/node` follows the oldest supported Node.js major (22), so tsc flags APIs that Node 22
   lacks.
-- ESLint enforces the style; run `yarn lint-fix` and then read the result, since some fixes (for
-  example `object-property-newline`) produce awkward layouts that are better rewritten by hand.
-  Notable rules: single quotes, semicolons, max line length 100, `func-style: declaration`,
-  a blank line after variable declarations and before `return`, `import-x/order` with blank lines
-  between import groups, no CommonJS in `.ts` files (use `.cjs` for plain Node scripts),
-  `no-undefined`, no nested ternaries. `import-x/named` is off because tsc already checks named
-  imports and import-x cannot follow the `fs` re-exports of `@types/fs-extra`.
+- oxfmt owns the layout: print width 100, single quotes, semicolons, no trailing commas, imports
+  sorted in the groups builtin, external, parent, sibling with blank lines between groups. Run
+  `yarn format` instead of formatting by hand. It only touches code and JSON; Markdown, YAML and
+  the changelog entries are left alone.
+- oxlint enforces the rest (`.oxlintrc.json`). Notable rules: `func-style: declaration`,
+  `no-undefined`, no nested ternaries, `no-else-return`, `prefer-template`, no CommonJS in `.ts`
+  files (use `.cjs` for plain Node scripts), `import/no-cycle`, and type-aware rules such as
+  `no-floating-promises` and `no-misused-promises` (via `oxlint-tsgolint`). Mark a promise you
+  deliberately do not await with `void`. Neither tool enforces the blank line after variable
+  declarations and before `return`; keep it by hand.
 - ES module syntax in `src/`; tsc compiles it to CommonJS. That relies on `package.json` having no
   `"type": "module"` and on `module: nodenext` in `tsconfig.json`, which treats every `.ts` file
   as CommonJS: relative imports stay extensionless, and ESM-only dependencies (`yargs`, `inquirer`)
@@ -140,14 +149,19 @@ add tests to `test/specs/api/migrate.spec.ts`, and document the user-visible eff
   that fails without the fix; every feature gets tests for its main path and its error path.
 - Tests create projects under `tmpTest/` (git-ignored) via `test/factories`. Some specs
   `process.chdir()` into a test project; always restore the cwd in `afterEach`.
-- Date-dependent tests use `jest.useFakeTimers({ now: new Date(...) })` and `jest.useRealTimers()`.
+- Import `describe`, `it`, `expect`, `vi` and the hooks from `vitest`; there are no globals.
+- Date-dependent tests use `vi.useFakeTimers({ now: new Date(...), toFake: ['Date'] })` and
+  `vi.useRealTimers()`. Fake only `Date`: the CLI helpers rely on real timers.
+- Spec files run one after another (`fileParallelism: false` in `vitest.config.ts`) in child
+  processes (`pool: 'forks'`, which `process.chdir()` needs), because they share `tmpTest/` and the
+  cwd. CLI specs set a 20 s timeout on their `describe` (`describe(name, { timeout: 20000 }, ...)`).
 - CLI tests call `runCLI(cwd, args, inputs)`: it spawns `test/runSourceCLI.cjs` and sends each input
   once the prompt has rendered (stdout idle for 500 ms). Use `CLIButtons` for arrow keys and enter.
   Expect about 5 to 10 seconds per interactive CLI test.
-- Snapshots exist for API output. Update them (`-u`) only when the output change is intended, and
-  review the snapshot diff.
+- Snapshots exist for API output. Update them (`yarn vitest run <file> --update`) only when the
+  output change is intended, and review the snapshot diff.
 - Do not skip, `.only` or weaken tests to get green.
-- The Jest suite only runs on POSIX systems: fixtures use `:` in file names (to test the migration)
+- The test suite only runs on POSIX systems: fixtures use `:` in file names (to test the migration)
   and some tests delete their own cwd. Windows is covered by `test/smoke.cjs` in CI.
 
 ## Changelog entries (required)
@@ -171,13 +185,13 @@ Commit the generated YAML file. Never edit entries in released version directori
 
 - Upgrade with `yarn upgrade <pkg>@<version>` (or edit `package.json` and run `yarn install`), then
   commit `package.json` and `yarn.lock` together. CI installs with `--frozen-lockfile`.
-- Use stable releases only. Check peer dependency ranges before upgrading ESLint or its plugins:
-  `eslint-plugin-import-x`, `@stylistic/eslint-plugin`, `typescript-eslint` and
-  `eslint-import-resolver-typescript` must all support the ESLint major.
-- TypeScript is pinned to the newest version that `typescript-eslint` and `ts-jest` support (see
-  their `typescript` peer ranges). TypeScript 7 (the native port) has no JavaScript API yet, so
-  those tools cannot use it; upgrade only once both support it.
-- `ts-jest` is the Jest transform; `tsx` runs the CLI from source (`yarn start`,
+- Use stable releases only. Check peer dependency ranges before upgrading: Vitest needs `vite` as
+  a peer (it is a direct dev dependency for that reason), and `oxlint` needs a matching
+  `oxlint-tsgolint` for the type-aware rules.
+- TypeScript 7 (the native compiler) runs the type check and the build. No tool here uses the
+  TypeScript JavaScript API: Vitest and tsx strip types themselves, and `oxlint-tsgolint` brings
+  its own type checker.
+- Vitest transforms the specs; `tsx` runs the CLI from source (`yarn start`,
   `test/runSourceCLI.cjs`). Babel is not used.
 
 ## CI, branches and merging
@@ -193,12 +207,15 @@ Commit the generated YAML file. Never edit entries in released version directori
 
 ## Common pitfalls
 
-- Testing only through Jest: ts-jest and tsx compile `src/` on their own, so a broken `lib/` build
+- Testing only through Vitest: Vitest and tsx compile `src/` on their own, so a broken `lib/` build
   is invisible to `yarn test-ci`. Run `yarn compile && node test/smoke.cjs`.
-- ts-jest only transpiles (`isolatedModules`), so Jest passes even with type errors. Type errors
-  only show up in `yarn typecheck`, which is part of `yarn ci-pipeline`.
-- Node.js' built-in type stripping cannot run `src/` directly: it does not resolve the
-  extensionless relative imports. Use `yarn start` (tsx) or the compiled `lib/`.
+- Vitest only strips types, so the tests pass even with type errors. Type errors only show up in
+  `yarn typecheck`, which is part of `yarn ci-pipeline`.
+- Node.js' built-in type stripping cannot run `src/` directly. Without `"type"` in `package.json`,
+  Node.js detects the `import` syntax and loads the `.ts` files as ES modules, while tsc compiles
+  them as CommonJS. As ES modules, the extensionless relative imports do not resolve, and named
+  imports from CommonJS packages fail (`import { existsSync } from 'fs-extra'`: "Named export
+  'existsSync' not found"). Use `yarn start` (tsx) or the compiled `lib/`.
 - `getProjectConfig()` and `getPossibleNextVersions()` / `getAutomaticNextVersion()` read
   `.strangelogrc` and `package.json` from `process.cwd()`, not from the changelog path.
 - A project without `info.yml` but with entry files is treated as pre-`info.yml` (format version

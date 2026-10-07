@@ -6,12 +6,19 @@ import { outputFileSync, removeSync } from 'fs-extra';
 import { dump } from 'js-yaml';
 
 import { CURRENT_VERSION } from '../../src/api';
+import type { ComponentsConfigType } from '../../src/types';
 
 import { getOwnTestPath } from './fileSystem';
 
 const testProjectPaths = [];
 
-export function createTestProject(customPath?: string = 'changelog'): {
+export function createTestProject(
+  customPath?: string = 'changelog',
+  components?: ComponentsConfigType = {
+    comp1: 'Comp 1',
+    comp2: 'Comp 2'
+  }
+): {
   rootPath: string,
   changelogPath: string,
   infoFilePath: string,
@@ -27,10 +34,7 @@ export function createTestProject(customPath?: string = 'changelog'): {
   }));
   outputYAMLSync(joinPath(rootPath, '.strangelogrc'), {
     path: customPath,
-    components: {
-      comp1: 'Comp 1',
-      comp2: 'Comp 2'
-    }
+    components
   });
 
   outputYAMLSync(infoFilePath, { version: CURRENT_VERSION });

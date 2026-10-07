@@ -65,6 +65,34 @@ describe('getChangelogData', () => {
     expect(additionEntries[2].component).toBe('comp3');
   });
 
+  it('sorts by title when components are configured as objects', () => {
+    const changelogAPI = connectChangelog({
+      path: testPath,
+      components: {
+        comp1: {
+          title: 'B Comp',
+          enabled: false
+        },
+        comp2: 'A Comp'
+      }
+    });
+
+    changelogAPI.addEntry({
+      component: 'comp1',
+      kind: 'addition',
+      description: 'some silly description'
+    });
+    changelogAPI.addEntry({
+      component: 'comp2',
+      kind: 'addition',
+      description: 'some silly description'
+    });
+
+    const additionEntries = changelogAPI.getChangelogData()[0].entries.addition;
+
+    expect(additionEntries.map(({ component }) => component)).toEqual(['comp2', 'comp1']);
+  });
+
   describe('when there are no entries of a certain kind', () => {
 
     it('returns an empty array for that kind', () => {

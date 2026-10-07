@@ -13,7 +13,7 @@ import type {
   EntryKindType
 } from '../types';
 
-import { globPaths, stringifyVersion } from './utils';
+import { getComponentTitle, globPaths, stringifyVersion } from './utils';
 import getSortedChangelogVersions from './getSortedChangelogVersions';
 
 const entryKinds: EntryKindType[] = [
@@ -74,7 +74,8 @@ function sortByComponent(config: ConfigType, entry1: EntryType, entry2: EntryTyp
     return -1;
   }
 
-  return config.components[component1].localeCompare(config.components[component2]);
+  return getComponentTitle(config.components[component1])
+    .localeCompare(getComponentTitle(config.components[component2]));
 }
 
 function getVersionChangelogFileNames(

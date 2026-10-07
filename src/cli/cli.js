@@ -19,6 +19,9 @@ import runMigrate from './commands/migrate';
 import runRenameComponent from './commands/renameComponent';
 
 export default function cli(args: string[]) {
+  if (!args.length)
+    args = ['--help'];
+
   yargs(args)
     .command(
       'add',

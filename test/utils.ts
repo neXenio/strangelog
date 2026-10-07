@@ -35,11 +35,25 @@ export const CLIButtons = {
 
 const INPUT_IDLE_DELAY = 500;
 
+export type CLIResultType = {
+  stdout: string,
+  stderr: string,
+  exitCode: number | null
+};
+
 export async function runCLI(
   cwd: string,
   command: string[],
   inputs: string[]
 ): Promise<string> {
+  return (await runCLIWithResult(cwd, command, inputs)).stdout;
+}
+
+export function runCLIWithResult(
+  cwd: string,
+  command: string[],
+  inputs: string[]
+): Promise<CLIResultType> {
   const childProcess = spawn(
     process.execPath,
     [joinPath(__dirname, 'runSourceCLI.cjs'), ...command],
@@ -82,14 +96,22 @@ export async function runCLI(
       });
     }
 
-    const chunks: Buffer[] = [];
+    const stdoutChunks: Buffer[] = [];
+    const stderrChunks: Buffer[] = [];
 
     childProcess.stdout.on('data', (chunk) => {
-      chunks.push(chunk);
+      stdoutChunks.push(chunk);
     });
-    childProcess.on('close', () => {
+    childProcess.stderr.on('data', (chunk) => {
+      stderrChunks.push(chunk);
+    });
+    childProcess.on('close', (exitCode) => {
       clearTimeout(inputTimer);
-      resolve(Buffer.concat(chunks).toString());
+      resolve({
+        stdout: Buffer.concat(stdoutChunks).toString(),
+        stderr: Buffer.concat(stderrChunks).toString(),
+        exitCode
+      });
     });
   });
 }

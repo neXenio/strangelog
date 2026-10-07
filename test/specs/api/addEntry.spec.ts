@@ -34,12 +34,14 @@ describe('addEntry', () => {
     it('adds entry with null component', () => {
       const { changeLog, testProject } = setup();
 
-      changeLog.addEntry({
+      const entryFilePath = changeLog.addEntry({
         component: null,
         kind: 'fix',
         description: ''
       });
 
+      expect(entryFilePath)
+        .toBe(`${testProject.changelogPath}/next/2017-06-24T00-01-02.000Z_fix_all.yml`);
       expect(
         readSingleYAMLFileFromGlob(`${testProject.changelogPath}/next/**/*.yml`)
       ).toMatchSnapshot();

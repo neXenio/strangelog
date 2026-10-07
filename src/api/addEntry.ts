@@ -8,7 +8,7 @@ import { ensureInitializedProject } from './changelogInfo';
 export default function addEntry(
   config: ConfigType,
   entry: EntryType
-): void {
+): string {
   const { path, components } = config;
   const { component } = entry;
 
@@ -25,13 +25,17 @@ export default function addEntry(
   const readableComponent = entry.component || 'all';
   const fileName = `${fsFriendlyDateTimeString}_${entry.kind}_${readableComponent}.yml`;
 
+  const entryFilePath = `${path}/next/${fileName}`;
+
   outputFileSync(
-    `${path}/next/${fileName}`,
+    entryFilePath,
     dump({
       dateTime: date.toISOString(),
       ...entry
     })
   );
+
+  return entryFilePath;
 }
 
 function toFSFriendlyDateTime(date: Date): string {

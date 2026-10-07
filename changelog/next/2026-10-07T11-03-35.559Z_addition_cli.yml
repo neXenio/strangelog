@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T11:03:35.559Z'
+component: cli
+kind: addition
+description: >-
+  Components configured with `enabled: false` in `.strangelogrc` are no longer
+  offered by `strangelog add`

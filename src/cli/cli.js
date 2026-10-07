@@ -4,16 +4,19 @@ import yargs from 'yargs';
 
 import { connectChangelog } from '../api';
 import getProjectConfig from '../getProjectConfig';
+import type { ChangelogAPIType } from '../types';
 
 import type {
   CLIOptionsType,
   CLIGenerateOptionsType,
-  CLIBumpOptionsType
+  CLIBumpOptionsType,
+  CLIRenameComponentOptionsType
 } from './types';
 import runAdd from './commands/add';
 import runBump from './commands/bump';
 import runGenerate from './commands/generate';
 import runMigrate from './commands/migrate';
+import runRenameComponent from './commands/renameComponent';
 
 export default function cli(args: string[]) {
   if (!args.length)
@@ -30,7 +33,8 @@ export default function cli(args: string[]) {
       'bump',
       'bumps "next" changelog to new version',
       (yargs) => {
-        yargs.option('version', {
+        // `bump --version`/`-v` is the version to bump to, not yargs' built-in version flag
+        yargs.version(false).option('version', {
           alias: 'v',
           describe: 'next version to bump to'
         });
@@ -42,6 +46,18 @@ export default function cli(args: string[]) {
       'migrates changelog files to latest version after updating strangelog',
       () => {},
       withAPI((changelog) => runMigrate(changelog))
+    )
+    .command(
+      'rename-component <from> <to>',
+      'moves all entries of component <from> to component <to> (renames or merges components)',
+      (yargs) => {
+        yargs
+          .positional('from', { type: 'string' })
+          .positional('to', { type: 'string' });
+      },
+      withAPI(
+        (changelog, argv: CLIRenameComponentOptionsType) => runRenameComponent(changelog, argv)
+      )
     )
     .command(
       'generate',
@@ -57,13 +73,15 @@ export default function cli(args: string[]) {
       withAPI((changelog, argv: CLIGenerateOptionsType) => runGenerate(changelog, argv))
     )
     .help()
-    .argv;
-  }
+    .parse();
+}
 
-function withAPI(commandFunction) {
-  return (argv: CLIOptionsType, ...args) => {
+function withAPI<ArgvType extends CLIOptionsType>(
+  commandFunction: (changelog: ChangelogAPIType, argv: ArgvType) => Promise<void>
+): (argv: ArgvType) => Promise<void> {
+  return (argv: ArgvType) => {
     const changelog = connectChangelog(getProjectConfig());
 
-    return commandFunction(changelog, argv, ...args);
+    return commandFunction(changelog, argv);
   };
 }

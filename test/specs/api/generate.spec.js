@@ -5,6 +5,7 @@ import { removeSync } from 'fs-extra';
 import { addTestVersionsWithEntries, addEntryWithoutComponent } from '../../factories/changelog';
 import { connectChangelog } from '../../../src/api';
 import { getOwnTestPath } from '../../factories/fileSystem';
+import type { ComponentsConfigType } from '../../../src/types';
 
 const testPath = getOwnTestPath();
 
@@ -19,7 +20,7 @@ describe('generate', () => {
   });
 
   function setup(
-    components = {
+    components: ComponentsConfigType = {
       comp1: 'Comp 1',
       comp2: 'Comp 2'
     }
@@ -38,6 +39,25 @@ describe('generate', () => {
     expect(
       changelogAPI.generate()
     ).toMatchSnapshot();
+  });
+
+  describe('when components are configured as objects', () => {
+    it('renders their titles, including disabled components', () => {
+      const changelogAPI = setup({
+        comp1: { title: 'Comp 1' },
+        comp2: {
+          title: 'Comp 2',
+          enabled: false
+        }
+      });
+
+      addTestVersionsWithEntries(changelogAPI);
+
+      const markdown = changelogAPI.generate();
+
+      expect(markdown).toMatch('- **Comp 1:** comp1 addition description');
+      expect(markdown).toMatch('- **Comp 2:** comp2 fix description');
+    });
   });
 
   describe('when there are no configured components', () => {

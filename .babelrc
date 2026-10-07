@@ -1,7 +1,6 @@
 {
   "presets": [
-    "es2015",
-    "stage-1",
-    "flow"
+    ["@babel/preset-env", { "targets": { "node": "22.18" }, "modules": "commonjs" }],
+    "@babel/preset-flow"
   ]
 }

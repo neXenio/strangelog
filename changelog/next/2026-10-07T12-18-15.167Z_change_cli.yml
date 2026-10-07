@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T12:18:15.167Z'
+component: cli
+kind: change
+description: >-
+  `strangelog add` phrases the description question by kind of change (e.g.
+  "What is fixed?")

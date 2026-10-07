@@ -16,8 +16,15 @@ export type ChangelogInfoType = {
 
 export type MigratorType = (config: ConfigType) => void
 
+// A component is configured either by its title or by an object; `enabled: false` keeps a
+// component for rendering existing entries but no longer offers it for new ones
+export type ComponentConfigType = string | {
+  title: string,
+  enabled?: boolean
+};
+
 export type ComponentsConfigType = {
-  [name: string]: string
+  [name: string]: ComponentConfigType
 };
 
 export type EntryKindType = 'addition' | 'change' | 'fix' | 'security' | 'removal' | 'deprecation';
@@ -47,6 +54,7 @@ export type ChangelogAPIType = {
   getPossibleNextVersions: () => string[] | null,
   getComponentsConfig: () => ComponentsConfigType,
   migrate: () => MigrationResultType,
+  renameComponent: (from: string, to: string) => number,
   getChangelogInfo: () => ChangelogInfoType,
   saveChangelogInfo: (newChangelogInfo: ChangelogInfoType) => void
 };

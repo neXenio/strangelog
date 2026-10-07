@@ -3,16 +3,17 @@
 import { join as joinPath } from 'path';
 import { spawn } from 'child_process';
 
-import concatStream from 'concat-stream';
-import { sync as globSync } from 'glob';
+import { globSync } from 'glob';
 import { readFileSync, outputFileSync } from 'fs-extra';
-import jsYAML from 'js-yaml';
+import { dump, load } from 'js-yaml';
 
-function readYAMLFileSync(filePath: string) {
-  return jsYAML.safeLoad(readFileSync(filePath).toString());
+function readYAMLFileSync(filePath: string): { [key: string]: unknown } {
+  return load(readFileSync(filePath).toString());
 }
 
-export function readSingleYAMLFileFromGlob(...fileGlobPathParts: string[]) {
+export function readSingleYAMLFileFromGlob(
+  ...fileGlobPathParts: string[]
+): { [key: string]: unknown } {
   const matchedFiles = joinAndGlob(...fileGlobPathParts);
 
   expect(matchedFiles.length).toBe(1);
@@ -20,12 +21,12 @@ export function readSingleYAMLFileFromGlob(...fileGlobPathParts: string[]) {
   return readYAMLFileSync(matchedFiles[0]);
 }
 
-export function joinAndGlob(...fileGlobPathParts: string[]) {
+export function joinAndGlob(...fileGlobPathParts: string[]): string[] {
   return globSync(joinPath(...fileGlobPathParts));
 }
 
-export function joinAndOutputYAMLFile(pathParts: string[], json: Object) {
-  return outputFileSync(joinPath(...pathParts), jsYAML.safeDump(json));
+export function joinAndOutputYAMLFile(pathParts: string[], json: unknown): void {
+  return outputFileSync(joinPath(...pathParts), dump(json));
 }
 
 export const CLIButtons = {
@@ -34,37 +35,47 @@ export const CLIButtons = {
   ENTER: '\x0D'
 };
 
+const INPUT_IDLE_DELAY = 500;
+
 export async function runCLI(
   cwd: string,
   command: string[],
   inputs: string[]
 ): Promise<string> {
   const childProcess = spawn(
-    '../../node_modules/.bin/babel-node',
-    ['../../src/cli/index.js', ...command],
+    process.execPath,
+    [joinPath(__dirname, 'runSourceCLI.cjs'), ...command],
     {
       stdio: [null, null, null],
       cwd
     }
   );
 
-  // setEncoding exists, works and is documented
-  // (see https://nodejs.org/api/stream.html#stream_readable_setencoding_encoding)
-  // $FlowFixMe
-  childProcess.stdin.setEncoding('utf-8');
+  // Each input is sent once the prompt has rendered (stdout went quiet after new output), since
+  // keystrokes that arrive before a prompt is ready get lost.
+  const remainingInputs = [...inputs];
+  let inputTimer;
 
-  function processInputs(remainingInputs) {
-    if (remainingInputs.length > 0) {
-      setTimeout(() => {
-        childProcess.stdin.write(remainingInputs[0]);
-        processInputs(remainingInputs.slice(1));
-      }, 2000);
-    } else {
-      childProcess.stdin.end();
-    }
+  function sendNextInputWhenIdle() {
+    clearTimeout(inputTimer);
+    inputTimer = setTimeout(() => {
+      const nextInput = remainingInputs.shift();
+
+      if (typeof nextInput === 'string') {
+        childProcess.stdin.write(nextInput);
+      }
+
+      if (remainingInputs.length === 0) {
+        childProcess.stdin.end();
+      }
+    }, INPUT_IDLE_DELAY);
   }
 
-  processInputs(inputs);
+  if (remainingInputs.length === 0) {
+    childProcess.stdin.end();
+  } else {
+    childProcess.stdout.on('data', sendNextInputWhenIdle);
+  }
 
   return new Promise((resolve) => {
     if (process.env.DEBUG_CLI_TESTS) {
@@ -73,8 +84,14 @@ export async function runCLI(
       });
     }
 
-    childProcess.stdout.pipe(concatStream((result) => {
-      resolve(result.toString());
-    }));
+    const chunks = [];
+
+    childProcess.stdout.on('data', (chunk) => {
+      chunks.push(chunk);
+    });
+    childProcess.on('close', () => {
+      clearTimeout(inputTimer);
+      resolve(Buffer.concat(chunks).toString());
+    });
   });
 }

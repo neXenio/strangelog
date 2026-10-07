@@ -1,0 +1,4 @@
+dateTime: '2026-10-07T09:11:25.355Z'
+component: cli
+kind: change
+description: Interactive prompts are rendered by Inquirer 14

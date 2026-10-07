@@ -20,7 +20,7 @@ const entryKindToReadable = {
 export default function defaultTemplate(
   helpers: TemplateHelpersType,
   changelog: ChangelogType
-) {
+): string {
   return [
     '# Changelog',
     ...changelog.map((versionChangelog) => renderVersionChangelog(helpers, versionChangelog))
@@ -31,7 +31,7 @@ function renderVersionChangelog(
   helpers: TemplateHelpersType,
   { version, entries }: VersionChangelogType
 ): string {
-  // $FlowFixMe: Object.keys() does not refine correctly based on type definition of keys
+  // $FlowFixMe[incompatible-type]: Object.keys() does not refine to the key type
   const entryKeys: EntryKindType[] = Object.keys(entries);
 
   return [

@@ -2,7 +2,8 @@
 
 import inquirer from 'inquirer';
 
-import type { ChangelogAPIType, ComponentsConfigType } from '../../types';
+import { getComponentTitle, isComponentEnabled } from '../../api/utils';
+import type { ChangelogAPIType, ComponentsConfigType, EntryKindType } from '../../types';
 
 export default async function runAdd(
   { addEntry, getComponentsConfig }: ChangelogAPIType
@@ -12,17 +13,27 @@ export default async function runAdd(
   addEntry(answers);
 }
 
+const descriptionQuestions = {
+  addition: 'What is added?',
+  change: 'What changes?',
+  fix: 'What is fixed?',
+  removal: 'What is removed?',
+  deprecation: 'What is deprecated?',
+  security: 'What is fixed?'
+};
+
 function promptEntryInformation(componentsConfig: ComponentsConfigType) {
-  const componentKeys = Object.keys(componentsConfig);
+  const componentKeys = Object.keys(componentsConfig)
+    .filter((componentName) => isComponentEnabled(componentsConfig[componentName]));
 
   const componentQuestions = componentKeys.length === 0
     ? []
     : [{
       name: 'component',
-      type: 'list',
+      type: 'select',
       message: 'Which component is your change affecting?',
       choices: componentKeys.map((componentName) => ({
-        name: componentsConfig[componentName],
+        name: getComponentTitle(componentsConfig[componentName]),
         value: componentName
       }))
     }];
@@ -31,7 +42,7 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType) {
     ...componentQuestions,
     {
       name: 'kind',
-      type: 'list',
+      type: 'select',
       message: 'What kind of change are you documenting?',
       choices: [{
         name: 'Addition (e.g. new button, new behavior)',
@@ -46,8 +57,8 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType) {
     }, {
       name: 'description',
       type: 'input',
-      message: 'What changed?',
-      validate: (input) => (input.length < 10)
+      message: ({ kind }: { kind: EntryKindType }) => descriptionQuestions[kind],
+      validate: (input: string) => (input.length < 10)
         ? 'Describe the change in at least 10 characters'
         : true
     }

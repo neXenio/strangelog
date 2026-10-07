@@ -35,7 +35,7 @@ async function promptNewVersionInformation(
 
   return inquirer.prompt([{
     name: 'nextVersion',
-    type: 'list',
+    type: 'select',
     message: 'How should the new version be called?',
     choices: versions
   }]);

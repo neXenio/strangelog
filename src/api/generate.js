@@ -3,14 +3,14 @@
 import type { ConfigType, ChangelogType } from '../types';
 import defaultTemplate from '../templates/defaultTemplate';
 
-import { stringifyVersion } from './utils';
+import { getComponentTitle, stringifyVersion } from './utils';
 
-function readableComponent(componentID: string, { components }: ConfigType): string {
-  if (componentID === null) {
+function readableComponent(componentID: ?string, { components }: ConfigType): string {
+  if (componentID == null) {
     return 'All';
   }
 
-  return components[componentID];
+  return getComponentTitle(components[componentID]);
 }
 
 export default function generate(

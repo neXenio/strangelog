@@ -1,30 +1,18 @@
 // @flow
 
-import { join as joinPath } from 'path';
-
-import { sync as syncGlob } from 'glob';
+import { basename, join as joinPath } from 'path';
 
 import type { ConfigType } from '../types';
 
-const VERSION_DIRECTORY_NAME_MATCH = /([^\/]+)?\/$/;
+import { globPaths } from './utils';
 
 export default function getSortedChangelogVersions(config: ConfigType): string[] {
   return getVersionDirectoryNames(config)
-    .map((versionDirectoryName) => {
-      const versionDirectoryMatch = versionDirectoryName.match(VERSION_DIRECTORY_NAME_MATCH);
-
-      if (!versionDirectoryMatch) {
-        throw new Error(
-          `Could not detect valid version on version directory ${versionDirectoryName}`
-        );
-      }
-
-      return versionDirectoryMatch[1];
-    })
+    .map((versionDirectoryPath) => basename(versionDirectoryPath))
     .filter((versionDirectoryName) => versionDirectoryName !== 'next')
     .sort().reverse();
 }
 
 function getVersionDirectoryNames({ path }: ConfigType): string[] {
-  return syncGlob(joinPath(path, '*/'));
+  return globPaths(joinPath(path, '*/'));
 }

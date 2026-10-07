@@ -1,7 +1,6 @@
 // @flow
 
 import { removeSync } from 'fs-extra';
-import { install as installClock } from 'lolex';
 
 import { connectChangelog } from '../../../src/api';
 import { addTestVersionsWithEntries } from '../../factories/changelog';
@@ -11,16 +10,14 @@ const testPath = getOwnTestPath();
 
 describe('getChangelogData', () => {
 
-  let clock;
-
   beforeEach(() => {
     removeSync(testPath);
-    clock = installClock(new Date('2017-06-24T00:01:02.000Z'));
+    jest.useFakeTimers({ now: new Date('2017-06-24T00:01:02.000Z') });
   });
 
   afterEach(() => {
     removeSync(testPath);
-    clock.uninstall();
+    jest.useRealTimers();
   });
 
   function setup() {
@@ -66,6 +63,34 @@ describe('getChangelogData', () => {
     expect(additionEntries[0].component).toBe('comp1');
     expect(additionEntries[1].component).toBe('comp2');
     expect(additionEntries[2].component).toBe('comp3');
+  });
+
+  it('sorts by title when components are configured as objects', () => {
+    const changelogAPI = connectChangelog({
+      path: testPath,
+      components: {
+        comp1: {
+          title: 'B Comp',
+          enabled: false
+        },
+        comp2: 'A Comp'
+      }
+    });
+
+    changelogAPI.addEntry({
+      component: 'comp1',
+      kind: 'addition',
+      description: 'some silly description'
+    });
+    changelogAPI.addEntry({
+      component: 'comp2',
+      kind: 'addition',
+      description: 'some silly description'
+    });
+
+    const additionEntries = changelogAPI.getChangelogData()[0].entries.addition;
+
+    expect(additionEntries.map(({ component }) => component)).toEqual(['comp2', 'comp1']);
   });
 
   describe('when there are no entries of a certain kind', () => {

@@ -1,10 +1,13 @@
+/.github
 /flow-typed
 /src
+/temp
 /test
+/tmpTest
 /.babelrc
 /.flowconfig
-/.eslintrc
-/.eslintignore
 /.gitignore
-/.travis.yml
+/.nvmrc
+/eslint.config.mjs
 /jest.config.json
+/.omc

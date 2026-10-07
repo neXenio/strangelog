@@ -128,4 +128,34 @@ describe('$ add', () => {
       .toEqual('fix');
   });
 
+  it('offers the removal, deprecation and security kinds', async () => {
+    const testProject = setup();
+
+    const output = await runCLI(
+      testProject.rootPath,
+      ['add'],
+      [
+        // Select first offered component
+        CLIButtons.ENTER,
+
+        // Select sixth change kind ("Security")
+        CLIButtons.ARROW_DOWN,
+        CLIButtons.ARROW_DOWN,
+        CLIButtons.ARROW_DOWN,
+        CLIButtons.ARROW_DOWN,
+        CLIButtons.ARROW_DOWN,
+        CLIButtons.ENTER,
+
+        // Enter description and confirm
+        'the description',
+        CLIButtons.ENTER
+      ]
+    );
+
+    expect(output).toMatch('Removal');
+    expect(output).toMatch('Deprecation');
+    expect(readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml').kind)
+      .toEqual('security');
+  });
+
 });

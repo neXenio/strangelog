@@ -6,14 +6,14 @@ export function addTestVersionsWithEntries({ addEntry, bumpNextVersion }: Change
     kind: 'addition',
     description: 'comp1 addition description'
   });
-  bumpNextVersion('1.0.0');
+  bumpNextVersion('1.0.0', { date: '2017-06-24' });
 
   addEntry({
     component: 'comp1',
     kind: 'change',
     description: 'comp1 change description'
   });
-  bumpNextVersion('1.1.0');
+  bumpNextVersion('1.1.0', { date: '2017-06-25' });
 
   addEntry({
     component: 'comp2',

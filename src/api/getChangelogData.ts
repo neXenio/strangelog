@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join as joinPath } from 'path';
 
 import { load } from 'js-yaml';
@@ -40,8 +40,28 @@ function getVersionChangelog(
 
   return {
     version,
+    ...getReleaseInfo(config, version),
     entries
   };
+}
+
+// `bump` writes the release date to <version>/.release.yml; older versions have none
+function getReleaseInfo(
+  { path }: ConfigType,
+  version: string | null | undefined
+): Pick<VersionChangelogType, 'date'> {
+  const releaseFilePath = joinPath(path, stringifyVersion(version), '.release.yml');
+
+  if (!version || !existsSync(releaseFilePath)) {
+    return {};
+  }
+
+  const { date } = (load(readFileSync(releaseFilePath).toString()) || {}) as {
+    date?: string | Date;
+  };
+
+  // an unquoted date in a hand-written file is loaded as a Date
+  return { date: date instanceof Date ? date.toISOString().slice(0, 10) : (date ?? null) };
 }
 
 function sortByComponent(config: ConfigType, entry1: EntryType, entry2: EntryType): number {

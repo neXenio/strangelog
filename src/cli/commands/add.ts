@@ -1,36 +1,39 @@
 import inquirer, { type DistinctQuestion } from 'inquirer';
 
-import { ENTRY_KINDS, getComponentTitle, isComponentEnabled } from '../../api/utils.ts';
-import type {
-  ChangelogAPIType,
-  ComponentsConfigType,
-  EntryKindType,
-  EntryType
-} from '../../types.ts';
+import { getAllowedKinds, getComponentTitle, isComponentEnabled } from '../../api/utils.ts';
+import type { ChangelogAPIType, ConfigType, EntryKindType, EntryType } from '../../types.ts';
 import type { CLIAddOptionsType } from '../types.ts';
 
 // Exit code for invalid `add` flags, so that scripts and coding agents can tell it from failures
 const INVALID_INPUT_EXIT_CODE = 2;
 const MIN_DESCRIPTION_LENGTH = 10;
 
+type PromptAnswersType = Omit<EntryType, 'tickets'> & {
+  tickets: string;
+};
+
 export default async function runAdd(
-  { addEntry, getComponentsConfig }: ChangelogAPIType,
+  { addEntry, getConfig }: ChangelogAPIType,
   flags: CLIAddOptionsType
 ) {
-  const { kind, component, description } = flags;
-  const componentsConfig = getComponentsConfig();
-  const isInteractive = [kind, component, description].every((flag) => typeof flag === 'undefined');
+  const { kind, component, description, ticket } = flags;
+  const config = getConfig();
+  const isInteractive = [kind, component, description, ticket].every(
+    (flag) => typeof flag === 'undefined'
+  );
 
   if (isInteractive) {
-    addEntry(await promptEntryInformation(componentsConfig));
+    const { tickets, ...entry } = await promptEntryInformation(config);
+
+    addEntry({ ...entry, tickets: parseTickets(tickets) });
 
     return;
   }
 
-  const errors = getInvalidFlagErrors(componentsConfig, flags);
+  const errors = getInvalidFlagErrors(config, flags);
 
   if (errors.length > 0) {
-    printInvalidFlags(componentsConfig, errors);
+    printInvalidFlags(config, errors);
     process.exitCode = INVALID_INPUT_EXIT_CODE;
 
     return;
@@ -40,22 +43,39 @@ export default async function runAdd(
     component: component || null,
     // validated by getInvalidFlagErrors()
     kind: kind as EntryKindType,
-    description: (description || '').trim()
+    description: (description || '').trim(),
+    tickets: parseTickets(ticket)
   });
 
   console.log(`Added changelog entry ${entryFilePath}`);
 }
 
-function getEnabledComponentIDs(componentsConfig: ComponentsConfigType): string[] {
-  return Object.keys(componentsConfig).filter((componentName) =>
-    isComponentEnabled(componentsConfig[componentName])
+// `--ticket` may be repeated and each value may be a comma separated list
+function parseTickets(tickets: string | string[] | undefined): string[] {
+  return [tickets || []]
+    .flat()
+    .flatMap((ticketList) => ticketList.split(','))
+    .map((ticket) => ticket.trim())
+    .filter((ticket) => ticket);
+}
+
+function getInvalidTickets({ ticketPattern }: ConfigType, tickets: string[]): string[] {
+  if (!ticketPattern) {
+    return [];
+  }
+
+  const ticketRegExp = new RegExp(ticketPattern);
+
+  return tickets.filter((ticket) => !ticketRegExp.test(ticket));
+}
+
+function getEnabledComponentIDs({ components }: ConfigType): string[] {
+  return Object.keys(components).filter((componentName) =>
+    isComponentEnabled(components[componentName])
   );
 }
 
-function getInvalidFlagErrors(
-  componentsConfig: ComponentsConfigType,
-  flags: CLIAddOptionsType
-): string[] {
+function getInvalidFlagErrors(config: ConfigType, flags: CLIAddOptionsType): string[] {
   // yargs turns a repeated flag into an array
   const repeatedFlagNames = (['kind', 'component', 'description'] as const).filter((flagName) =>
     Array.isArray(flags[flagName])
@@ -65,13 +85,14 @@ function getInvalidFlagErrors(
     return repeatedFlagNames.map((flagName) => `--${flagName} is given more than once`);
   }
 
-  const { kind, component, description } = flags;
+  const { kind, component, description, ticket } = flags;
+  const componentsConfig = config.components;
   const errors: string[] = [];
-  const enabledComponentIDs = getEnabledComponentIDs(componentsConfig);
+  const enabledComponentIDs = getEnabledComponentIDs(config);
 
   if (!kind) {
     errors.push('--kind is missing');
-  } else if (!(ENTRY_KINDS as string[]).includes(kind)) {
+  } else if (!(getAllowedKinds(config) as string[]).includes(kind)) {
     errors.push(`--kind "${kind}" is not a valid kind`);
   }
 
@@ -89,17 +110,21 @@ function getInvalidFlagErrors(
     errors.push(`--description must have at least ${MIN_DESCRIPTION_LENGTH} characters`);
   }
 
+  getInvalidTickets(config, parseTickets(ticket)).forEach((invalidTicket) => {
+    errors.push(`--ticket "${invalidTicket}" does not match ${config.ticketPattern}`);
+  });
+
   return errors;
 }
 
-function printInvalidFlags(componentsConfig: ComponentsConfigType, errors: string[]) {
-  const enabledComponentIDs = getEnabledComponentIDs(componentsConfig);
+function printInvalidFlags(config: ConfigType, errors: string[]) {
+  const enabledComponentIDs = getEnabledComponentIDs(config);
 
   console.error(
     [
       'Cannot add the changelog entry:',
       ...errors.map((error) => `  - ${error}`),
-      `Valid kinds: ${ENTRY_KINDS.join(', ')}`,
+      `Valid kinds: ${getAllowedKinds(config).join(', ')}`,
       enabledComponentIDs.length > 0
         ? `Valid components: ${enabledComponentIDs.join(', ')}`
         : 'No components are defined in .strangelogrc: leave out --component'
@@ -116,10 +141,39 @@ const descriptionQuestions = {
   security: 'What is fixed?'
 };
 
-function promptEntryInformation(componentsConfig: ComponentsConfigType): Promise<EntryType> {
-  const componentKeys = getEnabledComponentIDs(componentsConfig);
+const kindChoices = [
+  {
+    name: 'Addition (e.g. new button, new behavior)',
+    value: 'addition'
+  },
+  {
+    name: 'Change (e.g. change of existing behavior)',
+    value: 'change'
+  },
+  {
+    name: 'Bug Fix',
+    value: 'fix'
+  },
+  {
+    name: 'Removal (e.g. removed feature or option)',
+    value: 'removal'
+  },
+  {
+    name: 'Deprecation (e.g. feature or option that will be removed)',
+    value: 'deprecation'
+  },
+  {
+    name: 'Security (e.g. fixed vulnerability)',
+    value: 'security'
+  }
+];
 
-  const componentQuestions: DistinctQuestion<EntryType>[] =
+function promptEntryInformation(config: ConfigType): Promise<PromptAnswersType> {
+  const componentsConfig = config.components;
+  const componentKeys = getEnabledComponentIDs(config);
+  const allowedKinds: string[] = getAllowedKinds(config);
+
+  const componentQuestions: DistinctQuestion<PromptAnswersType>[] =
     componentKeys.length === 0
       ? []
       : [
@@ -134,38 +188,13 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType): Promise
           }
         ];
 
-  const questions: DistinctQuestion<EntryType>[] = [
+  const questions: DistinctQuestion<PromptAnswersType>[] = [
     ...componentQuestions,
     {
       name: 'kind',
       type: 'select',
       message: 'What kind of change are you documenting?',
-      choices: [
-        {
-          name: 'Addition (e.g. new button, new behavior)',
-          value: 'addition'
-        },
-        {
-          name: 'Change (e.g. change of existing behavior)',
-          value: 'change'
-        },
-        {
-          name: 'Bug Fix',
-          value: 'fix'
-        },
-        {
-          name: 'Removal (e.g. removed feature or option)',
-          value: 'removal'
-        },
-        {
-          name: 'Deprecation (e.g. feature or option that will be removed)',
-          value: 'deprecation'
-        },
-        {
-          name: 'Security (e.g. fixed vulnerability)',
-          value: 'security'
-        }
-      ]
+      choices: kindChoices.filter(({ value }) => allowedKinds.includes(value))
     },
     {
       name: 'description',
@@ -176,8 +205,20 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType): Promise
         input.length < MIN_DESCRIPTION_LENGTH
           ? `Describe the change in at least ${MIN_DESCRIPTION_LENGTH} characters`
           : true
+    },
+    {
+      name: 'tickets',
+      type: 'input',
+      message: 'Tickets (comma separated, optional)',
+      validate: (input: string) => {
+        const invalidTickets = getInvalidTickets(config, parseTickets(input));
+
+        return invalidTickets.length > 0
+          ? `${invalidTickets.join(', ')} does not match ${config.ticketPattern}`
+          : true;
+      }
     }
   ];
 
-  return inquirer.prompt<EntryType>(questions);
+  return inquirer.prompt<PromptAnswersType>(questions);
 }

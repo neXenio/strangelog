@@ -28,6 +28,15 @@ try {
     /## Version `1\.0\.0`\n\n### Added\n- \*\*API:\*\* first entry/
   );
 
+  assert.match(
+    connectChangelog({
+      path: changelogPath,
+      components: { api: 'API' },
+      template: 'compact'
+    }).generate(),
+    /### 1\.0\.0 \(\d{4}-\d{2}-\d{2}\)\n\* \*\*api\*\* feat: first entry/
+  );
+
   console.log('Smoke test passed');
 } finally {
   rmSync(join(changelogPath, '..'), { recursive: true, force: true });

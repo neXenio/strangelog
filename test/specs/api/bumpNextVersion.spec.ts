@@ -83,6 +83,32 @@ describe('bumpNextVersion', () => {
       expect(globSync(`${testPath}/1.0.0/fake.yml`).length).toEqual(1);
     });
 
+    it('writes the local date of the release to .release.yml', () => {
+      const { bumpNextVersion } = setup();
+
+      // local time, so the date is the same in every time zone
+      vi.setSystemTime(new Date(2026, 9, 7, 23, 30));
+      outputFileSync(`${testPath}/next/fake.yml`, '');
+
+      bumpNextVersion('1.0.0');
+
+      expect(readFileSync(`${testPath}/1.0.0/.release.yml`).toString()).toBe(
+        "date: '2026-10-07'\n"
+      );
+    });
+
+    it('writes the date given as option to .release.yml', () => {
+      const { bumpNextVersion } = setup();
+
+      outputFileSync(`${testPath}/next/fake.yml`, '');
+
+      bumpNextVersion('1.0.0', { date: '2020-01-31' });
+
+      expect(load(readFileSync(`${testPath}/1.0.0/.release.yml`).toString())).toEqual({
+        date: '2020-01-31'
+      });
+    });
+
     it('creates an new file with the correct content', () => {
       const { addEntry } = setup();
 

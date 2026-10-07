@@ -15,14 +15,14 @@ export default function connectChangelog(config: ConfigType): ChangelogAPIType {
     addEntry(entry) {
       return addEntry(config, entry);
     },
-    bumpNextVersion(nextVersion) {
-      return bumpNextVersion(config, nextVersion);
+    bumpNextVersion(nextVersion, options) {
+      return bumpNextVersion(config, nextVersion, options);
     },
     getChangelogData() {
       return getChangelogData(config);
     },
-    generate() {
-      return generate(config, getChangelogData(config));
+    generate(options) {
+      return generate(config, getChangelogData(config), options);
     },
     getPossibleNextVersions,
     getAutomaticNextVersion() {
@@ -30,6 +30,9 @@ export default function connectChangelog(config: ConfigType): ChangelogAPIType {
     },
     getComponentsConfig() {
       return config.components;
+    },
+    getConfig() {
+      return config;
     },
     migrate() {
       return migrate(config);

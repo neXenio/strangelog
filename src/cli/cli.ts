@@ -41,6 +41,11 @@ export default function cli(args: string[]) {
             alias: 'd',
             type: 'string',
             describe: 'what changed, at least 10 characters'
+          })
+          .option('ticket', {
+            alias: 't',
+            type: 'string',
+            describe: 'ticket ID, repeatable or comma separated'
           });
       },
       withAPI((changelog, argv: CLIAddOptionsType) => runAdd(changelog, argv))
@@ -87,12 +92,23 @@ export default function cli(args: string[]) {
       'generate',
       'generates changelog for all versions',
       (yargs) => {
-        yargs.option('outFile', {
-          alias: 'f',
-          describe: 'name of the changelog file to write',
-          // default: 'CHANGELOG.md',
-          demandOption: true
-        });
+        // `generate --version`/`-v` is the version to render, not yargs' built-in version flag
+        yargs
+          .version(false)
+          .option('outFile', {
+            alias: 'f',
+            type: 'string',
+            // without it, yargs reads `--outFile -` as an empty string followed by a positional "-"
+            nargs: 1,
+            describe: 'name of the changelog file to write, "-" for stdout',
+            // default: 'CHANGELOG.md',
+            demandOption: true
+          })
+          .option('version', {
+            alias: 'v',
+            type: 'string',
+            describe: 'render only this version, without the "# Changelog" header'
+          });
       },
       withAPI((changelog, argv: CLIGenerateOptionsType) => runGenerate(changelog, argv))
     )

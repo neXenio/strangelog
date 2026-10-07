@@ -1,6 +1,9 @@
+import { readFileSync } from 'node:fs';
+
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { connectChangelog } from '#src/api/index';
+import type { ConfigType } from '#src/types';
 import { createTestProject } from '#test/factories/testProject';
 import { readSingleYAMLFileFromGlob } from '#test/utils';
 
@@ -16,7 +19,7 @@ describe('addEntry', () => {
     vi.useRealTimers();
   });
 
-  function setup() {
+  function setup(config: Partial<ConfigType> = {}) {
     const testProject = createTestProject();
 
     const changeLog = connectChangelog({
@@ -24,7 +27,8 @@ describe('addEntry', () => {
       components: {
         comp1: 'Comp 1',
         comp2: 'Comp 2'
-      }
+      },
+      ...config
     });
 
     return {
@@ -63,6 +67,63 @@ describe('addEntry', () => {
           description: ''
         });
       }).toThrow('Unknown component "unknown"');
+    });
+  });
+
+  describe('when called with tickets', () => {
+    it('writes the tickets', () => {
+      const { changeLog } = setup();
+
+      const entryFilePath = changeLog.addEntry({
+        component: 'comp1',
+        kind: 'fix',
+        description: 'a fix',
+        tickets: ['LUCA-1', 'LUCA-2']
+      });
+
+      expect(readFileSync(entryFilePath).toString()).toBe(
+        [
+          "dateTime: '2017-06-24T00:01:02.000Z'",
+          'component: comp1',
+          'kind: fix',
+          'description: a fix',
+          'tickets:',
+          '  - LUCA-1',
+          '  - LUCA-2',
+          ''
+        ].join('\n')
+      );
+    });
+
+    it('does not write an empty ticket list', () => {
+      const { changeLog } = setup();
+
+      const entryFilePath = changeLog.addEntry({
+        component: 'comp1',
+        kind: 'fix',
+        description: 'a fix',
+        tickets: []
+      });
+
+      expect(readFileSync(entryFilePath).toString()).not.toMatch('tickets');
+    });
+  });
+
+  describe('when .strangelogrc restricts the kinds', () => {
+    it('throws for a kind that is not allowed', () => {
+      const { changeLog } = setup({ kinds: ['addition', 'fix'] });
+
+      expect(() => {
+        changeLog.addEntry({ component: 'comp1', kind: 'change', description: 'a change' });
+      }).toThrow('Kind "change" is not allowed, allowed kinds: addition, fix');
+    });
+
+    it('adds entries of allowed kinds', () => {
+      const { changeLog } = setup({ kinds: ['addition', 'fix'] });
+
+      expect(changeLog.addEntry({ component: 'comp1', kind: 'fix', description: 'a fix' })).toMatch(
+        /_fix_comp1\.yml$/
+      );
     });
   });
 });

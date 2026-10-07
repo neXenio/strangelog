@@ -4,6 +4,7 @@ export type CLIOptionsType = {
 
 export type CLIGenerateOptionsType = CLIOptionsType & {
   outFile: string;
+  version?: string;
 };
 
 export type CLIRenameComponentOptionsType = CLIOptionsType & {
@@ -15,6 +16,8 @@ export type CLIAddOptionsType = CLIOptionsType & {
   kind?: string;
   component?: string;
   description?: string;
+  // yargs turns a repeated flag into an array
+  ticket?: string | string[];
 };
 
 export type CLIBumpOptionsType = CLIOptionsType & {

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { ComponentsConfigType } from '#src/types';
 import { createTestProject } from '#test/factories/testProject';
-import { readSingleYAMLFileFromGlob, runCLI, CLIButtons } from '#test/utils';
+import { joinAndOutputYAMLFile, readSingleYAMLFileFromGlob, runCLI, CLIButtons } from '#test/utils';
 
 describe('$ add', { timeout: 20000 }, () => {
   function setup(customPath?: string, components?: ComponentsConfigType) {
@@ -25,6 +25,9 @@ describe('$ add', { timeout: 20000 }, () => {
 
         // Enter description and confirm
         'the description',
+        CLIButtons.ENTER,
+
+        // Skip the optional tickets
         CLIButtons.ENTER
       ]
     );
@@ -52,6 +55,9 @@ describe('$ add', { timeout: 20000 }, () => {
 
           // Enter description and confirm
           'the description',
+          CLIButtons.ENTER,
+
+          // Skip the optional tickets
           CLIButtons.ENTER
         ]
       );
@@ -85,6 +91,9 @@ describe('$ add', { timeout: 20000 }, () => {
 
           // Enter description and confirm
           'the description',
+          CLIButtons.ENTER,
+
+          // Skip the optional tickets
           CLIButtons.ENTER
         ]
       );
@@ -113,6 +122,9 @@ describe('$ add', { timeout: 20000 }, () => {
 
         // Enter description and confirm
         'the description',
+        CLIButtons.ENTER,
+
+        // Skip the optional tickets
         CLIButtons.ENTER
       ]
     );
@@ -141,6 +153,9 @@ describe('$ add', { timeout: 20000 }, () => {
 
         // Enter description and confirm
         'the description',
+        CLIButtons.ENTER,
+
+        // Skip the optional tickets
         CLIButtons.ENTER
       ]
     );
@@ -150,5 +165,72 @@ describe('$ add', { timeout: 20000 }, () => {
     expect(readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml').kind).toEqual(
       'security'
     );
+  });
+
+  it('asks for optional tickets and stores them', async () => {
+    const testProject = setup();
+
+    const output = await runCLI(
+      testProject.rootPath,
+      ['add'],
+      [
+        // Select first offered component
+        CLIButtons.ENTER,
+
+        // Select first change kind ("Addition")
+        CLIButtons.ENTER,
+
+        // Enter description and confirm
+        'the description',
+        CLIButtons.ENTER,
+
+        // Enter tickets and confirm
+        'LUCA-1, LUCA-2',
+        CLIButtons.ENTER
+      ]
+    );
+
+    expect(output).toMatch('Tickets (comma separated, optional)');
+    expect(readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml').tickets).toEqual([
+      'LUCA-1',
+      'LUCA-2'
+    ]);
+  });
+
+  describe('when .strangelogrc restricts the kinds', () => {
+    it('offers only the allowed kinds', async () => {
+      const testProject = setup();
+
+      joinAndOutputYAMLFile([testProject.configFilePath], {
+        path: 'changelog',
+        components: { comp1: 'Comp 1' },
+        kinds: ['addition', 'fix']
+      });
+
+      const output = await runCLI(
+        testProject.rootPath,
+        ['add'],
+        [
+          // Select the only component
+          CLIButtons.ENTER,
+
+          // Select second offered kind ("Bug Fix")
+          CLIButtons.ARROW_DOWN,
+          CLIButtons.ENTER,
+
+          // Enter description and confirm
+          'the description',
+          CLIButtons.ENTER,
+
+          // Skip the optional tickets
+          CLIButtons.ENTER
+        ]
+      );
+
+      expect(output).not.toMatch('Change (e.g. change of existing behavior)');
+      expect(readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml').kind).toEqual(
+        'fix'
+      );
+    });
   });
 });

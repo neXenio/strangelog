@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { createTestProject } from '#test/factories/testProject';
-import { joinAndGlob, runCLI } from '#test/utils';
+import { joinAndGlob, joinAndOutputYAMLFile, runCLI, runCLIWithResult } from '#test/utils';
 
 describe('$ generate', { timeout: 20000 }, () => {
   function setup() {
@@ -16,5 +16,37 @@ describe('$ generate', { timeout: 20000 }, () => {
     const changelogFileMatch = joinAndGlob(testProject.rootPath, 'CHANGELOG.md');
 
     expect(changelogFileMatch.length).toBe(1);
+  });
+
+  it('prints only the section of --version to stdout with --outFile -', async () => {
+    const testProject = setup();
+
+    joinAndOutputYAMLFile([testProject.configFilePath], {
+      path: 'changelog',
+      components: { comp1: 'Comp 1' },
+      template: 'compact'
+    });
+    joinAndOutputYAMLFile(
+      [testProject.changelogPath, '1.0.0/2026-10-07T08-00-00.000Z_fix_comp1.yml'],
+      {
+        component: 'comp1',
+        kind: 'fix',
+        description: 'the description',
+        tickets: ['LUCA-1']
+      }
+    );
+    joinAndOutputYAMLFile([testProject.changelogPath, '1.0.0/.release.yml'], {
+      date: '2026-10-07'
+    });
+
+    const { stdout, exitCode } = await runCLIWithResult(
+      testProject.rootPath,
+      ['generate', '--version', '1.0.0', '--outFile', '-'],
+      []
+    );
+
+    expect(exitCode).toBe(0);
+    expect(stdout).toBe('### 1.0.0 (2026-10-07)\n* **comp1** fix: the description (LUCA-1)\n');
+    expect(joinAndGlob(testProject.rootPath, '-')).toEqual([]);
   });
 });

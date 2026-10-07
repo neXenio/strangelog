@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { connectChangelog } from '#src/api/index';
 import { addTestVersionsWithEntries } from '#test/factories/changelog';
 import { getOwnTestPath } from '#test/factories/fileSystem';
-import { removeSync } from '#test/fileSystem';
+import { outputFileSync, removeSync } from '#test/fileSystem';
 
 const testPath = getOwnTestPath();
 
@@ -92,6 +92,55 @@ describe('getChangelogData', () => {
     const additionEntries = changelogAPI.getChangelogData()[0].entries.addition;
 
     expect(additionEntries.map(({ component }) => component)).toEqual(['comp2', 'comp1']);
+  });
+
+  describe('release dates', () => {
+    it('reads the date of each version from .release.yml', () => {
+      const changelogAPI = setup();
+
+      addTestVersionsWithEntries(changelogAPI);
+
+      expect(changelogAPI.getChangelogData().map(({ date }) => date)).toEqual([
+        // "next" is not released yet
+        // oxlint-disable-next-line no-undefined
+        undefined,
+        '2017-06-25',
+        '2017-06-24'
+      ]);
+    });
+
+    it('never reads .release.yml as an entry', () => {
+      const changelogAPI = setup();
+
+      changelogAPI.addEntry({ component: 'comp1', kind: 'fix', description: 'a fix' });
+      changelogAPI.bumpNextVersion('1.0.0', { date: '2026-10-07' });
+
+      const [, versionChangelog] = changelogAPI.getChangelogData();
+      const allEntries = Object.values(versionChangelog.entries).flat();
+
+      expect(allEntries).toHaveLength(1);
+      expect(allEntries[0].description).toBe('a fix');
+    });
+
+    it('accepts an unquoted date in a hand-written .release.yml', () => {
+      const changelogAPI = setup();
+
+      changelogAPI.addEntry({ component: 'comp1', kind: 'fix', description: 'a fix' });
+      changelogAPI.bumpNextVersion('1.0.0');
+      outputFileSync(`${testPath}/1.0.0/.release.yml`, 'date: 2026-10-07\n');
+
+      expect(changelogAPI.getChangelogData()[1].date).toBe('2026-10-07');
+    });
+
+    it('has no date for versions without .release.yml', () => {
+      const changelogAPI = setup();
+
+      changelogAPI.addEntry({ component: 'comp1', kind: 'fix', description: 'a fix' });
+      changelogAPI.bumpNextVersion('1.0.0');
+      removeSync(`${testPath}/1.0.0/.release.yml`);
+
+      expect(changelogAPI.getChangelogData()[1]).not.toHaveProperty('date');
+    });
   });
 
   describe('when there are no entries of a certain kind', () => {

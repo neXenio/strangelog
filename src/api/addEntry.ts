@@ -4,13 +4,21 @@ import { outputFileSync } from '../fileSystem.ts';
 import type { ConfigType, EntryType } from '../types.ts';
 
 import { ensureInitializedProject } from './changelogInfo.ts';
+import { getAllowedKinds } from './utils.ts';
 
 export default function addEntry(config: ConfigType, entry: EntryType): string {
   const { path, components } = config;
-  const { component } = entry;
+  const { component, kind } = entry;
+  const { tickets, ...entryData } = entry;
 
   if (component && !Object.keys(components).includes(component)) {
     throw new Error(`Unknown component "${component}"`);
+  }
+
+  const allowedKinds = getAllowedKinds(config);
+
+  if (config.kinds && !allowedKinds.includes(kind)) {
+    throw new Error(`Kind "${kind}" is not allowed, allowed kinds: ${allowedKinds.join(', ')}`);
   }
 
   // Record the format version before the first entry exists, otherwise the project would later
@@ -28,7 +36,9 @@ export default function addEntry(config: ConfigType, entry: EntryType): string {
     entryFilePath,
     dump({
       dateTime: date.toISOString(),
-      ...entry
+      ...entryData,
+      // only written when there are tickets, so entries without them keep their format
+      ...(tickets && tickets.length > 0 ? { tickets } : {})
     })
   );
 

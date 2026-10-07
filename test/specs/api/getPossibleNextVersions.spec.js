@@ -2,7 +2,7 @@
 
 import { join as joinPath } from 'path';
 
-import { removeSync } from 'fs-extra';
+import { outputFileSync, removeSync } from 'fs-extra';
 
 import { connectChangelog } from '../../../src/api';
 import { createTestProject } from '../../factories/testProject';
@@ -52,6 +52,21 @@ describe('getPossibleNextVersions', () => {
       const { changelog } = setup();
 
       expect(changelog.getPossibleNextVersions()).toMatchSnapshot();
+    });
+
+  });
+
+  describe('when called with a "1.2.3"-version in package.json', () => {
+
+    it('resets the lower version parts like SemVer requires', () => {
+      const { changelog, testProject } = setup();
+
+      outputFileSync(
+        joinPath(testProject.rootPath, 'package.json'),
+        JSON.stringify({ version: '1.2.3' })
+      );
+
+      expect(changelog.getPossibleNextVersions()).toEqual(['1.2.4', '1.3.0', '2.0.0']);
     });
 
   });

@@ -102,4 +102,30 @@ describe('$ add', () => {
 
   });
 
+  it('asks for the description matching the selected kind', async () => {
+    const testProject = setup();
+
+    const output = await runCLI(
+      testProject.rootPath,
+      ['add'],
+      [
+        // Select first offered component
+        CLIButtons.ENTER,
+
+        // Select third change kind ("Bug Fix")
+        CLIButtons.ARROW_DOWN,
+        CLIButtons.ARROW_DOWN,
+        CLIButtons.ENTER,
+
+        // Enter description and confirm
+        'the description',
+        CLIButtons.ENTER
+      ]
+    );
+
+    expect(output).toMatch('What is fixed?');
+    expect(readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml').kind)
+      .toEqual('fix');
+  });
+
 });

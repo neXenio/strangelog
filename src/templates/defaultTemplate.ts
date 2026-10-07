@@ -6,7 +6,7 @@ import type {
   EntryKindType
 } from '../types.ts';
 
-const entryKindToReadable = {
+const entryKindToReadable: Partial<Record<EntryKindType, string>> = {
   change: 'Changed',
   addition: 'Added',
   fix: 'Fixed',
@@ -57,7 +57,7 @@ function renderEntriesOfKind(
   }
 
   return [
-    `### ${entryKindToReadable[kind]}`,
+    `### ${entryKindToReadable[kind] || helpers.kindLabels[kind] || capitalize(kind)}`,
     ...entries.map(({ component, description, tickets }) => {
       const componentLabel = component ? `**${helpers.readableComponent(component)}:** ` : '';
       const renderedTickets = helpers.renderTickets(tickets);
@@ -65,4 +65,8 @@ function renderEntriesOfKind(
       return `- ${componentLabel}${description}${renderedTickets ? ` (${renderedTickets})` : ''}`;
     })
   ].join('\n');
+}
+
+function capitalize(text: string): string {
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 }

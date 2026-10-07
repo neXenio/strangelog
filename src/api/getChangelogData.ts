@@ -12,7 +12,13 @@ import type {
 } from '../types.ts';
 
 import getSortedChangelogVersions from './getSortedChangelogVersions.ts';
-import { ENTRY_KINDS, getComponentTitle, globPaths, stringifyVersion } from './utils.ts';
+import {
+  ENTRY_KINDS,
+  getComponentTitle,
+  globPaths,
+  isBuiltInKind,
+  stringifyVersion
+} from './utils.ts';
 
 export default function getChangelogData(config: ConfigType): ChangelogType {
   return [
@@ -21,13 +27,19 @@ export default function getChangelogData(config: ConfigType): ChangelogType {
   ];
 }
 
+// Built-in kinds first, then the custom kinds of `kinds`; kinds that only appear in entries are
+// appended when they are found
+function getKindsInOrder({ kinds }: ConfigType): EntryKindType[] {
+  return [...ENTRY_KINDS, ...(kinds || []).filter((kind) => !isBuiltInKind(kind))];
+}
+
 function getVersionChangelog(
   config: ConfigType,
   version: string | null | undefined
 ): VersionChangelogType {
   const entries = {} as Record<EntryKindType, EntryType[]>;
 
-  ENTRY_KINDS.forEach((entryKind) => {
+  getKindsInOrder(config).forEach((entryKind) => {
     entries[entryKind] = [];
   });
 

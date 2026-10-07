@@ -260,4 +260,32 @@ describe('$ add --kind --component --description', { timeout: 20000 }, () => {
     expect(stderr).toMatch('--kind "change" is not a valid kind');
     expect(stderr).toMatch('Valid kinds: addition, fix\n');
   });
+
+  it('accepts a custom kind listed in kinds', async () => {
+    const testProject = createTestProject();
+
+    joinAndOutputYAMLFile([testProject.configFilePath], {
+      path: 'changelog',
+      components: { comp1: 'Comp 1' },
+      kinds: ['addition', 'fix', 'chore']
+    });
+
+    const { exitCode } = await runCLIWithResult(
+      testProject.rootPath,
+      ['add', '-k', 'chore', '-c', 'comp1', '-d', 'Removed six unused texts'],
+      []
+    );
+
+    expect(exitCode).toBe(0);
+    expect(readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml').kind).toBe('chore');
+
+    const rejected = await runCLIWithResult(
+      testProject.rootPath,
+      ['add', '-k', 'perf', '-c', 'comp1', '-d', 'the description'],
+      []
+    );
+
+    expect(rejected.exitCode).toBe(2);
+    expect(rejected.stderr).toMatch('Valid kinds: addition, fix, chore\n');
+  });
 });

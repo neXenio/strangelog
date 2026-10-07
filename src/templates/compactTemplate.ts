@@ -2,13 +2,14 @@ import type {
   ChangelogType,
   VersionChangelogType,
   TemplateHelpersType,
+  BuiltInEntryKindType,
   EntryKindType
 } from '../types.ts';
 
 import { isEmptyUnreleasedVersion } from './defaultTemplate.ts';
 
 // Overridable via `kindLabels` in .strangelogrc
-const defaultKindLabels: Record<EntryKindType, string> = {
+const defaultKindLabels: Record<BuiltInEntryKindType, string> = {
   addition: 'feat',
   change: 'change',
   fix: 'fix',
@@ -36,7 +37,11 @@ export function renderVersionChangelog(
   helpers: TemplateHelpersType,
   { version, date, entries }: VersionChangelogType
 ): string {
-  const kindLabels = { ...defaultKindLabels, ...helpers.kindLabels };
+  // Custom kinds (e.g. `chore`) are labelled with their own name unless `kindLabels` says otherwise
+  const kindLabels: Partial<Record<EntryKindType, string>> = {
+    ...defaultKindLabels,
+    ...helpers.kindLabels
+  };
   // Object.keys() does not narrow to the key type
   const entryKeys = Object.keys(entries) as EntryKindType[];
   const entryLines = entryKeys.flatMap((entryKind) =>
@@ -44,7 +49,7 @@ export function renderVersionChangelog(
       const renderedTickets = helpers.renderTickets(tickets);
       const componentLabel = component || helpers.allComponentLabel;
 
-      return `* **${componentLabel}** ${kindLabels[entryKind]}: ${description}${renderedTickets ? ` (${renderedTickets})` : ''}`;
+      return `* **${componentLabel}** ${kindLabels[entryKind] || entryKind}: ${description}${renderedTickets ? ` (${renderedTickets})` : ''}`;
     })
   );
 

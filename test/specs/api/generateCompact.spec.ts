@@ -281,4 +281,27 @@ describe('generate with the compact template', () => {
 
     expect(changelogAPI.generate()).toMatch('([LUCA-1](https://example.com/LUCA-1?q=LUCA-1&x=$&))');
   });
+
+  it('renders custom kinds with their name or kindLabels, after the built-in kinds', () => {
+    const changelogAPI = setup({
+      kinds: ['addition', 'fix', 'chore', 'perf'],
+      kindLabels: { perf: 'performance' }
+    });
+
+    changelogAPI.addEntry({ component: 'comp1', kind: 'chore', description: 'chore entry' });
+    changelogAPI.addEntry({ component: 'comp1', kind: 'perf', description: 'perf entry' });
+    changelogAPI.addEntry({ component: 'comp2', kind: 'fix', description: 'fix entry' });
+
+    expect(changelogAPI.generate()).toBe(
+      [
+        '# Changelog',
+        '',
+        '### next',
+        '* **comp2** fix: fix entry',
+        '* **comp1** chore: chore entry',
+        '* **comp1** performance: perf entry',
+        ''
+      ].join('\n')
+    );
+  });
 });

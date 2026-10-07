@@ -52,6 +52,7 @@ export type ChangelogAPIType = {
   generate: () => string,
   getChangelogData: () => ChangelogType,
   getPossibleNextVersions: () => string[] | null,
+  getAutomaticNextVersion: () => string | null,
   getComponentsConfig: () => ComponentsConfigType,
   migrate: () => MigrationResultType,
   renameComponent: (from: string, to: string) => number,

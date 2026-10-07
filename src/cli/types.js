@@ -14,5 +14,6 @@ export type CLIRenameComponentOptionsType = CLIOptionsType & {
 };
 
 export type CLIBumpOptionsType = CLIOptionsType & {
- version: string
+ version: string,
+ auto: boolean
 };

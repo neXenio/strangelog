@@ -10,13 +10,27 @@ import type {
 
 export default async function runBump(
   changelogAPI: ChangelogAPIType,
-  { version }: CLIBumpOptionsType
+  { version, auto }: CLIBumpOptionsType
 ) {
   console.log('Bumping changelog for "next" version');
 
-  const nextVersion = version || (await promptNewVersionInformation(changelogAPI)).nextVersion;
+  const nextVersion = version
+    || (auto && getAutomaticVersion(changelogAPI))
+    || (await promptNewVersionInformation(changelogAPI)).nextVersion;
 
   changelogAPI.bumpNextVersion(nextVersion);
+}
+
+function getAutomaticVersion({ getAutomaticNextVersion }: ChangelogAPIType): string {
+  const automaticVersion = getAutomaticNextVersion();
+
+  if (!automaticVersion) {
+    throw new Error('Cannot derive the next version: package.json with a valid "version" needed');
+  }
+
+  console.log(`Automatically selected version ${automaticVersion}`);
+
+  return automaticVersion;
 }
 
 async function promptNewVersionInformation(

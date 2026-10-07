@@ -30,7 +30,7 @@ export default function cli(args: string[]) {
           .option('kind', {
             alias: 'k',
             type: 'string',
-            describe: `kind of change: ${ENTRY_KINDS.join(', ')}`
+            describe: `kind of change: ${ENTRY_KINDS.join(', ')}, or a custom kind from kinds in .strangelogrc`
           })
           .option('component', {
             alias: 'c',

@@ -30,14 +30,14 @@ export function getAllowedKinds({ kinds }: ConfigType): EntryKindType[] {
 
   return [
     ...ENTRY_KINDS.filter((kind) => kinds.includes(kind)),
-    ...kinds.filter((kind) => !isBuiltInKind(kind))
+    ...new Set(kinds.filter((kind) => !isBuiltInKind(kind)))
   ];
 }
 
 // Label of a kind in the compact template and the default template's section heading of a
 // custom kind: `kindLabels` first, the kind's own name otherwise
 export function getCustomKindLabel({ kindLabels }: ConfigType, kind: EntryKindType): string {
-  return kindLabels?.[kind] || kind;
+  return (kindLabels && Object.hasOwn(kindLabels, kind) && kindLabels[kind]) || kind;
 }
 
 // glob >= 9 treats `\` as an escape character; keep `path.join()`-built patterns working on Windows

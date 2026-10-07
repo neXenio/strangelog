@@ -49,7 +49,7 @@ export function renderVersionChangelog(
       const renderedTickets = helpers.renderTickets(tickets);
       const componentLabel = component || helpers.allComponentLabel;
 
-      return `* **${componentLabel}** ${kindLabels[entryKind] || entryKind}: ${description}${renderedTickets ? ` (${renderedTickets})` : ''}`;
+      return `* **${componentLabel}** ${(Object.hasOwn(kindLabels, entryKind) && kindLabels[entryKind]) || entryKind}: ${description}${renderedTickets ? ` (${renderedTickets})` : ''}`;
     })
   );
 

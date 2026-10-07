@@ -57,7 +57,7 @@ function renderEntriesOfKind(
   }
 
   return [
-    `### ${entryKindToReadable[kind] || helpers.kindLabels[kind] || capitalize(kind)}`,
+    `### ${getSectionTitle(helpers, kind)}`,
     ...entries.map(({ component, description, tickets }) => {
       const componentLabel = component ? `**${helpers.readableComponent(component)}:** ` : '';
       const renderedTickets = helpers.renderTickets(tickets);
@@ -65,6 +65,15 @@ function renderEntriesOfKind(
       return `- ${componentLabel}${description}${renderedTickets ? ` (${renderedTickets})` : ''}`;
     })
   ].join('\n');
+}
+
+// Built-in headings stay fixed; custom kinds use `kindLabels` or their capitalized name
+function getSectionTitle(helpers: TemplateHelpersType, kind: EntryKindType): string {
+  if (Object.hasOwn(entryKindToReadable, kind) && entryKindToReadable[kind]) {
+    return entryKindToReadable[kind];
+  }
+
+  return (Object.hasOwn(helpers.kindLabels, kind) && helpers.kindLabels[kind]) || capitalize(kind);
 }
 
 function capitalize(text: string): string {

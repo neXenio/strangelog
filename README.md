@@ -8,9 +8,11 @@ Manage your changelog via CLI – painless, merge-conflict free, CI-friendly.
 
 Requires Node.js `^22.18.0` or `>=24.11.0`.
 
-For yarn users: `yarn add --dev strangelog`
+For yarn users: `yarn add --dev @nexenio/strangelog`
 
-For npm users: `npm install --save-dev strangelog`
+For npm users: `npm install --save-dev @nexenio/strangelog`
+
+From version 3.0.0 strangelog is published as `@nexenio/strangelog`. The unscoped `strangelog` package on npm stays at 2.0.2. The command is still called `strangelog`.
 
 Done.
 
@@ -89,7 +91,7 @@ Changelogs created before strangelog `2.0.0` contain `:` in their entry file nam
 
 ## AI coding agents
 
-strangelog ships instructions for coding agents (Claude Code, Codex, Cursor, Copilot and others) in `node_modules/strangelog/AGENTS.md`: when to add an entry, which flags to use and what not to touch. To make agents in your project follow them, add this to your project's `AGENTS.md` (or `CLAUDE.md`):
+strangelog ships instructions for coding agents (Claude Code, Codex, Cursor, Copilot and others) in `node_modules/@nexenio/strangelog/AGENTS.md`: when to add an entry, which flags to use and what not to touch. To make agents in your project follow them, add this to your project's `AGENTS.md` (or `CLAUDE.md`):
 
 ```markdown
 ## Changelog
@@ -97,7 +99,7 @@ strangelog ships instructions for coding agents (Claude Code, Codex, Cursor, Cop
 This project uses strangelog. For every user-visible change, add an entry with
 `npx strangelog add --kind <kind> --component <component> --description "<what changed>"`
 and commit the created file. Never run `strangelog add` without flags.
-Full rules: node_modules/strangelog/AGENTS.md
+Full rules: node_modules/@nexenio/strangelog/AGENTS.md
 ```
 
 ## Development

@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T21:37:13.110Z'
+component: all
+kind: change
+description: >-
+  The package is published as `@nexenio/strangelog`; the `strangelog` command
+  keeps its name

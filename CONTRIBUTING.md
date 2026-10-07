@@ -123,8 +123,7 @@ add tests to `test/specs/api/migrate.spec.ts`, and document the user-visible eff
   `no-undefined`, no nested ternaries, `no-else-return`, `prefer-template`, no CommonJS in `.ts`
   files (use `.cjs` for plain Node scripts), `import/no-cycle`, and type-aware rules such as
   `no-floating-promises` and `no-misused-promises` (via `oxlint-tsgolint`). Mark a promise you
-  deliberately do not await with `void`. Neither tool enforces the blank line after variable
-  declarations and before `return`; keep it by hand.
+  deliberately do not await with `void`.
 - ES module syntax in `src/`; tsc compiles it to CommonJS. That relies on `package.json` having no
   `"type": "module"` and on `module: nodenext` in `tsconfig.json`, which treats every `.ts` file
   as CommonJS: relative imports stay extensionless, and ESM-only dependencies (`yargs`, `inquirer`)

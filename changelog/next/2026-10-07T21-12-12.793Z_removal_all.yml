@@ -1,4 +1,0 @@
-dateTime: '2026-10-07T21:12:12.793Z'
-component: all
-kind: removal
-description: strangelog no longer depends on `fs-extra`

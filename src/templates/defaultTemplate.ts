@@ -21,8 +21,15 @@ export default function defaultTemplate(
 ): string {
   return [
     '# Changelog',
-    ...changelog.map((versionChangelog) => renderVersionChangelog(helpers, versionChangelog))
+    ...changelog
+      .filter((versionChangelog) => !isEmptyUnreleasedVersion(versionChangelog))
+      .map((versionChangelog) => renderVersionChangelog(helpers, versionChangelog))
   ].join('\n\n');
+}
+
+// Right after a release `next` has no entries; an empty `next` heading would only be noise
+function isEmptyUnreleasedVersion({ version, entries }: VersionChangelogType): boolean {
+  return !version && Object.values(entries).every((kindEntries) => kindEntries.length === 0);
 }
 
 function renderVersionChangelog(

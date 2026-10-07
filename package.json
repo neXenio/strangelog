@@ -1,6 +1,6 @@
 {
   "name": "strangelog",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "description": "Painless file-based changelog management via CLI.",
   "main": "index.js",
   "types": "lib/index.d.ts",

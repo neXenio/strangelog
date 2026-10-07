@@ -56,6 +56,20 @@ describe('generate', () => {
     });
   });
 
+  describe('when "next" has no entries', () => {
+    it('does not render a "next" section', () => {
+      const changelogAPI = setup();
+
+      addTestVersionsWithEntries(changelogAPI);
+      changelogAPI.bumpNextVersion('1.2.0');
+
+      const markdown = changelogAPI.generate();
+
+      expect(markdown).not.toMatch('Version `next`');
+      expect(markdown).toMatch(/^# Changelog\n\n## Version `1\.2\.0`/);
+    });
+  });
+
   describe('when there are no configured components', () => {
     it('renders "All" for the entries with null as component', () => {
       const changelogAPI = setup({});

@@ -195,6 +195,10 @@ yarn start add --kind fix --component cli --description "Describe the change for
 
 Commit the generated YAML file. Never edit entries in released version directories, and never run
 `strangelog bump` or change the `version` in `package.json`: releases are a maintainer decision.
+Maintainers release from a clean checkout of `master` with `npm publish`, not `yarn publish`:
+Yarn classic always adds files and directories named `changelog*` to the package, `files` in
+`package.json` notwithstanding (and a `!` entry there makes it ignore `files` altogether). Check
+the contents with `npm pack --dry-run` first.
 `CHANGELOG.md` in the root is a generated artifact.
 
 ## Dependencies

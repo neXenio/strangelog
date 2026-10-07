@@ -1,6 +1,6 @@
 {
   "name": "@nexenio/strangelog",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Painless file-based changelog management via CLI.",
   "main": "index.js",
   "types": "lib/index.d.ts",
@@ -14,7 +14,10 @@
     "#src/*": "./src/*.ts",
     "#test/*": "./test/*.ts"
   },
-  "repository": "git@github.com:neXenio/strangelog.git",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/neXenio/strangelog.git"
+  },
   "author": "neXenio GmbH <contact@nexenio.com>",
   "license": "MIT",
   "engines": {
@@ -55,7 +58,7 @@
     "yargs": "^18.2.0"
   },
   "bin": {
-    "strangelog": "./lib/cli/index.js"
+    "strangelog": "lib/cli/index.js"
   },
   "publishConfig": {
     "access": "public"

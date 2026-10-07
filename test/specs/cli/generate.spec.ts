@@ -49,4 +49,16 @@ describe('$ generate', { timeout: 20000 }, () => {
     expect(stdout).toBe('### 1.0.0 (2026-10-07)\n* **comp1** fix: the description (LUCA-1)\n');
     expect(joinAndGlob(testProject.rootPath, '-')).toEqual([]);
   });
+  it('exits with code 2 and a one-line message for an unknown --version', async () => {
+    const testProject = createTestProject();
+
+    const { stderr, exitCode } = await runCLIWithResult(
+      testProject.rootPath,
+      ['generate', '--version', '9.9.9', '--outFile', '-'],
+      []
+    );
+
+    expect(exitCode).toBe(2);
+    expect(stderr.trim()).toBe('Unknown version "9.9.9"');
+  });
 });

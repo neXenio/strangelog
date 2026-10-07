@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 import compactTemplate, {
   renderVersionChangelog as renderCompactVersionChangelog
@@ -41,7 +41,9 @@ function readableComponent(
 
 function renderTickets(tickets: string[] | undefined, { ticketUrl }: ConfigType): string {
   return (tickets || [])
-    .map((ticket) => (ticketUrl ? `[${ticket}](${ticketUrl.replace('{ticket}', ticket)})` : ticket))
+    .map((ticket) =>
+      ticketUrl ? `[${ticket}](${ticketUrl.replaceAll('{ticket}', () => ticket)})` : ticket
+    )
     .join(', ');
 }
 
@@ -88,7 +90,14 @@ export default function generate(
 
 // The generated changelog has its own `# Changelog` header
 function readLegacyChangelog(legacyChangelogPath: string): string {
+  if (!existsSync(legacyChangelogPath)) {
+    throw new Error(
+      `Legacy changelog "${legacyChangelogPath}" (legacyChangelog in .strangelogrc) not found`
+    );
+  }
+
   return readFileSync(legacyChangelogPath)
     .toString()
-    .replace(/^# Changelog[ \t]*(\r?\n|$)(\r?\n)*/, '');
+    .replace(/\r\n/g, '\n')
+    .replace(/^# Changelog[ \t]*(\n|$)\n*/, '');
 }

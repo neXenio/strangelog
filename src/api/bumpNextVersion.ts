@@ -12,6 +12,7 @@ export default function bumpNextVersion(
   nextVersionString: string,
   { date = toLocalDateString(new Date()) }: BumpOptionsType = {}
 ): void {
+  ensureValidDate(date);
   ensureNextVersionHasEntries(path, nextVersionString);
   ensureVersionDoesNotExist(path, nextVersionString);
 
@@ -25,6 +26,18 @@ function toLocalDateString(date: Date): string {
   return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
     .map((part) => String(part).padStart(2, '0'))
     .join('-');
+}
+
+function ensureValidDate(date: string) {
+  const parsedDate = new Date(`${date}T00:00:00Z`);
+  const isValidDate =
+    /^\d{4}-\d{2}-\d{2}$/.test(date)
+    && !Number.isNaN(parsedDate.getTime())
+    && parsedDate.toISOString().slice(0, 10) === date;
+
+  if (!isValidDate) {
+    throw new Error(`Invalid release date "${date}", expected YYYY-MM-DD`);
+  }
 }
 
 function ensureNextVersionHasEntries(changelogPath: string, nextVersionString: string) {

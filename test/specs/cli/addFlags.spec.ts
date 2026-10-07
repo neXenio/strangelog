@@ -206,6 +206,41 @@ describe('$ add --kind --component --description', { timeout: 20000 }, () => {
     });
   });
 
+  it('anchors ticketPattern and reports an invalid ticketPattern', async () => {
+    const testProject = createTestProject();
+
+    joinAndOutputYAMLFile([testProject.configFilePath], {
+      path: 'changelog',
+      components: { comp1: 'Comp 1' },
+      ticketPattern: 'LUCA-\\d+'
+    });
+
+    const unanchored = await runCLIWithResult(
+      testProject.rootPath,
+      ['add', '-k', 'fix', '-c', 'comp1', '-d', 'the description', '-t', 'XLUCA-1x'],
+      []
+    );
+
+    expect(unanchored.exitCode).toBe(2);
+    expect(unanchored.stderr).toMatch('--ticket "XLUCA-1x" does not match');
+
+    joinAndOutputYAMLFile([testProject.configFilePath], {
+      path: 'changelog',
+      components: { comp1: 'Comp 1' },
+      ticketPattern: 'LUCA-('
+    });
+
+    const invalid = await runCLIWithResult(
+      testProject.rootPath,
+      ['add', '-k', 'fix', '-c', 'comp1', '-d', 'the description', '-t', 'LUCA-1'],
+      []
+    );
+
+    expect(invalid.exitCode).toBe(2);
+    expect(invalid.stderr).toMatch('Invalid ticketPattern in .strangelogrc: LUCA-(');
+    expect(joinAndGlob(testProject.changelogPath, 'next/*.yml')).toEqual([]);
+  });
+
   it('exits with code 2 for a kind that .strangelogrc does not allow', async () => {
     const testProject = createTestProject();
 

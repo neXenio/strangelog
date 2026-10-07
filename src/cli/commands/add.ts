@@ -64,9 +64,18 @@ function getInvalidTickets({ ticketPattern }: ConfigType, tickets: string[]): st
     return [];
   }
 
-  const ticketRegExp = new RegExp(ticketPattern);
+  // Anchored, so that `LUCA-\d+` cannot match inside `XLUCA-1x`
+  const ticketRegExp = toTicketRegExp(ticketPattern);
 
   return tickets.filter((ticket) => !ticketRegExp.test(ticket));
+}
+
+function toTicketRegExp(ticketPattern: string): RegExp {
+  try {
+    return new RegExp(`^(?:${ticketPattern})$`);
+  } catch {
+    throw new Error(`Invalid ticketPattern in .strangelogrc: ${ticketPattern}`);
+  }
 }
 
 function getEnabledComponentIDs({ components }: ConfigType): string[] {
@@ -110,9 +119,13 @@ function getInvalidFlagErrors(config: ConfigType, flags: CLIAddOptionsType): str
     errors.push(`--description must have at least ${MIN_DESCRIPTION_LENGTH} characters`);
   }
 
-  getInvalidTickets(config, parseTickets(ticket)).forEach((invalidTicket) => {
-    errors.push(`--ticket "${invalidTicket}" does not match ${config.ticketPattern}`);
-  });
+  try {
+    getInvalidTickets(config, parseTickets(ticket)).forEach((invalidTicket) => {
+      errors.push(`--ticket "${invalidTicket}" does not match ${config.ticketPattern}`);
+    });
+  } catch (error) {
+    errors.push(error instanceof Error ? error.message : String(error));
+  }
 
   return errors;
 }

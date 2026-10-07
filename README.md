@@ -45,7 +45,7 @@ All keys are optional:
 | `allComponentLabel` | `all` | What the `compact` template prints instead of a component for entries without one. |
 | `kinds` | all kinds | List of the kinds new entries may have, e.g. `[addition, fix]`. `strangelog add` and `addEntry()` reject other kinds. Existing entries of other kinds still render. |
 | `ticketUrl` | none | URL of a ticket, `{ticket}` is replaced with the ticket ID. Both templates render tickets as Markdown links with it, and as plain IDs without it. |
-| `ticketPattern` | none | Regular expression that ticket IDs given to `strangelog add` must match, e.g. `^LUCA-\d+$`. |
+| `ticketPattern` | none | Regular expression that ticket IDs given to `strangelog add` must match, e.g. `^LUCA-\d+$`. The pattern always has to match the whole ID (it is anchored). |
 | `legacyChangelog` | none | Path of a Markdown file whose content `strangelog generate` appends verbatim after the generated versions. A leading `# Changelog` line is left out, since the generated part has one. |
 
 The `compact` template renders:

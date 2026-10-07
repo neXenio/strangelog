@@ -250,4 +250,35 @@ describe('generate with the compact template', () => {
 
     expect(() => changelogAPI.generate()).toThrow('Unknown template "fancy"');
   });
+  it('normalizes CRLF line endings of the legacy changelog', () => {
+    outputFileSync(
+      legacyChangelogPath,
+      '# Changelog\r\n\r\n### 0.9.0 (2017-01-01)\r\n* **comp1** fix: old\r\n'
+    );
+
+    const changelogAPI = setup({ legacyChangelog: legacyChangelogPath });
+
+    expect(changelogAPI.generate()).toBe(
+      '# Changelog\n\n### 0.9.0 (2017-01-01)\n* **comp1** fix: old\n'
+    );
+  });
+
+  it('throws a clear error for a missing legacy changelog', () => {
+    const changelogAPI = setup({ legacyChangelog: joinPath(testPath, 'missing.md') });
+
+    expect(() => changelogAPI.generate()).toThrow('legacyChangelog in .strangelogrc) not found');
+  });
+
+  it('inserts tickets into ticketUrl literally', () => {
+    const changelogAPI = setup({ ticketUrl: 'https://example.com/{ticket}?q={ticket}&x=$&' });
+
+    changelogAPI.addEntry({
+      component: 'comp1',
+      kind: 'fix',
+      description: 'with a ticket',
+      tickets: ['LUCA-1']
+    });
+
+    expect(changelogAPI.generate()).toMatch('([LUCA-1](https://example.com/LUCA-1?q=LUCA-1&x=$&))');
+  });
 });

@@ -128,4 +128,14 @@ describe('bumpNextVersion', () => {
       });
     });
   });
+  it('rejects an invalid release date', () => {
+    const { bumpNextVersion } = setup();
+
+    outputFileSync(`${testPath}/next/fake.yml`, '');
+
+    expect(() => bumpNextVersion('1.0.0', { date: '2026-13-45' })).toThrow(
+      'Invalid release date "2026-13-45", expected YYYY-MM-DD'
+    );
+    expect(() => bumpNextVersion('1.0.0', { date: 'foo' })).toThrow('Invalid release date');
+  });
 });

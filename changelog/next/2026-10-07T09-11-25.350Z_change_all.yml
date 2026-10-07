@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T09:11:25.350Z'
+component: all
+kind: change
+description: >-
+  Requires Node.js `^22.18.0` or `>=24.11.0`; all dependencies are updated to
+  their latest major versions

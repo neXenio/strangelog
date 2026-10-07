@@ -53,6 +53,12 @@ Takes all the entries in the `next` directory and moves them to a new version di
 
 **Example:** `yarn run strangelog bump`
 
+Pass `--version` (`-v`) to set the next version without being asked, e.g. `yarn run strangelog bump -v 1.2.3`.
+
+Pass `--auto` (`-a`) to derive the next SemVer version from the `version` in your `package.json` and the entries in `next`: a major version if there is any change, otherwise a minor version if there is any addition, otherwise a patch version.
+
+**Example:** `yarn run strangelog bump --auto`
+
 ### `strangelog generate`
 
 Takes all changelog entries ever made in your project and generates a Markdown file at the path given via `--outFile` (e.g. `CHANGELOG.md`).

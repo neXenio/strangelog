@@ -34,10 +34,19 @@ export default function cli(args: string[]) {
       'bumps "next" changelog to new version',
       (yargs) => {
         // `bump --version`/`-v` is the version to bump to, not yargs' built-in version flag
-        yargs.version(false).option('version', {
-          alias: 'v',
-          describe: 'next version to bump to'
-        });
+        yargs
+          .version(false)
+          .option('version', {
+            alias: 'v',
+            describe: 'next version to bump to'
+          })
+          .option('auto', {
+            alias: 'a',
+            type: 'boolean',
+            describe: 'derive the next SemVer version from the "next" entries: major for changes, '
+              + 'minor for additions, patch otherwise'
+          })
+          .conflicts('auto', 'version');
       },
       withAPI((changelog, argv: CLIBumpOptionsType) => runBump(changelog, argv))
     )

@@ -48,4 +48,20 @@ describe('$ bump', () => {
     expect(newVersionEntries.length).toBe(1);
   });
 
+  it('derives the version from the entries with --auto', async () => {
+    const testProject = setup();
+
+    joinAndOutputYAMLFile([testProject.changelogPath, 'next/something.yml'], {
+      component: null,
+      kind: 'addition',
+      description: 'something new'
+    });
+
+    const output = await runCLI(testProject.rootPath, ['bump', '--auto'], []);
+
+    expect(output).toMatch('Automatically selected version 1.1.0');
+    expect(joinAndGlob(testProject.changelogPath, 'next/*.yml').length).toBe(0);
+    expect(joinAndGlob(testProject.changelogPath, '1.1.0/*.yml').length).toBe(1);
+  });
+
 });

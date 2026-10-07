@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T12:48:01.761Z'
+component: all
+kind: addition
+description: >-
+  `strangelog bump --auto` and `getAutomaticNextVersion()` derive the next
+  SemVer version from the "next" entries

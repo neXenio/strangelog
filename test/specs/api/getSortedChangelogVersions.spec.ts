@@ -9,7 +9,6 @@ import { getOwnTestPath } from '../../factories/fileSystem';
 const testPath = getOwnTestPath();
 
 describe('getSortedChangelogVersions', () => {
-
   afterEach(() => {
     removeSync(testPath);
   });
@@ -24,18 +23,25 @@ describe('getSortedChangelogVersions', () => {
   }
 
   it('sorts SemVer versions numerically, newest first, without "next"', () => {
-    expect(setup(['1.9.0', 'next', '1.10.0', '2.0.0', '1.0.0-beta.1', '1.0.0']))
-      .toEqual(['2.0.0', '1.10.0', '1.9.0', '1.0.0', '1.0.0-beta.1']);
+    expect(setup(['1.9.0', 'next', '1.10.0', '2.0.0', '1.0.0-beta.1', '1.0.0'])).toEqual([
+      '2.0.0',
+      '1.10.0',
+      '1.9.0',
+      '1.0.0',
+      '1.0.0-beta.1'
+    ]);
   });
 
   it('sorts non-SemVer versions numeric-aware, newest first', () => {
-    expect(setup(['1.2.3.4', '1.2.3.10', '1.3.0.0']))
-      .toEqual(['1.3.0.0', '1.2.3.10', '1.2.3.4']);
+    expect(setup(['1.2.3.4', '1.2.3.10', '1.3.0.0'])).toEqual(['1.3.0.0', '1.2.3.10', '1.2.3.4']);
   });
 
   it('lists SemVer versions before other versions', () => {
-    expect(setup(['1.0.0-', '1.0.0', '1.2.3.4', '1.0.0-beta']))
-      .toEqual(['1.0.0', '1.0.0-beta', '1.2.3.4', '1.0.0-']);
+    expect(setup(['1.0.0-', '1.0.0', '1.2.3.4', '1.0.0-beta'])).toEqual([
+      '1.0.0',
+      '1.0.0-beta',
+      '1.2.3.4',
+      '1.0.0-'
+    ]);
   });
-
 });

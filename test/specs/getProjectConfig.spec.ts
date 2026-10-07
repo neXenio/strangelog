@@ -7,7 +7,6 @@ import getProjectConfig from '../../src/getProjectConfig';
 import { createTestProject } from '../factories/testProject';
 
 describe('getProjectConfig', () => {
-
   let testProject: ReturnType<typeof createTestProject>, cwd: string;
 
   beforeEach(() => {
@@ -22,24 +21,15 @@ describe('getProjectConfig', () => {
   });
 
   describe('when there is no .strangelogrc', () => {
-
     it('returns default configuration', () => {
       removeSync(testProject.configFilePath);
-      expect(
-        getProjectConfig()
-      ).toMatchSnapshot();
+      expect(getProjectConfig()).toMatchSnapshot();
     });
-
   });
 
   describe('when there is a .strangelogrc', () => {
-
     it('returns configuration from .strangelogrc merged over defaults', () => {
-      expect(
-        getProjectConfig()
-      ).toMatchSnapshot();
+      expect(getProjectConfig()).toMatchSnapshot();
     });
-
   });
-
 });

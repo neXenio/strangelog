@@ -3,7 +3,7 @@ import { inc as incrementSemVer, valid as validSemVer } from 'semver';
 
 export default function getPossibleNextVersions(): string[] | null {
   const packageJSON = existsSync('package.json')
-    ? JSON.parse(readFileSync('package.json').toString()) as { version: string }
+    ? (JSON.parse(readFileSync('package.json').toString()) as { version: string })
     : null;
   const packageVersion = packageJSON ? validSemVer(packageJSON.version) : null;
 

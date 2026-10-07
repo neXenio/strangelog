@@ -22,14 +22,18 @@ export default function renameComponent(
     return 0;
   }
 
-  const entryFilePathsToMove = globPaths(joinPath(path, '*', '*.yml'))
-    .filter((entryFilePath) => readEntry(entryFilePath)?.component === from);
+  const entryFilePathsToMove = globPaths(joinPath(path, '*', '*.yml')).filter(
+    (entryFilePath) => readEntry(entryFilePath)?.component === from
+  );
 
   entryFilePathsToMove.forEach((entryFilePath) => {
-    outputFileSync(entryFilePath, dump({
-      ...readEntry(entryFilePath),
-      component: to
-    }));
+    outputFileSync(
+      entryFilePath,
+      dump({
+        ...readEntry(entryFilePath),
+        component: to
+      })
+    );
     moveSync(entryFilePath, renamedEntryFilePath(entryFilePath, from, to));
   });
 
@@ -49,8 +53,5 @@ function renamedEntryFilePath(entryFilePath: string, from: string, to: string): 
     return entryFilePath;
   }
 
-  return joinPath(
-    dirname(entryFilePath),
-    `${fileName.slice(0, -fromSuffix.length)}_${to}.yml`
-  );
+  return joinPath(dirname(entryFilePath), `${fileName.slice(0, -fromSuffix.length)}_${to}.yml`);
 }

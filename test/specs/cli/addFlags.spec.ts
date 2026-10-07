@@ -4,7 +4,6 @@ import { createTestProject } from '../../factories/testProject';
 import { joinAndGlob, readSingleYAMLFileFromGlob, runCLIWithResult } from '../../utils';
 
 describe('$ add --kind --component --description', { timeout: 20000 }, () => {
-
   it('adds the entry without prompting', async () => {
     const testProject = createTestProject();
 
@@ -34,8 +33,9 @@ describe('$ add --kind --component --description', { timeout: 20000 }, () => {
     );
 
     expect(exitCode).toBe(0);
-    expect(readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml').kind)
-      .toEqual('security');
+    expect(readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml').kind).toEqual(
+      'security'
+    );
   });
 
   it('does not require --component when no components are defined', async () => {
@@ -48,8 +48,9 @@ describe('$ add --kind --component --description', { timeout: 20000 }, () => {
     );
 
     expect(exitCode).toBe(0);
-    expect(readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml').component)
-      .toBe(null);
+    expect(readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml').component).toBe(
+      null
+    );
   });
 
   it('exits with code 2 and lists the valid values for invalid flags', async () => {
@@ -136,8 +137,8 @@ describe('$ add --kind --component --description', { timeout: 20000 }, () => {
     );
 
     expect(exitCode).toBe(0);
-    expect(readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml').description)
-      .toEqual('the description');
+    expect(readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml').description).toEqual(
+      'the description'
+    );
   });
-
 });

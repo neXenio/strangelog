@@ -11,7 +11,6 @@ import { joinAndGlob, readSingleYAMLFileFromGlob } from '../../utils';
 const testPath = getOwnTestPath();
 
 describe('renameComponent', () => {
-
   beforeEach(() => {
     removeSync(testPath);
     vi.useFakeTimers({
@@ -61,8 +60,9 @@ describe('renameComponent', () => {
 
     changelogAPI.renameComponent('comp1', 'comp3');
 
-    expect(joinAndGlob(testPath, '1.0.0/*.yml').map((filePath) => basename(filePath)))
-      .toEqual(['2017-06-24T00-01-02.000Z_addition_comp3.yml']);
+    expect(joinAndGlob(testPath, '1.0.0/*.yml').map((filePath) => basename(filePath))).toEqual([
+      '2017-06-24T00-01-02.000Z_addition_comp3.yml'
+    ]);
   });
 
   it('merges entries into an already used component', () => {
@@ -70,7 +70,8 @@ describe('renameComponent', () => {
 
     expect(changelogAPI.renameComponent('comp2', 'comp1')).toBe(1);
 
-    const components = changelogAPI.getChangelogData()
+    const components = changelogAPI
+      .getChangelogData()
       .flatMap(({ entries }) => Object.values(entries).flat())
       .map(({ component }) => component);
 
@@ -85,5 +86,4 @@ describe('renameComponent', () => {
     );
     expect(readSingleYAMLFileFromGlob(testPath, '1.0.0/*.yml').component).toBe('comp1');
   });
-
 });

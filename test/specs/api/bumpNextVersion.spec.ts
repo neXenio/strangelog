@@ -1,12 +1,7 @@
 import { resolve } from 'path';
 
+import { removeSync, readFileSync, outputFileSync, mkdirsSync } from 'fs-extra';
 import { globSync } from 'glob';
-import {
-  removeSync,
-  readFileSync,
-  outputFileSync,
-  mkdirsSync
-} from 'fs-extra';
 import { load } from 'js-yaml';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -17,7 +12,6 @@ import { getOwnTestPath } from '../../factories/fileSystem';
 const testPath = getOwnTestPath();
 
 describe('bumpNextVersion', () => {
-
   beforeEach(() => {
     removeSync(testPath);
     vi.useFakeTimers({
@@ -42,23 +36,22 @@ describe('bumpNextVersion', () => {
   }
 
   describe('when called with empty "next" directory', () => {
-
     it('throws error', () => {
       const { bumpNextVersion } = setup();
 
       expect(() => {
         bumpNextVersion('1.0.0');
-      }).toThrow(multiToSingleLineString(`
+      }).toThrow(
+        multiToSingleLineString(`
         Cannot release version "next" as 1.0.0
         because it does not contain any entries yet
         (${resolve(`${testPath}/next/`)})
-      `));
+      `)
+      );
     });
-
   });
 
   describe('when called with already existing version', () => {
-
     it('throws error', () => {
       const { bumpNextVersion } = setup();
 
@@ -67,17 +60,17 @@ describe('bumpNextVersion', () => {
 
       expect(() => {
         bumpNextVersion('1.0.0');
-      }).toThrow(multiToSingleLineString(`
+      }).toThrow(
+        multiToSingleLineString(`
         Cannot release version "next" as 1.0.0
         because that version already exists
         (${resolve(`${testPath}/1.0.0`)})
-      `));
+      `)
+      );
     });
-
   });
 
   describe('when called with correct "next" version entries', () => {
-
     it('renames "next" directory to new version string', () => {
       const { bumpNextVersion } = setup();
 
@@ -99,11 +92,7 @@ describe('bumpNextVersion', () => {
       });
 
       expect(
-        load(
-          readFileSync(
-            `${testPath}/next/2017-06-24T00-01-02.000Z_fix_comp1.yml`
-          ).toString()
-        )
+        load(readFileSync(`${testPath}/next/2017-06-24T00-01-02.000Z_fix_comp1.yml`).toString())
       ).toEqual({
         component: 'comp1',
         dateTime: '2017-06-24T00:01:02.000Z',
@@ -111,7 +100,5 @@ describe('bumpNextVersion', () => {
         kind: 'fix'
       });
     });
-
   });
-
 });

@@ -2,13 +2,13 @@ import type { ConfigType, ChangelogAPIType } from '../types';
 
 import addEntry from './addEntry';
 import bumpNextVersion from './bumpNextVersion';
+import { getChangelogInfo, saveChangelogInfo } from './changelogInfo';
 import generate from './generate';
+import getAutomaticNextVersion from './getAutomaticNextVersion';
 import getChangelogData from './getChangelogData';
 import getPossibleNextVersions from './getPossibleNextVersions';
-import getAutomaticNextVersion from './getAutomaticNextVersion';
 import migrate from './migrate';
 import renameComponent from './renameComponent';
-import { getChangelogInfo, saveChangelogInfo } from './changelogInfo';
 
 export default function connectChangelog(config: ConfigType): ChangelogAPIType {
   return {

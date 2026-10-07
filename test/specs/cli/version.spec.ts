@@ -5,7 +5,6 @@ import { createTestProject } from '../../factories/testProject';
 import { runCLI } from '../../utils';
 
 describe('$ --version', { timeout: 20000 }, () => {
-
   it('prints the strangelog version', async () => {
     const testProject = createTestProject();
     const { version } = JSON.parse(
@@ -16,5 +15,4 @@ describe('$ --version', { timeout: 20000 }, () => {
 
     expect(output.trim()).toBe(version);
   });
-
 });

@@ -8,7 +8,6 @@ import { getOwnTestPath } from '../../factories/fileSystem';
 const testPath = getOwnTestPath();
 
 describe('getChangelogData', () => {
-
   beforeEach(() => {
     removeSync(testPath);
     vi.useFakeTimers({
@@ -96,7 +95,6 @@ describe('getChangelogData', () => {
   });
 
   describe('when there are no entries of a certain kind', () => {
-
     it('returns an empty array for that kind', () => {
       const changelogAPI = setup();
 
@@ -108,7 +106,5 @@ describe('getChangelogData', () => {
 
       expect(changelogAPI.getChangelogData()[0].entries.deprecation).toEqual([]);
     });
-
   });
-
 });

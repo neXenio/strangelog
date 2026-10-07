@@ -1,5 +1,5 @@
-import type { ConfigType, ChangelogType } from '../types';
 import defaultTemplate from '../templates/defaultTemplate';
+import type { ConfigType, ChangelogType } from '../types';
 
 import { getComponentTitle, stringifyVersion } from './utils';
 
@@ -14,12 +14,12 @@ function readableComponent(
   return getComponentTitle(components[componentID]);
 }
 
-export default function generate(
-  config: ConfigType,
-  changelog: ChangelogType
-): string {
-  return defaultTemplate({
-    readableComponent: (componentID) => readableComponent(componentID, config),
-    stringifyVersion
-  }, changelog);
+export default function generate(config: ConfigType, changelog: ChangelogType): string {
+  return defaultTemplate(
+    {
+      readableComponent: (componentID) => readableComponent(componentID, config),
+      stringifyVersion
+    },
+    changelog
+  );
 }

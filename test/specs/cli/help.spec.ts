@@ -4,7 +4,6 @@ import { createTestProject } from '../../factories/testProject';
 import { runCLI } from '../../utils';
 
 describe('$ (no command)', { timeout: 20000 }, () => {
-
   it('prints the same usage help as --help', async () => {
     const testProject = createTestProject();
 
@@ -14,5 +13,4 @@ describe('$ (no command)', { timeout: 20000 }, () => {
     expect(output).toMatch('Commands:');
     expect(output).toBe(helpOutput);
   });
-
 });

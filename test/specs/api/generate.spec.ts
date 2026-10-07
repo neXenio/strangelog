@@ -1,15 +1,14 @@
 import { removeSync } from 'fs-extra';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { addTestVersionsWithEntries, addEntryWithoutComponent } from '../../factories/changelog';
 import { connectChangelog } from '../../../src/api';
-import { getOwnTestPath } from '../../factories/fileSystem';
 import type { ComponentsConfigType } from '../../../src/types';
+import { addTestVersionsWithEntries, addEntryWithoutComponent } from '../../factories/changelog';
+import { getOwnTestPath } from '../../factories/fileSystem';
 
 const testPath = getOwnTestPath();
 
 describe('generate', () => {
-
   beforeEach(() => {
     removeSync(testPath);
   });
@@ -35,9 +34,7 @@ describe('generate', () => {
 
     addTestVersionsWithEntries(changelogAPI);
 
-    expect(
-      changelogAPI.generate()
-    ).toMatchSnapshot();
+    expect(changelogAPI.generate()).toMatchSnapshot();
   });
 
   describe('when components are configured as objects', () => {
@@ -65,10 +62,7 @@ describe('generate', () => {
 
       addEntryWithoutComponent(changelogAPI);
 
-      expect(
-        changelogAPI.generate()
-      ).toMatchSnapshot();
+      expect(changelogAPI.generate()).toMatchSnapshot();
     });
   });
-
 });

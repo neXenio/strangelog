@@ -9,7 +9,6 @@ import { createTestProject } from '../../factories/testProject';
 import { joinAndOutputYAMLFile, joinAndGlob } from '../../utils';
 
 describe('migrate', () => {
-
   let currentRootPath: string;
 
   afterEach(() => {
@@ -179,5 +178,4 @@ describe('migrate', () => {
       expect(entryFileMatch[0]).toMatch(new RegExp('next/whatever.yml$'));
     });
   });
-
 });

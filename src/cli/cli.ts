@@ -4,6 +4,7 @@ import { connectChangelog } from '../api/index.ts';
 import { ENTRY_KINDS } from '../api/utils.ts';
 import getProjectConfig from '../getProjectConfig.ts';
 import type { ChangelogAPIType } from '../types.ts';
+import { STRANGELOG_VERSION } from '../version.ts';
 
 import runAdd from './commands/add.ts';
 import runBump from './commands/bump.ts';
@@ -17,6 +18,12 @@ import type {
   CLIBumpOptionsType,
   CLIRenameComponentOptionsType
 } from './types.ts';
+
+// strangelog's own version: yargs would otherwise report the version of the package.json it finds
+// from the current directory, i.e. the version of the project strangelog runs in
+function getOwnVersion(): string {
+  return STRANGELOG_VERSION;
+}
 
 export default function cli(args: string[]) {
   if (!args.length) args = ['--help'];
@@ -112,6 +119,7 @@ export default function cli(args: string[]) {
       },
       withAPI((changelog, argv: CLIGenerateOptionsType) => runGenerate(changelog, argv))
     )
+    .version(getOwnVersion())
     .help()
     .parse();
 }

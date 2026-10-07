@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T22:02:58.218Z'
+component: all
+kind: addition
+description: >-
+  `strangelog bump` records the release date in `.release.yml`, which the
+  `compact` template prints next to the version

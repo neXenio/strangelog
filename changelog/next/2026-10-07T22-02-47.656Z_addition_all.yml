@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T22:02:47.656Z'
+component: all
+kind: addition
+description: >-
+  The `kinds` list in `.strangelogrc` restricts the kinds that `strangelog add`
+  and `addEntry()` accept

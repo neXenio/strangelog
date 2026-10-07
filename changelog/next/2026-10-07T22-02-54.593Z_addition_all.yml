@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T22:02:54.593Z'
+component: all
+kind: addition
+description: >-
+  Entries can link tickets: `strangelog add --ticket`, an optional prompt
+  question, `ticketUrl` for links and `ticketPattern` to validate the IDs

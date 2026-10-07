@@ -1,0 +1,7 @@
+dateTime: '2026-10-07T22:02:42.559Z'
+component: all
+kind: addition
+description: >-
+  The `compact` template (`template: compact` in `.strangelogrc`) renders one
+  line per entry in the form `* **component** feat: description (tickets)`, with
+  `kindLabels` and `allComponentLabel` to adjust the labels

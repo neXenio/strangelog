@@ -28,11 +28,11 @@ export default function defaultTemplate(
 }
 
 // Right after a release `next` has no entries; an empty `next` heading would only be noise
-function isEmptyUnreleasedVersion({ version, entries }: VersionChangelogType): boolean {
+export function isEmptyUnreleasedVersion({ version, entries }: VersionChangelogType): boolean {
   return !version && Object.values(entries).every((kindEntries) => kindEntries.length === 0);
 }
 
-function renderVersionChangelog(
+export function renderVersionChangelog(
   helpers: TemplateHelpersType,
   { version, entries }: VersionChangelogType
 ): string {
@@ -58,10 +58,11 @@ function renderEntriesOfKind(
 
   return [
     `### ${entryKindToReadable[kind]}`,
-    ...entries.map(({ component, description }) => {
+    ...entries.map(({ component, description, tickets }) => {
       const componentLabel = component ? `**${helpers.readableComponent(component)}:** ` : '';
+      const renderedTickets = helpers.renderTickets(tickets);
 
-      return `- ${componentLabel}${description}`;
+      return `- ${componentLabel}${description}${renderedTickets ? ` (${renderedTickets})` : ''}`;
     })
   ].join('\n');
 }

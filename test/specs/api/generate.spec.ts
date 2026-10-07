@@ -70,6 +70,40 @@ describe('generate', () => {
     });
   });
 
+  describe('when entries have tickets', () => {
+    function addEntryWithTickets({ addEntry }: ReturnType<typeof setup>) {
+      addEntry({
+        component: 'comp1',
+        kind: 'fix',
+        description: 'a fix',
+        tickets: ['LUCA-1', 'LUCA-2']
+      });
+    }
+
+    it('appends the ticket IDs to the entry line', () => {
+      const changelogAPI = setup();
+
+      addEntryWithTickets(changelogAPI);
+
+      expect(changelogAPI.generate()).toMatch(/^- \*\*Comp 1:\*\* a fix \(LUCA-1, LUCA-2\)$/m);
+    });
+
+    it('appends links with ticketUrl', () => {
+      const changelogAPI = connectChangelog({
+        path: testPath,
+        components: { comp1: 'Comp 1' },
+        ticketUrl: 'https://tickets.example.com/{ticket}'
+      });
+
+      addEntryWithTickets(changelogAPI);
+
+      expect(changelogAPI.generate()).toMatch(
+        '- **Comp 1:** a fix ([LUCA-1](https://tickets.example.com/LUCA-1), '
+          + '[LUCA-2](https://tickets.example.com/LUCA-2))'
+      );
+    });
+  });
+
   describe('when there are no configured components', () => {
     it('renders "All" for the entries with null as component', () => {
       const changelogAPI = setup({});

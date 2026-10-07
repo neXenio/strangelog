@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T22:03:01.966Z'
+component: cli
+kind: addition
+description: >-
+  `strangelog generate --version <version> --outFile -` prints the section of
+  one version, e.g. for release notes

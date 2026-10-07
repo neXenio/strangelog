@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
 import { createTestProject } from '#test/factories/testProject';
-import { joinAndGlob, joinAndOutputYAMLFile, runCLI, CLIButtons } from '#test/utils';
+import {
+  joinAndGlob,
+  joinAndOutputYAMLFile,
+  readSingleYAMLFileFromGlob,
+  runCLI,
+  CLIButtons
+} from '#test/utils';
 
 describe('$ bump', { timeout: 20000 }, () => {
   function setup() {
@@ -55,5 +61,17 @@ describe('$ bump', { timeout: 20000 }, () => {
     expect(output).toMatch('Automatically selected version 1.1.0');
     expect(joinAndGlob(testProject.changelogPath, 'next/*.yml').length).toBe(0);
     expect(joinAndGlob(testProject.changelogPath, '1.1.0/*.yml').length).toBe(1);
+  });
+
+  it('writes the release date to .release.yml', async () => {
+    const testProject = setup();
+
+    joinAndOutputYAMLFile([testProject.changelogPath, 'next/something.yml'], {});
+
+    await runCLI(testProject.rootPath, ['bump', '-v', '1.2.3'], []);
+
+    expect(
+      readSingleYAMLFileFromGlob(testProject.changelogPath, '1.2.3/.release.yml').date
+    ).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
 });

@@ -55,7 +55,7 @@ src/
     getSortedChangelogVersions.ts
     getPossibleNextVersions.ts / getAutomaticNextVersion.ts   version suggestions for bump
     renameComponent.ts      moves entries between components
-    generate.ts             renders Markdown via templates/defaultTemplate.ts
+    generate.ts             renders Markdown via the template from `template` in .strangelogrc
     changelogInfo.ts        info.yml (format version) handling
     migrate.ts + migrations/  on-disk format migrations
     utils.ts                globPaths, component helpers, string helpers
@@ -63,7 +63,8 @@ src/
     index.ts                bin entry (shebang)
     cli.ts                  yargs command definitions
     commands/*.ts           one file per command; prompts via inquirer
-  templates/defaultTemplate.ts
+  templates/defaultTemplate.ts   `template: default`: a section per version and kind
+  templates/compactTemplate.ts   `template: compact`: one line per entry
   fileSystem.ts             outputFileSync / moveSync on top of node:fs
 test/
   specs/api/*.spec.ts       API tests
@@ -86,13 +87,20 @@ changelog/                  this project's own changelog (strangelog dogfoods it
   a map of component ID to either a title string or `{ title, enabled }`. `enabled: false` hides a
   component from `strangelog add` but keeps rendering its entries. Always accept both forms; use
   `getComponentTitle()` / `isComponentEnabled()` from `src/api/utils.ts` instead of reading values
-  directly.
+  directly. Optional keys (all documented in the README): `template`, `kindLabels`,
+  `allComponentLabel`, `kinds`, `ticketUrl`, `ticketPattern`, `legacyChangelog`. Projects without
+  them must get exactly the output of before; apply their defaults where they are used, not in
+  `getProjectConfig()`. Use `getAllowedKinds()` for `kinds`.
 - Entry files: `<changelog path>/<version or next>/<date>_<kind>_<component or "all">.yml` with
-  `dateTime` (ISO string, quoted), `component` (ID or `null`), `kind`, `description`. The date part
-  uses `-` instead of `:` so that Windows can check out the files.
+  `dateTime` (ISO string, quoted), `component` (ID or `null`), `kind`, `description` and optional
+  `tickets` (list of ticket IDs, only written when there is at least one). The date part uses `-`
+  instead of `:` so that Windows can check out the files.
+- `<changelog path>/<version>/.release.yml`: written by `bump`, `date: 'YYYY-MM-DD'` (local date of
+  the release). Versions bumped with older strangelog versions have none. It is a dotfile so that the
+  entry globs (`*.yml`, glob's default `dot: false`) never read it as an entry; keep it that way.
 - Kinds: `addition`, `change`, `fix`, `removal`, `deprecation`, `security`. They are listed in
-  `src/types.ts` (`EntryKindType`), `src/api/getChangelogData.ts`, `src/templates/defaultTemplate.ts`
-  and `src/cli/commands/add.ts`. Keep these four places in sync.
+  `src/types.ts` (`EntryKindType`), `src/api/getChangelogData.ts`, `src/templates/defaultTemplate.ts`,
+  `src/templates/compactTemplate.ts` and `src/cli/commands/add.ts`. Keep these five places in sync.
 - `info.yml` in the changelog path stores the format version (`version: <n>`). `n` is the number of
   migrations in `src/api/migrations/index.ts` (`CURRENT_VERSION`).
 

@@ -1,6 +1,6 @@
 import { globSync } from 'glob';
 
-import type { ComponentConfigType, EntryKindType } from '../types.ts';
+import type { ComponentConfigType, ConfigType, EntryKindType } from '../types.ts';
 
 // In the order of the `add` prompt and of the generated changelog
 export const ENTRY_KINDS: EntryKindType[] = [
@@ -11,6 +11,11 @@ export const ENTRY_KINDS: EntryKindType[] = [
   'deprecation',
   'security'
 ];
+
+// The kinds new entries may have (`kinds` in .strangelogrc), in the order of ENTRY_KINDS
+export function getAllowedKinds({ kinds }: ConfigType): EntryKindType[] {
+  return kinds ? ENTRY_KINDS.filter((kind) => kinds.includes(kind)) : ENTRY_KINDS;
+}
 
 // glob >= 9 treats `\` as an escape character; keep `path.join()`-built patterns working on Windows
 export function globPaths(pattern: string): string[] {

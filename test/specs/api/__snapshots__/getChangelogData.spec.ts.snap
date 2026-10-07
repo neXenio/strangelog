@@ -21,6 +21,7 @@ exports[`getChangelogData > returns correct changelog data 1`] = `
     "version": null,
   },
   {
+    "date": "2017-06-25",
     "entries": {
       "addition": [],
       "change": [
@@ -39,6 +40,7 @@ exports[`getChangelogData > returns correct changelog data 1`] = `
     "version": "1.1.0",
   },
   {
+    "date": "2017-06-24",
     "entries": {
       "addition": [
         {

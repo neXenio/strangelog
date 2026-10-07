@@ -37,6 +37,11 @@ npx strangelog add --kind fix --component api --description "Login no longer fai
   them. Leave out `--component` only if `.strangelogrc` defines no components.
 - `--description` (`-d`): at least 10 characters. If it starts with `-`, write it as
   `--description="-..."` so it is not read as a flag.
+- `--ticket` (`-t`), optional: a ticket ID such as `LUCA-123`. Repeat the flag or separate IDs
+  with commas for several tickets. If `.strangelogrc` has a `ticketPattern`, the IDs must match it.
+
+Read `.strangelogrc` before adding an entry: if it has a `kinds` list, only those kinds are
+allowed (for example only `addition` and `fix`). Pick the closest allowed kind.
 
 The command prints the path of the created file and exits with code 0. On invalid input it exits
 with code 2 and prints the valid kinds and components; fix the flags and run it again.
@@ -50,7 +55,8 @@ with your change.
 - One sentence, present tense, no trailing period needed: "Exports include the invoice number",
   not "Added invoiceNumber to ExportSerializer".
 - Mention the user-facing names of options, commands or screens in backticks.
-- Do not mention ticket numbers, branch names or the fact that an agent made the change.
+- Do not put ticket numbers in the description (use `--ticket`), and do not mention branch names
+  or the fact that an agent made the change.
 
 ## What not to do
 
@@ -65,6 +71,7 @@ with your change.
 ## Other commands
 
 - `npx strangelog generate --outFile CHANGELOG.md`: render all entries to Markdown.
+  `npx strangelog generate --version 1.2.3 --outFile -` prints the section of one version.
 - `npx strangelog bump --auto`: release `next/` as the next SemVer version (major for any `change`,
   minor for any `addition`, patch otherwise), based on the `version` in `package.json`. Only when
   asked to release.

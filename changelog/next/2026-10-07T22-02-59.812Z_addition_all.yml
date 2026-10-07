@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T22:02:59.812Z'
+component: all
+kind: addition
+description: >-
+  The `legacyChangelog` file in `.strangelogrc` is appended to the generated
+  changelog, so an existing `CHANGELOG.md` can be kept

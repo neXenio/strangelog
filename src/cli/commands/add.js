@@ -3,7 +3,7 @@
 import inquirer from 'inquirer';
 
 import { getComponentTitle, isComponentEnabled } from '../../api/utils';
-import type { ChangelogAPIType, ComponentsConfigType } from '../../types';
+import type { ChangelogAPIType, ComponentsConfigType, EntryKindType } from '../../types';
 
 export default async function runAdd(
   { addEntry, getComponentsConfig }: ChangelogAPIType
@@ -12,6 +12,15 @@ export default async function runAdd(
 
   addEntry(answers);
 }
+
+const descriptionQuestions = {
+  addition: 'What is added?',
+  change: 'What changes?',
+  fix: 'What is fixed?',
+  removal: 'What is removed?',
+  deprecation: 'What is deprecated?',
+  security: 'What is fixed?'
+};
 
 function promptEntryInformation(componentsConfig: ComponentsConfigType) {
   const componentKeys = Object.keys(componentsConfig)
@@ -48,7 +57,7 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType) {
     }, {
       name: 'description',
       type: 'input',
-      message: 'What changed?',
+      message: ({ kind }: { kind: EntryKindType }) => descriptionQuestions[kind],
       validate: (input: string) => (input.length < 10)
         ? 'Describe the change in at least 10 characters'
         : true

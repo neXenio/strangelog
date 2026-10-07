@@ -81,5 +81,6 @@ function getVersionChangelogFileNames(
   { path }: ConfigType,
   versionString: string
 ): string[] {
-  return globPaths(joinPath(path, versionString, '*.yml')).sort();
+  // glob >= 9 no longer sorts its results; this matches the order of glob 7
+  return globPaths(joinPath(path, versionString, '*.yml')).sort((a, b) => a.localeCompare(b, 'en'));
 }

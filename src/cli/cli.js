@@ -28,7 +28,8 @@ export default function cli(args: string[]) {
       'bump',
       'bumps "next" changelog to new version',
       (yargs) => {
-        yargs.option('version', {
+        // `bump --version`/`-v` is the version to bump to, not yargs' built-in version flag
+        yargs.version(false).option('version', {
           alias: 'v',
           describe: 'next version to bump to'
         });
@@ -54,8 +55,6 @@ export default function cli(args: string[]) {
       },
       withAPI((changelog, argv: CLIGenerateOptionsType) => runGenerate(changelog, argv))
     )
-    // `-v` is the `bump --version` alias, so yargs' built-in --version flag stays off
-    .version(false)
     .help()
     .parse();
 }

@@ -1,0 +1,4 @@
+dateTime: '2026-10-07T16:55:48.507Z'
+component: all
+kind: fix
+description: Versions are sorted by SemVer, so 1.10.0 is listed above 1.9.0

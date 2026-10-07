@@ -1,0 +1,4 @@
+dateTime: '2026-10-07T16:55:48.506Z'
+component: cli
+kind: addition
+description: '`strangelog add` offers the removal, deprecation and security kinds'

@@ -34,7 +34,7 @@ export function saveChangelogInfo(
 //      initial config and set migration version to latest since it's implicitly up-to-date
 //   3. info.yml does not exist but we have changelog entry files already -> old project, with
 //      implicit migration version -1 (since info.yml was introduced with the first migration)
-function ensureInitializedProject(config: ConfigType): void {
+export function ensureInitializedProject(config: ConfigType): void {
   if (existsSync(getInfoFilePath(config))) {
     // Case 1
     return;

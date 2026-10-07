@@ -82,6 +82,24 @@ describe('migrate', () => {
     });
   });
 
+  describe('when the first entry was added via the API without info.yml', () => {
+    test('does not run any migration', () => {
+      const { changelog, infoFilePath } = setup();
+
+      removeSync(infoFilePath);
+      changelog.addEntry({
+        component: null,
+        kind: 'fix',
+        description: 'the first entry'
+      });
+
+      expect(changelog.migrate()).toEqual({
+        from: CURRENT_VERSION,
+        to: CURRENT_VERSION
+      });
+    });
+  });
+
   describe('to version 1', () => {
     test('transforms `x.y` version directory style to SemVer (`x.,y.z`)', () => {
       const { changelog, changelogPath } = setup();

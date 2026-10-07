@@ -5,15 +5,22 @@ import { dump } from 'js-yaml';
 
 import type { ConfigType, EntryType } from '../types';
 
+import { ensureInitializedProject } from './changelogInfo';
+
 export default function addEntry(
-  { path, components }: ConfigType,
+  config: ConfigType,
   entry: EntryType
 ): void {
+  const { path, components } = config;
   const { component } = entry;
 
   if (component && !Object.keys(components).includes(component)) {
     throw new Error(`Unknown component "${component}"`);
   }
+
+  // Record the format version before the first entry exists, otherwise the project would later
+  // be taken for one created before info.yml was introduced
+  ensureInitializedProject(config);
 
   const date = new Date();
   const fsFriendlyDateTimeString = toFSFriendlyDateTime(date);

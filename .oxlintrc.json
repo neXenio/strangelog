@@ -1,0 +1,117 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "import", "oxc"],
+  "options": {
+    "typeAware": true
+  },
+  "categories": {
+    "correctness": "error"
+  },
+  "env": {
+    "builtin": true,
+    "node": true
+  },
+  "ignorePatterns": ["index.js", "lib/", "tmpTest/", ".claude/"],
+  "rules": {
+    "no-case-declarations": "error",
+    "no-empty": "error",
+    "no-fallthrough": "error",
+    "no-prototype-builtins": "error",
+    "no-redeclare": "error",
+    "no-regex-spaces": "error",
+    "no-undef": "error",
+    "no-unexpected-multiline": "error",
+    "no-useless-assignment": "error",
+    "preserve-caught-error": "error"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts"],
+      "rules": {
+        "no-undef": "off",
+
+        "class-methods-use-this": "error",
+        "default-case": "error",
+        "no-else-return": "error",
+        "guard-for-in": "error",
+        "no-console": "off",
+        "no-undefined": "error",
+        "func-style": ["error", "declaration"],
+
+        "no-array-constructor": "error",
+        "no-bitwise": "error",
+        "no-continue": "error",
+        "no-lonely-if": "error",
+        "no-nested-ternary": "error",
+        "no-object-constructor": "error",
+        "no-unneeded-ternary": "error",
+        "arrow-body-style": "error",
+        "no-duplicate-imports": "error",
+        "no-useless-computed-key": "error",
+        "no-useless-constructor": "error",
+        "no-useless-rename": "error",
+        "no-var": "error",
+        "object-shorthand": "error",
+        "prefer-arrow-callback": "error",
+        "prefer-const": "error",
+        "prefer-numeric-literals": "error",
+        "prefer-rest-params": "error",
+        "prefer-spread": "error",
+        "prefer-template": "error",
+        "symbol-description": "error",
+        "no-unused-expressions": "error",
+
+        "typescript/ban-ts-comment": "error",
+        "typescript/no-empty-object-type": "error",
+        "typescript/no-explicit-any": "error",
+        "typescript/no-namespace": "error",
+        "typescript/no-require-imports": "error",
+        "typescript/no-unnecessary-type-constraint": "error",
+        "typescript/no-unsafe-function-type": "error",
+
+        "typescript/await-thenable": "error",
+        "typescript/no-array-delete": "error",
+        "typescript/no-base-to-string": "error",
+        "typescript/no-deprecated": "error",
+        "typescript/no-duplicate-type-constituents": "error",
+        "typescript/no-floating-promises": "error",
+        "typescript/no-for-in-array": "error",
+        "typescript/no-implied-eval": "error",
+        "typescript/no-misused-promises": "error",
+        "typescript/no-redundant-type-constituents": "error",
+        "typescript/no-unnecessary-type-assertion": "error",
+        "typescript/no-unsafe-argument": "error",
+        "typescript/no-unsafe-assignment": "error",
+        "typescript/no-unsafe-call": "error",
+        "typescript/no-unsafe-enum-comparison": "error",
+        "typescript/no-unsafe-member-access": "error",
+        "typescript/no-unsafe-return": "error",
+        "typescript/no-unsafe-unary-minus": "error",
+        "typescript/only-throw-error": "error",
+        "typescript/prefer-promise-reject-errors": "error",
+        "typescript/restrict-plus-operands": "error",
+        "typescript/restrict-template-expressions": "error",
+        "typescript/unbound-method": "error",
+
+        "import/default": "error",
+        "import/namespace": "error",
+        "import/no-absolute-path": "error",
+        "import/no-dynamic-require": "error",
+        "import/no-webpack-loader-syntax": "error",
+        "import/export": "error",
+        "import/no-named-as-default": "error",
+        "import/no-named-as-default-member": "error",
+        "import/no-mutable-exports": "error",
+        "import/unambiguous": "error",
+        "import/no-commonjs": "error",
+        "import/no-amd": "error",
+        "import/first": "error",
+        "import/no-duplicates": "error",
+        "import/no-namespace": "error",
+        "import/newline-after-import": "error",
+        "import/no-named-default": "error",
+        "import/no-cycle": "error"
+      }
+    }
+  ]
+}

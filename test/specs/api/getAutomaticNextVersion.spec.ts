@@ -1,13 +1,13 @@
 import { join as joinPath } from 'path';
 
 import { removeSync } from 'fs-extra';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import { connectChangelog } from '../../../src/api';
 import type { EntryKindType } from '../../../src/types';
 import { createTestProject } from '../../factories/testProject';
 
 describe('getAutomaticNextVersion', () => {
-
   const realCWD = process.cwd();
 
   afterEach(() => {
@@ -22,11 +22,13 @@ describe('getAutomaticNextVersion', () => {
       components: {}
     });
 
-    entryKinds.forEach((kind) => changelog.addEntry({
-      component: null,
-      kind,
-      description: `some ${kind}`
-    }));
+    entryKinds.forEach((kind) =>
+      changelog.addEntry({
+        component: null,
+        kind,
+        description: `some ${kind}`
+      })
+    );
     process.chdir(testProject.rootPath);
 
     return {
@@ -60,5 +62,4 @@ describe('getAutomaticNextVersion', () => {
 
     expect(changelog.getAutomaticNextVersion()).toBe(null);
   });
-
 });

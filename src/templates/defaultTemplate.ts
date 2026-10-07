@@ -34,9 +34,9 @@ function renderVersionChangelog(
 
   return [
     `## Version \`${helpers.stringifyVersion(version)}\``,
-    ...entryKeys.map(
-      (entryKind) => renderEntriesOfKind(helpers, entryKind, entries[entryKind])
-    ).filter((entry) => entry)
+    ...entryKeys
+      .map((entryKind) => renderEntriesOfKind(helpers, entryKind, entries[entryKind]))
+      .filter((entry) => entry)
   ].join('\n\n');
 }
 
@@ -52,9 +52,7 @@ function renderEntriesOfKind(
   return [
     `### ${entryKindToReadable[kind]}`,
     ...entries.map(({ component, description }) => {
-      const componentLabel = component
-        ? `**${helpers.readableComponent(component)}:** `
-        : '';
+      const componentLabel = component ? `**${helpers.readableComponent(component)}:** ` : '';
 
       return `- ${componentLabel}${description}`;
     })

@@ -5,10 +5,7 @@ import type { ConfigType, EntryType } from '../types';
 
 import { ensureInitializedProject } from './changelogInfo';
 
-export default function addEntry(
-  config: ConfigType,
-  entry: EntryType
-): string {
+export default function addEntry(config: ConfigType, entry: EntryType): string {
   const { path, components } = config;
   const { component } = entry;
 

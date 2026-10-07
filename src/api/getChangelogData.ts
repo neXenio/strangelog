@@ -11,16 +11,13 @@ import type {
   EntryKindType
 } from '../types';
 
-import { ENTRY_KINDS, getComponentTitle, globPaths, stringifyVersion } from './utils';
 import getSortedChangelogVersions from './getSortedChangelogVersions';
+import { ENTRY_KINDS, getComponentTitle, globPaths, stringifyVersion } from './utils';
 
-export default function getChangelogData(
-  config: ConfigType
-): ChangelogType {
+export default function getChangelogData(config: ConfigType): ChangelogType {
   return [
     getVersionChangelog(config, null),
-    ...getSortedChangelogVersions(config).map((version) =>
-      getVersionChangelog(config, version))
+    ...getSortedChangelogVersions(config).map((version) => getVersionChangelog(config, version))
   ];
 }
 
@@ -63,14 +60,12 @@ function sortByComponent(config: ConfigType, entry1: EntryType, entry2: EntryTyp
     return -1;
   }
 
-  return getComponentTitle(config.components[component1])
-    .localeCompare(getComponentTitle(config.components[component2]));
+  return getComponentTitle(config.components[component1]).localeCompare(
+    getComponentTitle(config.components[component2])
+  );
 }
 
-function getVersionChangelogFileNames(
-  { path }: ConfigType,
-  versionString: string
-): string[] {
+function getVersionChangelogFileNames({ path }: ConfigType, versionString: string): string[] {
   // glob >= 9 no longer sorts its results; this matches the order of glob 7
   return globPaths(joinPath(path, versionString, '*.yml')).sort((a, b) => a.localeCompare(b, 'en'));
 }

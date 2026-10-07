@@ -1,12 +1,7 @@
 import inquirer, { type DistinctQuestion } from 'inquirer';
 
 import { ENTRY_KINDS, getComponentTitle, isComponentEnabled } from '../../api/utils';
-import type {
-  ChangelogAPIType,
-  ComponentsConfigType,
-  EntryKindType,
-  EntryType
-} from '../../types';
+import type { ChangelogAPIType, ComponentsConfigType, EntryKindType, EntryType } from '../../types';
 import type { CLIAddOptionsType } from '../types';
 
 // Exit code for invalid `add` flags, so that scripts and coding agents can tell it from failures
@@ -19,8 +14,7 @@ export default async function runAdd(
 ) {
   const { kind, component, description } = flags;
   const componentsConfig = getComponentsConfig();
-  const isInteractive = [kind, component, description]
-    .every((flag) => typeof flag === 'undefined');
+  const isInteractive = [kind, component, description].every((flag) => typeof flag === 'undefined');
 
   if (isInteractive) {
     addEntry(await promptEntryInformation(componentsConfig));
@@ -48,8 +42,9 @@ export default async function runAdd(
 }
 
 function getEnabledComponentIDs(componentsConfig: ComponentsConfigType): string[] {
-  return Object.keys(componentsConfig)
-    .filter((componentName) => isComponentEnabled(componentsConfig[componentName]));
+  return Object.keys(componentsConfig).filter((componentName) =>
+    isComponentEnabled(componentsConfig[componentName])
+  );
 }
 
 function getInvalidFlagErrors(
@@ -57,8 +52,9 @@ function getInvalidFlagErrors(
   flags: CLIAddOptionsType
 ): string[] {
   // yargs turns a repeated flag into an array
-  const repeatedFlagNames = (['kind', 'component', 'description'] as const)
-    .filter((flagName) => Array.isArray(flags[flagName]));
+  const repeatedFlagNames = (['kind', 'component', 'description'] as const).filter((flagName) =>
+    Array.isArray(flags[flagName])
+  );
 
   if (repeatedFlagNames.length > 0) {
     return repeatedFlagNames.map((flagName) => `--${flagName} is given more than once`);
@@ -94,14 +90,16 @@ function getInvalidFlagErrors(
 function printInvalidFlags(componentsConfig: ComponentsConfigType, errors: string[]) {
   const enabledComponentIDs = getEnabledComponentIDs(componentsConfig);
 
-  console.error([
-    'Cannot add the changelog entry:',
-    ...errors.map((error) => `  - ${error}`),
-    `Valid kinds: ${ENTRY_KINDS.join(', ')}`,
-    enabledComponentIDs.length > 0
-      ? `Valid components: ${enabledComponentIDs.join(', ')}`
-      : 'No components are defined in .strangelogrc: leave out --component'
-  ].join('\n'));
+  console.error(
+    [
+      'Cannot add the changelog entry:',
+      ...errors.map((error) => `  - ${error}`),
+      `Valid kinds: ${ENTRY_KINDS.join(', ')}`,
+      enabledComponentIDs.length > 0
+        ? `Valid components: ${enabledComponentIDs.join(', ')}`
+        : 'No components are defined in .strangelogrc: leave out --component'
+    ].join('\n')
+  );
 }
 
 const descriptionQuestions = {
@@ -116,17 +114,20 @@ const descriptionQuestions = {
 function promptEntryInformation(componentsConfig: ComponentsConfigType): Promise<EntryType> {
   const componentKeys = getEnabledComponentIDs(componentsConfig);
 
-  const componentQuestions: DistinctQuestion<EntryType>[] = componentKeys.length === 0
-    ? []
-    : [{
-      name: 'component',
-      type: 'select',
-      message: 'Which component is your change affecting?',
-      choices: componentKeys.map((componentName) => ({
-        name: getComponentTitle(componentsConfig[componentName]),
-        value: componentName
-      }))
-    }];
+  const componentQuestions: DistinctQuestion<EntryType>[] =
+    componentKeys.length === 0
+      ? []
+      : [
+          {
+            name: 'component',
+            type: 'select',
+            message: 'Which component is your change affecting?',
+            choices: componentKeys.map((componentName) => ({
+              name: getComponentTitle(componentsConfig[componentName]),
+              value: componentName
+            }))
+          }
+        ];
 
   const questions: DistinctQuestion<EntryType>[] = [
     ...componentQuestions,
@@ -134,33 +135,42 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType): Promise
       name: 'kind',
       type: 'select',
       message: 'What kind of change are you documenting?',
-      choices: [{
-        name: 'Addition (e.g. new button, new behavior)',
-        value: 'addition'
-      }, {
-        name: 'Change (e.g. change of existing behavior)',
-        value: 'change'
-      }, {
-        name: 'Bug Fix',
-        value: 'fix'
-      }, {
-        name: 'Removal (e.g. removed feature or option)',
-        value: 'removal'
-      }, {
-        name: 'Deprecation (e.g. feature or option that will be removed)',
-        value: 'deprecation'
-      }, {
-        name: 'Security (e.g. fixed vulnerability)',
-        value: 'security'
-      }]
-    }, {
+      choices: [
+        {
+          name: 'Addition (e.g. new button, new behavior)',
+          value: 'addition'
+        },
+        {
+          name: 'Change (e.g. change of existing behavior)',
+          value: 'change'
+        },
+        {
+          name: 'Bug Fix',
+          value: 'fix'
+        },
+        {
+          name: 'Removal (e.g. removed feature or option)',
+          value: 'removal'
+        },
+        {
+          name: 'Deprecation (e.g. feature or option that will be removed)',
+          value: 'deprecation'
+        },
+        {
+          name: 'Security (e.g. fixed vulnerability)',
+          value: 'security'
+        }
+      ]
+    },
+    {
       name: 'description',
       type: 'input',
       // `kind` is always answered, it is asked right before
       message: ({ kind }) => descriptionQuestions[kind as EntryKindType],
-      validate: (input: string) => (input.length < MIN_DESCRIPTION_LENGTH)
-        ? `Describe the change in at least ${MIN_DESCRIPTION_LENGTH} characters`
-        : true
+      validate: (input: string) =>
+        input.length < MIN_DESCRIPTION_LENGTH
+          ? `Describe the change in at least ${MIN_DESCRIPTION_LENGTH} characters`
+          : true
     }
   ];
 

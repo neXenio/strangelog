@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`addEntry when called with no component adds entry with null component 1`] = `
+exports[`addEntry > when called with no component > adds entry with null component 1`] = `
 {
   "component": null,
   "dateTime": "2017-06-24T00:01:02.000Z",

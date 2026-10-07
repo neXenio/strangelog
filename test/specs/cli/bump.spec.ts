@@ -1,10 +1,9 @@
+import { describe, expect, it } from 'vitest';
+
 import { createTestProject } from '../../factories/testProject';
 import { joinAndGlob, joinAndOutputYAMLFile, runCLI, CLIButtons } from '../../utils';
 
-describe('$ bump', () => {
-
-  jest.setTimeout(20000);
-
+describe('$ bump', { timeout: 20000 }, () => {
   function setup() {
     return createTestProject();
   }
@@ -33,11 +32,7 @@ describe('$ bump', () => {
 
     joinAndOutputYAMLFile([testProject.changelogPath, 'next/something.yml'], {});
 
-    await runCLI(
-      testProject.rootPath,
-      ['bump', '-v', '1.2.3.4'],
-      []
-    );
+    await runCLI(testProject.rootPath, ['bump', '-v', '1.2.3.4'], []);
 
     const nextEntries = joinAndGlob(testProject.changelogPath, 'next/*.yml');
     const newVersionEntries = joinAndGlob(testProject.changelogPath, '1.2.3.4/*.yml');
@@ -61,5 +56,4 @@ describe('$ bump', () => {
     expect(joinAndGlob(testProject.changelogPath, 'next/*.yml').length).toBe(0);
     expect(joinAndGlob(testProject.changelogPath, '1.1.0/*.yml').length).toBe(1);
   });
-
 });

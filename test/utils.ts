@@ -1,17 +1,18 @@
-import { join as joinPath } from 'path';
 import { spawn } from 'child_process';
+import { join as joinPath } from 'path';
 
-import { globSync } from 'glob';
 import { readFileSync, outputFileSync } from 'fs-extra';
+import { globSync } from 'glob';
 import { dump, load } from 'js-yaml';
+import { expect } from 'vitest';
 
 function readYAMLFileSync(filePath: string): { [key: string]: unknown } {
   return load(readFileSync(filePath).toString()) as { [key: string]: unknown };
 }
 
-export function readSingleYAMLFileFromGlob(
-  ...fileGlobPathParts: string[]
-): { [key: string]: unknown } {
+export function readSingleYAMLFileFromGlob(...fileGlobPathParts: string[]): {
+  [key: string]: unknown;
+} {
   const matchedFiles = joinAndGlob(...fileGlobPathParts);
 
   expect(matchedFiles.length).toBe(1);
@@ -36,16 +37,12 @@ export const CLIButtons = {
 const INPUT_IDLE_DELAY = 500;
 
 export type CLIResultType = {
-  stdout: string,
-  stderr: string,
-  exitCode: number | null
+  stdout: string;
+  stderr: string;
+  exitCode: number | null;
 };
 
-export async function runCLI(
-  cwd: string,
-  command: string[],
-  inputs: string[]
-): Promise<string> {
+export async function runCLI(cwd: string, command: string[], inputs: string[]): Promise<string> {
   return (await runCLIWithResult(cwd, command, inputs)).stdout;
 }
 
@@ -91,7 +88,7 @@ export function runCLIWithResult(
 
   return new Promise((resolve) => {
     if (process.env.DEBUG_CLI_TESTS) {
-      childProcess.stdout.on('data', (chunk) => {
+      childProcess.stdout.on('data', (chunk: Buffer) => {
         console.log(`Received output from command "${command.join(' ')}":`, chunk.toString());
       });
     }
@@ -99,10 +96,10 @@ export function runCLIWithResult(
     const stdoutChunks: Buffer[] = [];
     const stderrChunks: Buffer[] = [];
 
-    childProcess.stdout.on('data', (chunk) => {
+    childProcess.stdout.on('data', (chunk: Buffer) => {
       stdoutChunks.push(chunk);
     });
-    childProcess.stderr.on('data', (chunk) => {
+    childProcess.stderr.on('data', (chunk: Buffer) => {
       stderrChunks.push(chunk);
     });
     childProcess.on('close', (exitCode) => {

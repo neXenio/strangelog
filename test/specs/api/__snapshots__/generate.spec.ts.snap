@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`generate returns proper markdown string 1`] = `
+exports[`generate > returns proper markdown string 1`] = `
 "# Changelog
 
 ## Version \`next\`
@@ -19,7 +19,7 @@ exports[`generate returns proper markdown string 1`] = `
 - **Comp 1:** comp1 addition description"
 `;
 
-exports[`generate when there are no configured components renders "All" for the entries with null as component 1`] = `
+exports[`generate > when there are no configured components > renders "All" for the entries with null as component 1`] = `
 "# Changelog
 
 ## Version \`next\`

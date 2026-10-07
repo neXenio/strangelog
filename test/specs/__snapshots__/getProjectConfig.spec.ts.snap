@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`getProjectConfig when there is a .strangelogrc returns configuration from .strangelogrc merged over defaults 1`] = `
+exports[`getProjectConfig > when there is a .strangelogrc > returns configuration from .strangelogrc merged over defaults 1`] = `
 {
   "components": {
     "comp1": "Comp 1",
@@ -10,7 +10,7 @@ exports[`getProjectConfig when there is a .strangelogrc returns configuration fr
 }
 `;
 
-exports[`getProjectConfig when there is no .strangelogrc returns default configuration 1`] = `
+exports[`getProjectConfig > when there is no .strangelogrc > returns default configuration 1`] = `
 {
   "components": {},
   "path": "./changelog",

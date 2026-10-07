@@ -1,6 +1,7 @@
 import { basename } from 'path';
 
 import { removeSync } from 'fs-extra';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { connectChangelog } from '../../../src/api';
 import { addTestVersionsWithEntries } from '../../factories/changelog';
@@ -10,15 +11,17 @@ import { joinAndGlob, readSingleYAMLFileFromGlob } from '../../utils';
 const testPath = getOwnTestPath();
 
 describe('renameComponent', () => {
-
   beforeEach(() => {
     removeSync(testPath);
-    jest.useFakeTimers({ now: new Date('2017-06-24T00:01:02.000Z') });
+    vi.useFakeTimers({
+      now: new Date('2017-06-24T00:01:02.000Z'),
+      toFake: ['Date']
+    });
   });
 
   afterEach(() => {
     removeSync(testPath);
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   function setup() {
@@ -57,8 +60,9 @@ describe('renameComponent', () => {
 
     changelogAPI.renameComponent('comp1', 'comp3');
 
-    expect(joinAndGlob(testPath, '1.0.0/*.yml').map((filePath) => basename(filePath)))
-      .toEqual(['2017-06-24T00-01-02.000Z_addition_comp3.yml']);
+    expect(joinAndGlob(testPath, '1.0.0/*.yml').map((filePath) => basename(filePath))).toEqual([
+      '2017-06-24T00-01-02.000Z_addition_comp3.yml'
+    ]);
   });
 
   it('merges entries into an already used component', () => {
@@ -66,7 +70,8 @@ describe('renameComponent', () => {
 
     expect(changelogAPI.renameComponent('comp2', 'comp1')).toBe(1);
 
-    const components = changelogAPI.getChangelogData()
+    const components = changelogAPI
+      .getChangelogData()
       .flatMap(({ entries }) => Object.values(entries).flat())
       .map(({ component }) => component);
 
@@ -81,5 +86,4 @@ describe('renameComponent', () => {
     );
     expect(readSingleYAMLFileFromGlob(testPath, '1.0.0/*.yml').component).toBe('comp1');
   });
-
 });

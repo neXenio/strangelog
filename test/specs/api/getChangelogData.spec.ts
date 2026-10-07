@@ -1,4 +1,5 @@
 import { removeSync } from 'fs-extra';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { connectChangelog } from '../../../src/api';
 import { addTestVersionsWithEntries } from '../../factories/changelog';
@@ -7,15 +8,17 @@ import { getOwnTestPath } from '../../factories/fileSystem';
 const testPath = getOwnTestPath();
 
 describe('getChangelogData', () => {
-
   beforeEach(() => {
     removeSync(testPath);
-    jest.useFakeTimers({ now: new Date('2017-06-24T00:01:02.000Z') });
+    vi.useFakeTimers({
+      now: new Date('2017-06-24T00:01:02.000Z'),
+      toFake: ['Date']
+    });
   });
 
   afterEach(() => {
     removeSync(testPath);
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   function setup() {
@@ -92,7 +95,6 @@ describe('getChangelogData', () => {
   });
 
   describe('when there are no entries of a certain kind', () => {
-
     it('returns an empty array for that kind', () => {
       const changelogAPI = setup();
 
@@ -104,7 +106,5 @@ describe('getChangelogData', () => {
 
       expect(changelogAPI.getChangelogData()[0].entries.deprecation).toEqual([]);
     });
-
   });
-
 });

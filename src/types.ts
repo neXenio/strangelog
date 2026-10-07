@@ -16,10 +16,12 @@ export type MigratorType = (config: ConfigType) => void;
 
 // A component is configured either by its title or by an object; `enabled: false` keeps a
 // component for rendering existing entries but no longer offers it for new ones
-export type ComponentConfigType = string | {
-  title: string;
-  enabled?: boolean;
-};
+export type ComponentConfigType =
+  | string
+  | {
+      title: string;
+      enabled?: boolean;
+    };
 
 export type ComponentsConfigType = {
   [name: string]: ComponentConfigType;

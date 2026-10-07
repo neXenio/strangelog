@@ -1,15 +1,19 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { connectChangelog } from '../../../src/api';
 import { createTestProject } from '../../factories/testProject';
 import { readSingleYAMLFileFromGlob } from '../../utils';
 
 describe('addEntry', () => {
-
   beforeEach(() => {
-    jest.useFakeTimers({ now: new Date('2017-06-24T00:01:02.000Z') });
+    vi.useFakeTimers({
+      now: new Date('2017-06-24T00:01:02.000Z'),
+      toFake: ['Date']
+    });
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   function setup() {
@@ -30,7 +34,6 @@ describe('addEntry', () => {
   }
 
   describe('when called with no component', () => {
-
     it('adds entry with null component', () => {
       const { changeLog, testProject } = setup();
 
@@ -40,17 +43,16 @@ describe('addEntry', () => {
         description: ''
       });
 
-      expect(entryFilePath)
-        .toBe(`${testProject.changelogPath}/next/2017-06-24T00-01-02.000Z_fix_all.yml`);
+      expect(entryFilePath).toBe(
+        `${testProject.changelogPath}/next/2017-06-24T00-01-02.000Z_fix_all.yml`
+      );
       expect(
         readSingleYAMLFileFromGlob(`${testProject.changelogPath}/next/**/*.yml`)
       ).toMatchSnapshot();
     });
-
   });
 
   describe('when called with unknown component', () => {
-
     it('throws appropriate error', () => {
       const { changeLog } = setup();
 
@@ -62,7 +64,5 @@ describe('addEntry', () => {
         });
       }).toThrow('Unknown component "unknown"');
     });
-
   });
-
 });

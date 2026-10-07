@@ -14,16 +14,10 @@ export function getChangelogInfo(config: ConfigType): ChangelogInfoType {
   return load(readFileSync(getInfoFilePath(config)).toString()) as ChangelogInfoType;
 }
 
-export function saveChangelogInfo(
-  config: ConfigType,
-  newChangelogInfo: ChangelogInfoType
-): void {
+export function saveChangelogInfo(config: ConfigType, newChangelogInfo: ChangelogInfoType): void {
   const infoFilePath = joinPath(config.path, 'info.yml');
 
-  return outputFileSync(
-    infoFilePath,
-    dump(newChangelogInfo)
-  );
+  return outputFileSync(infoFilePath, dump(newChangelogInfo));
 }
 
 // Three cases may occur:
@@ -42,10 +36,10 @@ export function ensureInitializedProject(config: ConfigType): void {
 
   saveChangelogInfo(config, {
     version: hasEntries
-      // Case 3
-      ? -1
-      // Case 2
-      : CURRENT_VERSION
+      ? // Case 3
+        -1
+      : // Case 2
+        CURRENT_VERSION
   });
 }
 

@@ -1,10 +1,15 @@
 import yargs from 'yargs';
 
 import { connectChangelog } from '../api';
-import getProjectConfig from '../getProjectConfig';
 import { ENTRY_KINDS } from '../api/utils';
+import getProjectConfig from '../getProjectConfig';
 import type { ChangelogAPIType } from '../types';
 
+import runAdd from './commands/add';
+import runBump from './commands/bump';
+import runGenerate from './commands/generate';
+import runMigrate from './commands/migrate';
+import runRenameComponent from './commands/renameComponent';
 import type {
   CLIOptionsType,
   CLIAddOptionsType,
@@ -12,17 +17,11 @@ import type {
   CLIBumpOptionsType,
   CLIRenameComponentOptionsType
 } from './types';
-import runAdd from './commands/add';
-import runBump from './commands/bump';
-import runGenerate from './commands/generate';
-import runMigrate from './commands/migrate';
-import runRenameComponent from './commands/renameComponent';
 
 export default function cli(args: string[]) {
-  if (!args.length)
-    args = ['--help'];
+  if (!args.length) args = ['--help'];
 
-  yargs(args)
+  void yargs(args)
     .command<CLIAddOptionsType>(
       'add',
       'adds a changelog entry (prompts unless --kind, --component or --description is given)',
@@ -60,7 +59,8 @@ export default function cli(args: string[]) {
           .option('auto', {
             alias: 'a',
             type: 'boolean',
-            describe: 'derive the next SemVer version from the "next" entries: major for changes, '
+            describe:
+              'derive the next SemVer version from the "next" entries: major for changes, '
               + 'minor for additions, patch otherwise'
           })
           .conflicts('auto', 'version');
@@ -77,12 +77,10 @@ export default function cli(args: string[]) {
       'rename-component <from> <to>',
       'moves all entries of component <from> to component <to> (renames or merges components)',
       (yargs) => {
-        yargs
-          .positional('from', { type: 'string' })
-          .positional('to', { type: 'string' });
+        yargs.positional('from', { type: 'string' }).positional('to', { type: 'string' });
       },
-      withAPI(
-        (changelog, argv: CLIRenameComponentOptionsType) => runRenameComponent(changelog, argv)
+      withAPI((changelog, argv: CLIRenameComponentOptionsType) =>
+        runRenameComponent(changelog, argv)
       )
     )
     .command<CLIGenerateOptionsType>(

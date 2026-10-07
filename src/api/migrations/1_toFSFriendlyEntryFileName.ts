@@ -14,20 +14,15 @@ const ENTRY_FILE_PATH_ISO_DATE_MATCHER =
   /(.*)([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+Z)([^/\\]*\.yml)$/;
 
 export default function toSemVerDirectories(config: ConfigType) {
-  globPaths(joinPath(config.path, '*/*.yml'))
-    .forEach((oldFileName) => {
-      const dateMatches = oldFileName.match(ENTRY_FILE_PATH_ISO_DATE_MATCHER);
+  globPaths(joinPath(config.path, '*/*.yml')).forEach((oldFileName) => {
+    const dateMatches = oldFileName.match(ENTRY_FILE_PATH_ISO_DATE_MATCHER);
 
-      if (!dateMatches) {
-        return;
-      }
+    if (!dateMatches) {
+      return;
+    }
 
-      const [
-        beforeDatePart,
-        datePart,
-        afterPart
-      ] = dateMatches.slice(1);
+    const [beforeDatePart, datePart, afterPart] = dateMatches.slice(1);
 
-      moveSync(oldFileName, `${beforeDatePart}${datePart.replace(/:/g, '-')}${afterPart}`);
-    });
+    moveSync(oldFileName, `${beforeDatePart}${datePart.replace(/:/g, '-')}${afterPart}`);
+  });
 }

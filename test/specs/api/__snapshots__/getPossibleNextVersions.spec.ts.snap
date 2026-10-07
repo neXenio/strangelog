@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`getPossibleNextVersions when called with a "1.0.0"-version in package.json returns only 1.0.1, 1.1.0 and 2.0.0 as possible next versions 1`] = `
+exports[`getPossibleNextVersions > when called with a "1.0.0"-version in package.json > returns only 1.0.1, 1.1.0 and 2.0.0 as possible next versions 1`] = `
 [
   "1.0.1",
   "1.1.0",

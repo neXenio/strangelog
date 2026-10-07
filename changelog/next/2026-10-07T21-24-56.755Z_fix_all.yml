@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T21:24:56.755Z'
+component: all
+kind: fix
+description: >-
+  Generated changelogs no longer start with an empty `next` section right after
+  a release

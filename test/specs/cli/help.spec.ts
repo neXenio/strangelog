@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { createTestProject } from '../../factories/testProject';
-import { runCLI } from '../../utils';
+import { createTestProject } from '#test/factories/testProject';
+import { runCLI } from '#test/utils';
 
 describe('$ (no command)', { timeout: 20000 }, () => {
   it('prints the same usage help as --help', async () => {

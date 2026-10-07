@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { connectChangelog } from '../../../src/api';
-import { createTestProject } from '../../factories/testProject';
-import { readSingleYAMLFileFromGlob } from '../../utils';
+import { connectChangelog } from '#src/api/index';
+import { createTestProject } from '#test/factories/testProject';
+import { readSingleYAMLFileFromGlob } from '#test/utils';
 
 describe('addEntry', () => {
   beforeEach(() => {

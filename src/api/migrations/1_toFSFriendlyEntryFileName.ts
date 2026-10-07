@@ -1,9 +1,8 @@
 import { join as joinPath } from 'path';
 
-import { moveSync } from 'fs-extra';
-
-import type { ConfigType } from '../../types';
-import { globPaths } from '../utils';
+import { moveSync } from '../../fileSystem.ts';
+import type { ConfigType } from '../../types.ts';
+import { globPaths } from '../utils.ts';
 
 // Matches on a path like /path/to/changelog/[whatever]2017-08-23T12:19:14.980Z[whatever].yml
 // - 0: matches the file name from the beginning of the ISO string up to the end (extension)

@@ -1,9 +1,9 @@
-import { outputFileSync } from 'fs-extra';
 import { dump } from 'js-yaml';
 
-import type { ConfigType, EntryType } from '../types';
+import { outputFileSync } from '../fileSystem.ts';
+import type { ConfigType, EntryType } from '../types.ts';
 
-import { ensureInitializedProject } from './changelogInfo';
+import { ensureInitializedProject } from './changelogInfo.ts';
 
 export default function addEntry(config: ConfigType, entry: EntryType): string {
   const { path, components } = config;

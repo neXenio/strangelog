@@ -1,10 +1,12 @@
 import { spawn } from 'child_process';
+import { readFileSync } from 'node:fs';
 import { join as joinPath } from 'path';
 
-import { readFileSync, outputFileSync } from 'fs-extra';
 import { globSync } from 'glob';
 import { dump, load } from 'js-yaml';
 import { expect } from 'vitest';
+
+import { outputFileSync } from './fileSystem.ts';
 
 function readYAMLFileSync(filePath: string): { [key: string]: unknown } {
   return load(readFileSync(filePath).toString()) as { [key: string]: unknown };
@@ -53,7 +55,13 @@ export function runCLIWithResult(
 ): Promise<CLIResultType> {
   const childProcess = spawn(
     process.execPath,
-    [joinPath(__dirname, 'runSourceCLI.cjs'), ...command],
+    // Node strips the types of src/ itself; the warning is about running the .ts sources as ESM in
+    // a package without "type": "module", which only happens when running from source
+    [
+      '--disable-warning=MODULE_TYPELESS_PACKAGE_JSON',
+      joinPath(__dirname, '..', 'src', 'cli', 'index.ts'),
+      ...command
+    ],
     {
       stdio: [null, null, null],
       cwd

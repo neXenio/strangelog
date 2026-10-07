@@ -1,12 +1,12 @@
 import { basename } from 'path';
 
-import { removeSync } from 'fs-extra';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { connectChangelog } from '../../../src/api';
-import { addTestVersionsWithEntries } from '../../factories/changelog';
-import { getOwnTestPath } from '../../factories/fileSystem';
-import { joinAndGlob, readSingleYAMLFileFromGlob } from '../../utils';
+import { connectChangelog } from '#src/api/index';
+import { addTestVersionsWithEntries } from '#test/factories/changelog';
+import { getOwnTestPath } from '#test/factories/fileSystem';
+import { removeSync } from '#test/fileSystem';
+import { joinAndGlob, readSingleYAMLFileFromGlob } from '#test/utils';
 
 const testPath = getOwnTestPath();
 

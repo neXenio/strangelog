@@ -1,4 +1,5 @@
-import { readFileSync, existsSync } from 'fs-extra';
+import { existsSync, readFileSync } from 'node:fs';
+
 import { inc as incrementSemVer, valid as validSemVer } from 'semver';
 
 export default function getPossibleNextVersions(): string[] | null {

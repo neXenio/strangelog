@@ -1,13 +1,14 @@
+import { readFileSync } from 'node:fs';
 import { resolve } from 'path';
 
-import { removeSync, readFileSync, outputFileSync, mkdirsSync } from 'fs-extra';
 import { globSync } from 'glob';
 import { load } from 'js-yaml';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { connectChangelog } from '../../../src/api';
-import { multiToSingleLineString } from '../../../src/api/utils';
-import { getOwnTestPath } from '../../factories/fileSystem';
+import { connectChangelog } from '#src/api/index';
+import { multiToSingleLineString } from '#src/api/utils';
+import { getOwnTestPath } from '#test/factories/fileSystem';
+import { mkdirsSync, outputFileSync, removeSync } from '#test/fileSystem';
 
 const testPath = getOwnTestPath();
 

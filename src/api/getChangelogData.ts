@@ -1,6 +1,6 @@
+import { readFileSync } from 'node:fs';
 import { join as joinPath } from 'path';
 
-import { readFileSync } from 'fs-extra';
 import { load } from 'js-yaml';
 
 import type {
@@ -9,10 +9,10 @@ import type {
   VersionChangelogType,
   EntryType,
   EntryKindType
-} from '../types';
+} from '../types.ts';
 
-import getSortedChangelogVersions from './getSortedChangelogVersions';
-import { ENTRY_KINDS, getComponentTitle, globPaths, stringifyVersion } from './utils';
+import getSortedChangelogVersions from './getSortedChangelogVersions.ts';
+import { ENTRY_KINDS, getComponentTitle, globPaths, stringifyVersion } from './utils.ts';
 
 export default function getChangelogData(config: ConfigType): ChangelogType {
   return [

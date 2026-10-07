@@ -1,11 +1,12 @@
+import { readFileSync } from 'node:fs';
 import { basename, dirname, join as joinPath } from 'path';
 
-import { moveSync, outputFileSync, readFileSync } from 'fs-extra';
 import { dump, load } from 'js-yaml';
 
-import type { ConfigType, EntryType } from '../types';
+import { moveSync, outputFileSync } from '../fileSystem.ts';
+import type { ConfigType, EntryType } from '../types.ts';
 
-import { globPaths } from './utils';
+import { globPaths } from './utils.ts';
 
 // Moves all entries of component `from` (in every version, including "next") to component `to`.
 // Merging two components is renaming one onto the other. Returns the number of moved entries.

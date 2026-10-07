@@ -1,11 +1,11 @@
 import { join as joinPath } from 'path';
 
-import { removeSync } from 'fs-extra';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { connectChangelog } from '../../../src/api';
-import type { EntryKindType } from '../../../src/types';
-import { createTestProject } from '../../factories/testProject';
+import { connectChangelog } from '#src/api/index';
+import type { EntryKindType } from '#src/types';
+import { createTestProject } from '#test/factories/testProject';
+import { removeSync } from '#test/fileSystem';
 
 describe('getAutomaticNextVersion', () => {
   const realCWD = process.cwd();

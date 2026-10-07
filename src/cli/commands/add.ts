@@ -1,8 +1,13 @@
 import inquirer, { type DistinctQuestion } from 'inquirer';
 
-import { ENTRY_KINDS, getComponentTitle, isComponentEnabled } from '../../api/utils';
-import type { ChangelogAPIType, ComponentsConfigType, EntryKindType, EntryType } from '../../types';
-import type { CLIAddOptionsType } from '../types';
+import { ENTRY_KINDS, getComponentTitle, isComponentEnabled } from '../../api/utils.ts';
+import type {
+  ChangelogAPIType,
+  ComponentsConfigType,
+  EntryKindType,
+  EntryType
+} from '../../types.ts';
+import type { CLIAddOptionsType } from '../types.ts';
 
 // Exit code for invalid `add` flags, so that scripts and coding agents can tell it from failures
 const INVALID_INPUT_EXIT_CODE = 2;

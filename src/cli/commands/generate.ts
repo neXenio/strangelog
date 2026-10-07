@@ -1,7 +1,6 @@
-import { outputFileSync } from 'fs-extra';
-
-import type { ChangelogAPIType } from '../../types';
-import type { CLIGenerateOptionsType } from '../types';
+import { outputFileSync } from '../../fileSystem.ts';
+import type { ChangelogAPIType } from '../../types.ts';
+import type { CLIGenerateOptionsType } from '../types.ts';
 
 export default async function runGenerate(
   changelog: ChangelogAPIType,

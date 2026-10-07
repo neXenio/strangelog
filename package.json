@@ -10,6 +10,10 @@
     "AGENTS.md",
     "CHANGELOG.md"
   ],
+  "imports": {
+    "#src/*": "./src/*.ts",
+    "#test/*": "./test/*.ts"
+  },
   "repository": "git@github.com:neXenio/strangelog.git",
   "author": "neXenio GmbH <contact@nexenio.com>",
   "license": "MIT",
@@ -28,25 +32,22 @@
     "typecheck": "tsc --noEmit",
     "ci-pipeline": "yarn run test-ci && yarn run lint && yarn run format-check && yarn run typecheck",
     "prepare": "yarn run compile",
-    "start": "tsx src/cli/index.ts",
-    "changelog": "tsx src/cli/index.ts",
-    "changelog-generate": "tsx src/cli/index.ts generate --outFile CHANGELOG.md"
+    "start": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/cli/index.ts",
+    "changelog": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/cli/index.ts",
+    "changelog-generate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/cli/index.ts generate --outFile CHANGELOG.md"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.20.5",
     "@types/semver": "^7.8.0",
     "@types/yargs": "^17.0.35",
     "oxfmt": "^0.72.0",
     "oxlint": "^1.87.0",
     "oxlint-tsgolint": "^7.0.2003",
-    "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.3.3",
     "vitest": "^5.0.3"
   },
   "dependencies": {
-    "fs-extra": "^11.4.1",
     "glob": "^13.0.6",
     "inquirer": "^14.2.3",
     "js-yaml": "^5.4.3",

@@ -9,12 +9,14 @@ import type { ChangelogAPIType } from '../types';
 import type {
   CLIOptionsType,
   CLIGenerateOptionsType,
-  CLIBumpOptionsType
+  CLIBumpOptionsType,
+  CLIRenameComponentOptionsType
 } from './types';
 import runAdd from './commands/add';
 import runBump from './commands/bump';
 import runGenerate from './commands/generate';
 import runMigrate from './commands/migrate';
+import runRenameComponent from './commands/renameComponent';
 
 export default function cli(args: string[]) {
   yargs(args)
@@ -41,6 +43,18 @@ export default function cli(args: string[]) {
       'migrates changelog files to latest version after updating strangelog',
       () => {},
       withAPI((changelog) => runMigrate(changelog))
+    )
+    .command(
+      'rename-component <from> <to>',
+      'moves all entries of component <from> to component <to> (renames or merges components)',
+      (yargs) => {
+        yargs
+          .positional('from', { type: 'string' })
+          .positional('to', { type: 'string' });
+      },
+      withAPI(
+        (changelog, argv: CLIRenameComponentOptionsType) => runRenameComponent(changelog, argv)
+      )
     )
     .command(
       'generate',

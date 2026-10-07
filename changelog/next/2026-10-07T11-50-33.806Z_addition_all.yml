@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T11:50:33.806Z'
+component: all
+kind: addition
+description: >-
+  New `rename-component <from> <to>` command and `renameComponent()` API to
+  rename or merge components in all existing entries

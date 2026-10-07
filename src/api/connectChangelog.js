@@ -8,6 +8,7 @@ import generate from './generate';
 import getChangelogData from './getChangelogData';
 import getPossibleNextVersions from './getPossibleNextVersions';
 import migrate from './migrate';
+import renameComponent from './renameComponent';
 import { getChangelogInfo, saveChangelogInfo } from './changelogInfo';
 
 export default function connectChangelog(config: ConfigType): ChangelogAPIType {
@@ -30,6 +31,9 @@ export default function connectChangelog(config: ConfigType): ChangelogAPIType {
     },
     migrate() {
       return migrate(config);
+    },
+    renameComponent(from, to) {
+      return renameComponent(config, from, to);
     },
     getChangelogInfo() {
       return getChangelogInfo(config);

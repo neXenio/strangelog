@@ -1,0 +1,7 @@
+dateTime: '2026-10-07T17:17:18.524Z'
+component: api
+kind: addition
+description: >-
+  TypeScript type declarations are included: TypeScript projects get types for
+  connectChangelog, CURRENT_VERSION and the exported types such as ConfigType
+  and EntryType

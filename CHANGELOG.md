@@ -1,5 +1,15 @@
 # Changelog
 
+## Version `3.1.0`
+
+### Added
+- **All:** The `compact` template (`template: compact` in `.strangelogrc`) renders one line per entry in the form `* **component** feat: description (tickets)`, with `kindLabels` and `allComponentLabel` to adjust the labels
+- **All:** The `kinds` list in `.strangelogrc` restricts the kinds that `strangelog add` and `addEntry()` accept
+- **All:** Entries can link tickets: `strangelog add --ticket`, an optional prompt question, `ticketUrl` for links and `ticketPattern` to validate the IDs
+- **All:** `strangelog bump` records the release date in `.release.yml`, which the `compact` template prints next to the version
+- **All:** The `legacyChangelog` file in `.strangelogrc` is appended to the generated changelog, so an existing `CHANGELOG.md` can be kept
+- **CLI:** `strangelog generate --version <version> --outFile -` prints the section of one version, e.g. for release notes
+
 ## Version `3.0.0`
 
 ### Added

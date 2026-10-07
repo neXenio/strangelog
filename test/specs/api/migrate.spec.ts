@@ -4,10 +4,10 @@ import { join as joinPath } from 'path';
 import { load } from 'js-yaml';
 import { afterEach, describe, expect, test } from 'vitest';
 
-import { connectChangelog, CURRENT_VERSION } from '../../../src/api/index.ts';
-import { createTestProject } from '../../factories/testProject.ts';
-import { mkdirsSync, removeSync } from '../../fileSystem.ts';
-import { joinAndOutputYAMLFile, joinAndGlob } from '../../utils.ts';
+import { connectChangelog, CURRENT_VERSION } from '#src/api/index';
+import { createTestProject } from '#test/factories/testProject';
+import { mkdirsSync, removeSync } from '#test/fileSystem';
+import { joinAndOutputYAMLFile, joinAndGlob } from '#test/utils';
 
 describe('migrate', () => {
   let currentRootPath: string;

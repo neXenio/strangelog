@@ -8,7 +8,8 @@ export function outputFileSync(filePath: string, data: string): void {
 }
 
 // Moves a file or directory and creates missing parent directories. Never overwrites: entry files
-// and version directories must not silently replace existing ones.
+// and version directories must not silently replace existing ones. Moving a path onto itself
+// does nothing.
 export function moveSync(sourcePath: string, destinationPath: string): void {
   if (sourcePath === destinationPath) {
     return;

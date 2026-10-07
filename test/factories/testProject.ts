@@ -3,11 +3,11 @@ import { join as joinPath, resolve as resolvePath } from 'path';
 import { dump } from 'js-yaml';
 import { afterEach } from 'vitest';
 
-import { CURRENT_VERSION } from '../../src/api/index.ts';
-import type { ComponentsConfigType } from '../../src/types.ts';
-import { outputFileSync, removeSync } from '../fileSystem.ts';
-
 import { getOwnTestPath } from './fileSystem.ts';
+
+import { CURRENT_VERSION } from '#src/api/index';
+import type { ComponentsConfigType } from '#src/types';
+import { outputFileSync, removeSync } from '#test/fileSystem';
 
 const testProjectPaths: string[] = [];
 

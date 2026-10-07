@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { connectChangelog } from '../../../src/api/index.ts';
-import { addTestVersionsWithEntries } from '../../factories/changelog.ts';
-import { getOwnTestPath } from '../../factories/fileSystem.ts';
-import { removeSync } from '../../fileSystem.ts';
+import { connectChangelog } from '#src/api/index';
+import { addTestVersionsWithEntries } from '#test/factories/changelog';
+import { getOwnTestPath } from '#test/factories/fileSystem';
+import { removeSync } from '#test/fileSystem';
 
 const testPath = getOwnTestPath();
 

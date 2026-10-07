@@ -3,9 +3,9 @@ import { join as joinPath } from 'node:path';
 
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { moveSync, outputFileSync } from '../../src/fileSystem.ts';
-import { getOwnTestPath } from '../factories/fileSystem.ts';
-import { removeSync } from '../fileSystem.ts';
+import { moveSync, outputFileSync } from '#src/fileSystem';
+import { getOwnTestPath } from '#test/factories/fileSystem';
+import { removeSync } from '#test/fileSystem';
 
 const testPath = getOwnTestPath();
 

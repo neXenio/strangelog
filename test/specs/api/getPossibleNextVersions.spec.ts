@@ -2,9 +2,9 @@ import { join as joinPath } from 'path';
 
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { connectChangelog } from '../../../src/api/index.ts';
-import { createTestProject } from '../../factories/testProject.ts';
-import { outputFileSync, removeSync } from '../../fileSystem.ts';
+import { connectChangelog } from '#src/api/index';
+import { createTestProject } from '#test/factories/testProject';
+import { outputFileSync, removeSync } from '#test/fileSystem';
 
 describe('getPossibleNextVersions', () => {
   const realCWD = process.cwd();

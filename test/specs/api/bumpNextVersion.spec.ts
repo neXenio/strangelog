@@ -5,10 +5,10 @@ import { globSync } from 'glob';
 import { load } from 'js-yaml';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { connectChangelog } from '../../../src/api/index.ts';
-import { multiToSingleLineString } from '../../../src/api/utils.ts';
-import { getOwnTestPath } from '../../factories/fileSystem.ts';
-import { mkdirsSync, outputFileSync, removeSync } from '../../fileSystem.ts';
+import { connectChangelog } from '#src/api/index';
+import { multiToSingleLineString } from '#src/api/utils';
+import { getOwnTestPath } from '#test/factories/fileSystem';
+import { mkdirsSync, outputFileSync, removeSync } from '#test/fileSystem';
 
 const testPath = getOwnTestPath();
 

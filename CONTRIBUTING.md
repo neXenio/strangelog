@@ -136,6 +136,9 @@ add tests to `test/specs/api/migrate.spec.ts`, and document the user-visible eff
 - Relative imports name the `.ts` file (`import addEntry from './addEntry.ts'`,
   `'../api/index.ts'` for directories), so Node.js can run `src/` directly.
   `rewriteRelativeImportExtensions` turns them into `.js` in `lib/`.
+- Tests import sources and test helpers through the subpath imports in `package.json`
+  (`#src/api/index`, `#test/utils`) instead of long relative paths. `src/` itself keeps relative
+  imports, because only those are rewritten to `.js` in `lib/`.
 - File system access uses `node:fs`. Write and move files through `src/fileSystem.ts`
   (`outputFileSync`, `moveSync`): they create missing parent directories, and `moveSync` never
   overwrites an existing file or directory.

@@ -2,9 +2,9 @@ import { resolve } from 'path';
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import getProjectConfig from '../../src/getProjectConfig.ts';
-import { createTestProject } from '../factories/testProject.ts';
-import { removeSync } from '../fileSystem.ts';
+import getProjectConfig from '#src/getProjectConfig';
+import { createTestProject } from '#test/factories/testProject';
+import { removeSync } from '#test/fileSystem';
 
 describe('getProjectConfig', () => {
   let testProject: ReturnType<typeof createTestProject>, cwd: string;

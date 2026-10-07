@@ -2,9 +2,9 @@ import { join as joinPath } from 'path';
 
 import { afterEach, describe, expect, it } from 'vitest';
 
-import getSortedChangelogVersions from '../../../src/api/getSortedChangelogVersions.ts';
-import { getOwnTestPath } from '../../factories/fileSystem.ts';
-import { mkdirsSync, removeSync } from '../../fileSystem.ts';
+import getSortedChangelogVersions from '#src/api/getSortedChangelogVersions';
+import { getOwnTestPath } from '#test/factories/fileSystem';
+import { mkdirsSync, removeSync } from '#test/fileSystem';
 
 const testPath = getOwnTestPath();
 

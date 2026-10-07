@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { createTestProject } from '../../factories/testProject.ts';
-import { joinAndOutputYAMLFile, readSingleYAMLFileFromGlob, runCLI } from '../../utils.ts';
+import { createTestProject } from '#test/factories/testProject';
+import { joinAndOutputYAMLFile, readSingleYAMLFileFromGlob, runCLI } from '#test/utils';
 
 describe('$ rename-component', { timeout: 20000 }, () => {
   it('moves the entries of <from> to <to>', async () => {

@@ -10,6 +10,10 @@
     "AGENTS.md",
     "CHANGELOG.md"
   ],
+  "imports": {
+    "#src/*": "./src/*.ts",
+    "#test/*": "./test/*.ts"
+  },
   "repository": "git@github.com:neXenio/strangelog.git",
   "author": "neXenio GmbH <contact@nexenio.com>",
   "license": "MIT",

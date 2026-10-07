@@ -24,9 +24,6 @@
 - **API:** `addEntry()` writes `info.yml` for new projects, so `migrate()` no longer reports version -1
 - **CLI:** `strangelog bump` offers SemVer-compliant versions (from 1.2.3: 1.2.4, 1.3.0, 2.0.0)
 
-### Removed
-- **All:** strangelog no longer depends on `fs-extra`
-
 ## Version `2.0.1`
 
 ### Fixed

@@ -3,21 +3,20 @@
 import { join as joinPath } from 'path';
 
 import { readFileSync } from 'fs-extra';
-import groupBy from 'lodash/groupBy';
-import jsYaml from 'js-yaml';
-import { sync as syncGlob } from 'glob';
+import { load } from 'js-yaml';
 
 import type {
   ConfigType,
   ChangelogType,
   VersionChangelogType,
-  EntryType
+  EntryType,
+  EntryKindType
 } from '../types';
 
-import { stringifyVersion } from './utils';
+import { globPaths, stringifyVersion } from './utils';
 import getSortedChangelogVersions from './getSortedChangelogVersions';
 
-const entryKinds = [
+const entryKinds: EntryKindType[] = [
   'addition',
   'change',
   'fix',
@@ -40,43 +39,47 @@ function getVersionChangelog(
   config: ConfigType,
   version: ?string
 ): VersionChangelogType {
+  const entries: { [kind: EntryKindType]: EntryType[] } = {};
+
+  entryKinds.forEach((entryKind) => {
+    entries[entryKind] = [];
+  });
+
+  getVersionChangelogFileNames(config, stringifyVersion(version))
+    .map((entryFileName): EntryType => load(readFileSync(entryFileName).toString()))
+    .sort(sortByComponent.bind(null, config))
+    .forEach((entry) => {
+      entries[entry.kind] = [...(entries[entry.kind] || []), entry];
+    });
+
   return {
     version,
-    entries: {
-      ...entryKinds.reduce((kinds, entryKind) => ({
-        ...kinds,
-        [entryKind]: []
-      }), {}),
-      ...groupBy((
-        getVersionChangelogFileNames(config, stringifyVersion(version))
-          .map((entryFileName) => readFileSync(entryFileName).toString())
-          .map(jsYaml.safeLoad)
-          .sort(sortByComponent.bind(null, config))
-      ), 'kind')
-    }
+    entries
   };
 }
 
-function sortByComponent(config: ConfigType, entry1: EntryType, entry2: EntryType) {
-  if (!entry1.component && !entry2.component) {
+function sortByComponent(config: ConfigType, entry1: EntryType, entry2: EntryType): number {
+  const component1 = entry1.component;
+  const component2 = entry2.component;
+
+  if (!component1 && !component2) {
     return 0;
   }
 
-  if (!entry1.component && entry2.component) {
+  if (!component1) {
     return 1;
   }
 
-  if (entry1.component && !entry2.component) {
+  if (!component2) {
     return -1;
   }
 
-  // $FlowFixMe: Checks above cover that
-  return config.components[entry1.component].localeCompare(config.components[entry2.component]);
+  return config.components[component1].localeCompare(config.components[component2]);
 }
 
 function getVersionChangelogFileNames(
   { path }: ConfigType,
   versionString: string
 ): string[] {
-  return syncGlob(joinPath(path, versionString, '*.yml'));
+  return globPaths(joinPath(path, versionString, '*.yml')).sort();
 }

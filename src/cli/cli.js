@@ -4,6 +4,7 @@ import yargs from 'yargs';
 
 import { connectChangelog } from '../api';
 import getProjectConfig from '../getProjectConfig';
+import type { ChangelogAPIType } from '../types';
 
 import type {
   CLIOptionsType,
@@ -53,14 +54,18 @@ export default function cli(args: string[]) {
       },
       withAPI((changelog, argv: CLIGenerateOptionsType) => runGenerate(changelog, argv))
     )
+    // `-v` is the `bump --version` alias, so yargs' built-in --version flag stays off
+    .version(false)
     .help()
-    .argv;
-  }
+    .parse();
+}
 
-function withAPI(commandFunction) {
-  return (argv: CLIOptionsType, ...args) => {
+function withAPI<ArgvType extends CLIOptionsType>(
+  commandFunction: (changelog: ChangelogAPIType, argv: ArgvType) => Promise<void>
+): (argv: ArgvType) => Promise<void> {
+  return (argv: ArgvType) => {
     const changelog = connectChangelog(getProjectConfig());
 
-    return commandFunction(changelog, argv, ...args);
+    return commandFunction(changelog, argv);
   };
 }

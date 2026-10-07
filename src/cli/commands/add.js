@@ -19,7 +19,7 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType) {
     ? []
     : [{
       name: 'component',
-      type: 'list',
+      type: 'select',
       message: 'Which component is your change affecting?',
       choices: componentKeys.map((componentName) => ({
         name: componentsConfig[componentName],
@@ -31,7 +31,7 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType) {
     ...componentQuestions,
     {
       name: 'kind',
-      type: 'list',
+      type: 'select',
       message: 'What kind of change are you documenting?',
       choices: [{
         name: 'Addition (e.g. new button, new behavior)',
@@ -47,7 +47,7 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType) {
       name: 'description',
       type: 'input',
       message: 'What changed?',
-      validate: (input) => (input.length < 10)
+      validate: (input: string) => (input.length < 10)
         ? 'Describe the change in at least 10 characters'
         : true
     }

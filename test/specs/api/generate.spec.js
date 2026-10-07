@@ -5,6 +5,7 @@ import { removeSync } from 'fs-extra';
 import { addTestVersionsWithEntries, addEntryWithoutComponent } from '../../factories/changelog';
 import { connectChangelog } from '../../../src/api';
 import { getOwnTestPath } from '../../factories/fileSystem';
+import type { ComponentsConfigType } from '../../../src/types';
 
 const testPath = getOwnTestPath();
 
@@ -19,7 +20,7 @@ describe('generate', () => {
   });
 
   function setup(
-    components = {
+    components: ComponentsConfigType = {
       comp1: 'Comp 1',
       comp2: 'Comp 2'
     }

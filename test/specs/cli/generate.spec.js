@@ -5,8 +5,7 @@ import { joinAndGlob, runCLI } from '../../utils';
 
 describe('$ generate', () => {
 
-  beforeEach(() => jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000);
-  afterEach(() => jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000);
+  jest.setTimeout(20000);
 
   function setup() {
     return createTestProject();

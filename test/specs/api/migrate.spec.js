@@ -3,7 +3,7 @@
 import { join as joinPath } from 'path';
 
 import { removeSync, readFileSync, mkdirsSync, statSync } from 'fs-extra';
-import { safeLoad } from 'js-yaml';
+import { load } from 'js-yaml';
 
 import { connectChangelog, CURRENT_VERSION } from '../../../src/api';
 import { createTestProject } from '../../factories/testProject';
@@ -60,7 +60,7 @@ describe('migrate', () => {
         from: -1,
         to: CURRENT_VERSION
       });
-      expect(safeLoad(readFileSync(infoFilePath).toString())).toEqual({
+      expect(load(readFileSync(infoFilePath).toString())).toEqual({
         version: CURRENT_VERSION
       });
     });
@@ -76,7 +76,7 @@ describe('migrate', () => {
         from: CURRENT_VERSION,
         to: CURRENT_VERSION
       });
-      expect(safeLoad(readFileSync(infoFilePath).toString())).toEqual({
+      expect(load(readFileSync(infoFilePath).toString())).toEqual({
         version: CURRENT_VERSION
       });
     });

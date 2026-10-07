@@ -3,7 +3,7 @@
 import { join as joinPath, resolve as resolvePath } from 'path';
 
 import { outputFileSync, removeSync } from 'fs-extra';
-import jsYaml from 'js-yaml';
+import { dump } from 'js-yaml';
 
 import { CURRENT_VERSION } from '../../src/api';
 
@@ -49,8 +49,8 @@ export function removeTestProjects() {
   testProjectPaths.splice(0, testProjectPaths.length).forEach(removeSync);
 }
 
-function outputYAMLSync(path, json) {
-  outputFileSync(path, jsYaml.safeDump(json));
+function outputYAMLSync(path: string, json: unknown): void {
+  outputFileSync(path, dump(json));
 }
 
 afterEach(removeTestProjects);

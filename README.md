@@ -43,6 +43,14 @@ Takes all changelog entries ever made in your project and generates a Markdown f
 
 **Note:** Since that `CHANGELOG.md` file would produce merge conflicts when working with multiple people in parallel, it is recommended that you do not commit this file (at least not in feature branches). The recommended solution is to generate the `CHANGELOG.md`-file during your CI build and publish it as an artifact.
 
+### `strangelog migrate`
+
+Updates the changelog files of your project to the format of the installed strangelog version and records that version in `info.yml` inside your changelog path. Run it once after upgrading strangelog.
+
+Changelogs created before strangelog `2.0.0` contain `:` in their entry file names, which Windows cannot check out. `strangelog migrate` renames these files (e.g. `2017-09-12T13:50:07.154Z_fix_all.yml` becomes `2017-09-12T13-50-07.154Z_fix_all.yml`). Commit the renamed files so that the repository can be cloned on Windows.
+
+**Example:** `yarn run strangelog migrate`
+
 ## Development
 
 Requires Yarn classic (`1.22.22`, see `packageManager` in `package.json`). `.nvmrc` pins the recommended Node.js version.

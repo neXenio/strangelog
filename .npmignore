@@ -1,12 +1,12 @@
+/.claude
 /.github
-/flow-typed
 /src
 /test
 /tmpTest
-/.babelrc
-/.flowconfig
 /.gitignore
 /.nvmrc
 /eslint.config.mjs
 /jest.config.json
+/tsconfig.json
+/tsconfig.build.json
 /CONTRIBUTING.md

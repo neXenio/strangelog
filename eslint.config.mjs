@@ -1,18 +1,23 @@
 import js from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import { createNodeResolver, importX } from 'eslint-plugin-import-x';
 import globals from 'globals';
-import hermesParser from 'hermes-eslint';
+import tseslint from 'typescript-eslint';
 
 export default [
   {
-    ignores: ['index.js', 'lib/', 'flow-typed/', 'tmpTest/', '.claude/']
+    ignores: ['index.js', 'lib/', 'tmpTest/', '.claude/']
   },
   js.configs.recommended,
+  ...tseslint.configs.recommended.map((config) => ({
+    ...config,
+    files: ['**/*.ts']
+  })),
   {
-    files: ['**/*.js'],
+    files: ['**/*.ts'],
     languageOptions: {
-      parser: hermesParser,
+      parser: tseslint.parser,
       sourceType: 'module',
       globals: {
         ...globals.node,
@@ -24,9 +29,9 @@ export default [
       'import-x': importX
     },
     settings: {
-      // Flow syntax only exists in this repository's .js files; dependencies are plain ESM/CJS
-      'import-x/parsers': { 'hermes-eslint': ['.js'], 'espree': ['.mjs', '.cjs'] },
-      'import-x/resolver-next': [createNodeResolver()]
+      'import-x/extensions': ['.ts', '.js', '.mjs', '.cjs'],
+      'import-x/parsers': { '@typescript-eslint/parser': ['.ts'] },
+      'import-x/resolver-next': [createTypeScriptImportResolver(), createNodeResolver()]
     },
     rules: {
       'class-methods-use-this': 2,
@@ -113,7 +118,9 @@ export default [
 
       // eslint-plugin-import-x
       'import-x/no-unresolved': 2,
-      'import-x/named': 2,
+      // tsc checks named imports; import-x cannot follow the `export * from 'fs'` of the ambient
+      // module in @types/fs-extra and would report every fs re-export as missing
+      'import-x/named': 0,
       'import-x/default': 2,
       'import-x/namespace': 2,
       'import-x/no-absolute-path': 2,

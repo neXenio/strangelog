@@ -88,6 +88,6 @@ Requires Yarn classic (`1.22.22`, see `packageManager` in `package.json`). `.nvm
 - `yarn install`: installs dependencies and compiles `src/` to `lib/`
 - `yarn test-ci`: runs the Jest test suite
 - `yarn lint`: runs ESLint
-- `yarn flow`: runs the Flow type check
+- `yarn typecheck`: runs the TypeScript type check
 - `yarn ci-pipeline`: runs all of the above, as CI does
 - `yarn start [command]`: runs the CLI from source

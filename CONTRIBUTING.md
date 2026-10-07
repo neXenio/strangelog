@@ -10,9 +10,10 @@ one YAML file in `changelog/next/`, so parallel branches never conflict on a cha
 `bump` moves `next/` into a version directory and `generate` renders all entries to Markdown.
 
 - Public JS API: `require('strangelog')` -> `index.js` -> `lib/index.js` -> `connectChangelog(config)`
-  plus `CURRENT_VERSION` and the Flow types from `src/types.js`.
+  plus `CURRENT_VERSION` and the TypeScript types from `src/types.ts`. TypeScript consumers get
+  them through the generated declarations (`types` in `package.json` -> `lib/index.d.ts`).
 - CLI binary: `strangelog` -> `lib/cli/index.js`.
-- `lib/` is build output (git-ignored). Edit `src/`, never `lib/`.
+- `lib/` is build output (git-ignored, CommonJS `.js` plus `.d.ts`). Edit `src/`, never `lib/`.
 
 Keep both surfaces backwards compatible: consumer projects have years of entry files and
 `.strangelogrc` files in the formats described below.
@@ -25,14 +26,14 @@ Requirements: Node.js `^22.18.0 || >=24.11.0` (`.nvmrc` = 24) and Yarn classic `
 | Command | What it does |
 | --- | --- |
 | `yarn install --frozen-lockfile` | installs dependencies; `prepare` compiles `src/` to `lib/` |
-| `yarn compile` | Babel build `src/` -> `lib/` (CommonJS) |
+| `yarn compile` | `tsc -p tsconfig.build.json`: `src/` -> `lib/` (CommonJS + `.d.ts`) |
 | `yarn test-ci` | full Jest suite, `--runInBand` |
 | `yarn jest --config=jest.config.json <file>` | run one spec file (prefer this while iterating) |
 | `yarn lint` / `yarn lint-fix` | ESLint (flat config in `eslint.config.mjs`) |
-| `yarn flow` | Flow type check (`flow check`) |
-| `yarn ci-pipeline` | tests + lint + Flow, exactly what CI runs |
+| `yarn typecheck` | TypeScript type check of `src/` and `test/` (`tsc --noEmit`) |
+| `yarn ci-pipeline` | tests + lint + typecheck, exactly what CI runs |
 | `node test/smoke.cjs` | smoke test of the compiled `lib/` (run `yarn compile` first) |
-| `yarn start <command>` | run the CLI from source, e.g. `yarn start --help` |
+| `yarn start <command>` | run the CLI from source via `tsx`, e.g. `yarn start --help` |
 
 A change is done when `yarn ci-pipeline` passes, `yarn compile && node test/smoke.cjs` passes, and
 the change has a changelog entry (see below).
@@ -41,34 +42,35 @@ the change has a changelog entry (see below).
 
 ```
 src/
-  index.js                  package entry: re-exports src/api and src/types
-  types.js                  shared Flow types (ConfigType, EntryType, ChangelogAPIType, ...)
-  getProjectConfig.js       reads .strangelogrc (YAML) from the cwd, merges defaults
+  index.ts                  package entry: re-exports src/api and src/types
+  types.ts                  shared types (ConfigType, EntryType, ChangelogAPIType, ...)
+  getProjectConfig.ts       reads .strangelogrc (YAML) from the cwd, merges defaults
   api/
-    connectChangelog.js     binds config to all API functions; the public API object
-    addEntry.js             writes next/<ISO-date>_<kind>_<component>.yml
-    bumpNextVersion.js      renames next/ to <version>/
-    getChangelogData.js     reads all versions and entries, grouped by kind
-    getSortedChangelogVersions.js
-    getPossibleNextVersions.js / getAutomaticNextVersion.js   version suggestions for bump
-    renameComponent.js      moves entries between components
-    generate.js             renders Markdown via templates/defaultTemplate.js
-    changelogInfo.js        info.yml (format version) handling
-    migrate.js + migrations/  on-disk format migrations
-    utils.js                globPaths, component helpers, string helpers
+    connectChangelog.ts     binds config to all API functions; the public API object
+    addEntry.ts             writes next/<ISO-date>_<kind>_<component>.yml
+    bumpNextVersion.ts      renames next/ to <version>/
+    getChangelogData.ts     reads all versions and entries, grouped by kind
+    getSortedChangelogVersions.ts
+    getPossibleNextVersions.ts / getAutomaticNextVersion.ts   version suggestions for bump
+    renameComponent.ts      moves entries between components
+    generate.ts             renders Markdown via templates/defaultTemplate.ts
+    changelogInfo.ts        info.yml (format version) handling
+    migrate.ts + migrations/  on-disk format migrations
+    utils.ts                globPaths, component helpers, string helpers
   cli/
-    index.js                bin entry (shebang)
-    cli.js                  yargs command definitions
-    commands/*.js           one file per command; prompts via inquirer
-  templates/defaultTemplate.js
+    index.ts                bin entry (shebang)
+    cli.ts                  yargs command definitions
+    commands/*.ts           one file per command; prompts via inquirer
+  templates/defaultTemplate.ts
 test/
-  specs/api/*.spec.js       API tests
-  specs/cli/*.spec.js       CLI tests (spawn the CLI from source)
+  specs/api/*.spec.ts       API tests
+  specs/cli/*.spec.ts       CLI tests (spawn the CLI from source)
   factories/                test project / changelog fixtures
-  utils.js                  runCLI(), YAML/glob helpers
-  runSourceCLI.cjs          CLI entry for tests (@babel/register pinned to the repo root)
+  utils.ts                  runCLI(), YAML/glob helpers
+  runSourceCLI.cjs          CLI entry for tests (runs src/ through tsx)
   smoke.cjs                 smoke test of the compiled lib/
-flow-typed/                 hand-written libdefs for Node and Jest globals
+tsconfig.json               type check settings for src/ and test/ (no emit)
+tsconfig.build.json         build settings: src/ -> lib/ with declarations
 changelog/                  this project's own changelog (strangelog dogfoods itself)
 ```
 
@@ -77,45 +79,50 @@ changelog/                  this project's own changelog (strangelog dogfoods it
 - `.strangelogrc` (YAML, project root, optional): `path` (default `./changelog`) and `components`,
   a map of component ID to either a title string or `{ title, enabled }`. `enabled: false` hides a
   component from `strangelog add` but keeps rendering its entries. Always accept both forms; use
-  `getComponentTitle()` / `isComponentEnabled()` from `src/api/utils.js` instead of reading values
+  `getComponentTitle()` / `isComponentEnabled()` from `src/api/utils.ts` instead of reading values
   directly.
 - Entry files: `<changelog path>/<version or next>/<date>_<kind>_<component or "all">.yml` with
   `dateTime` (ISO string, quoted), `component` (ID or `null`), `kind`, `description`. The date part
   uses `-` instead of `:` so that Windows can check out the files.
 - Kinds: `addition`, `change`, `fix`, `removal`, `deprecation`, `security`. They are listed in
-  `src/types.js` (`EntryKindType`), `src/api/getChangelogData.js`, `src/templates/defaultTemplate.js`
-  and `src/cli/commands/add.js`. Keep these four places in sync.
+  `src/types.ts` (`EntryKindType`), `src/api/getChangelogData.ts`, `src/templates/defaultTemplate.ts`
+  and `src/cli/commands/add.ts`. Keep these four places in sync.
 - `info.yml` in the changelog path stores the format version (`version: <n>`). `n` is the number of
-  migrations in `src/api/migrations/index.js` (`CURRENT_VERSION`).
+  migrations in `src/api/migrations/index.ts` (`CURRENT_VERSION`).
 
 ### Adding a migration
 
-Only when the on-disk format changes. Add `src/api/migrations/<n>_<name>.js` exporting a
-`(config) => void`, append it to the array in `migrations/index.js` (this bumps `CURRENT_VERSION`),
-add tests to `test/specs/api/migrate.spec.js`, and document the user-visible effect in the README
+Only when the on-disk format changes. Add `src/api/migrations/<n>_<name>.ts` exporting a
+`(config) => void`, append it to the array in `migrations/index.ts` (this bumps `CURRENT_VERSION`),
+add tests to `test/specs/api/migrate.spec.ts`, and document the user-visible effect in the README
 (`strangelog migrate`). Migrations must be idempotent per file and must never delete entries.
 
 ## Code conventions
 
-- Every source and test file starts with `// @flow`. Annotate exported functions; Flow requires
-  annotations on module exports and on parameters it cannot infer.
-- Flow syntax must be parseable by `@babel/preset-flow`: use `(value: Type)` annotations, not
-  `value as Type` casts. Type parameter bounds use `<T extends Bound>`. Use `unknown`, not the
-  deprecated `mixed`. `$FlowFixMe` needs an error code (`$FlowFixMe[incompatible-type]`) and a
-  reason; prefer fixing the type.
-- `node_modules` are `[untyped]` in `.flowconfig`. New Node built-ins (e.g. another `path` function)
-  must be declared in `flow-typed/node.js`; new Jest globals/matchers in `flow-typed/jest.js`.
-  flow-typed's published `node`/`jest` libdefs do not parse with current Flow, so do not install them.
+- Sources and tests are TypeScript (`.ts`) with `strict: true`. Annotate exported functions. No
+  `any` (`@typescript-eslint/no-explicit-any` is an error) and no `as unknown as` double casts.
+  Where a value really has an unknown shape (`js-yaml`'s `load()` returns `unknown`), cast once at
+  that boundary to the domain type (`load(...) as EntryType`) and keep the rest typed.
+- Use `import type { ... }` for type-only imports. `isolatedModules` is on, so every file must
+  compile on its own (ts-jest and tsx transpile file by file).
+- Types of dependencies come from the packages themselves or from `@types/*` dev dependencies
+  (`@types/node`, `@types/jest`, `@types/fs-extra`, `@types/semver`, `@types/yargs`).
+  `@types/node` follows the oldest supported Node.js major (22), so tsc flags APIs that Node 22
+  lacks.
 - ESLint enforces the style; run `yarn lint-fix` and then read the result, since some fixes (for
   example `object-property-newline`) produce awkward layouts that are better rewritten by hand.
   Notable rules: single quotes, semicolons, max line length 100, `func-style: declaration`,
   a blank line after variable declarations and before `return`, `import-x/order` with blank lines
-  between import groups, no CommonJS in `.js` files (use `.cjs` for plain Node scripts),
-  `no-undefined`, no nested ternaries.
-- ES modules in `src/`; Babel compiles them to CommonJS. Keep `"modules": "commonjs"` in
-  `.babelrc`: without it Babel 8 leaves `import` statements in `lib/` and the published package
-  breaks while all tests still pass.
-- Globbing: use `globPaths()` from `src/api/utils.js`, not `globSync` directly. It sets
+  between import groups, no CommonJS in `.ts` files (use `.cjs` for plain Node scripts),
+  `no-undefined`, no nested ternaries. `import-x/named` is off because tsc already checks named
+  imports and import-x cannot follow the `fs` re-exports of `@types/fs-extra`.
+- ES module syntax in `src/`; tsc compiles it to CommonJS. That relies on `package.json` having no
+  `"type": "module"` and on `module: nodenext` in `tsconfig.json`, which treats every `.ts` file
+  as CommonJS: relative imports stay extensionless, and ESM-only dependencies (`yargs`, `inquirer`)
+  are loaded via `require()` of ES modules, which the supported Node.js versions provide. Do not
+  add `"type": "module"` or switch `module`: `lib/` would then contain `import` statements and the
+  published package would break while all tests still pass.
+- Globbing: use `globPaths()` from `src/api/utils.ts`, not `globSync` directly. It sets
   `windowsPathsNoEscape` so `path.join()`-built patterns work on Windows. glob does not sort its
   results; sort explicitly where order matters.
 - YAML: `load` / `dump` from `js-yaml` (v5, safe by default). Pass strings to `load`, not Buffers,
@@ -174,9 +181,13 @@ Commit the generated YAML file. Never edit entries in released version directori
 - Upgrade with `yarn upgrade <pkg>@<version>` (or edit `package.json` and run `yarn install`), then
   commit `package.json` and `yarn.lock` together. CI installs with `--frozen-lockfile`.
 - Use stable releases only. Check peer dependency ranges before upgrading ESLint or its plugins:
-  `eslint-plugin-import-x`, `@stylistic/eslint-plugin` and `hermes-eslint` must all support the
-  ESLint major. The abandoned `eslint-plugin-flowtype`/`ft-flow` plugins are intentionally unused.
-- `@babel/register` is only used by the tests; `@babel/node` by `yarn start`.
+  `eslint-plugin-import-x`, `@stylistic/eslint-plugin`, `typescript-eslint` and
+  `eslint-import-resolver-typescript` must all support the ESLint major.
+- TypeScript is pinned to the newest version that `typescript-eslint` and `ts-jest` support (see
+  their `typescript` peer ranges). TypeScript 7 (the native port) has no JavaScript API yet, so
+  those tools cannot use it; upgrade only once both support it.
+- `ts-jest` is the Jest transform; `tsx` runs the CLI from source (`yarn start`,
+  `test/runSourceCLI.cjs`). Babel is not used.
 
 ## CI, branches and merging
 
@@ -191,10 +202,12 @@ Commit the generated YAML file. Never edit entries in released version directori
 
 ## Common pitfalls
 
-- Testing only through Jest: Jest and `@babel/register` compile to CommonJS on their own, so a
-  broken `lib/` build is invisible to `yarn test-ci`. Run `yarn compile && node test/smoke.cjs`.
-- `@babel/register` only compiles files inside its `cwd`; that is why CLI tests use
-  `test/runSourceCLI.cjs` instead of `babel-node` from the test project directory.
+- Testing only through Jest: ts-jest and tsx compile `src/` on their own, so a broken `lib/` build
+  is invisible to `yarn test-ci`. Run `yarn compile && node test/smoke.cjs`.
+- ts-jest only transpiles (`isolatedModules`), so Jest passes even with type errors. Type errors
+  only show up in `yarn typecheck`, which is part of `yarn ci-pipeline`.
+- Node.js' built-in type stripping cannot run `src/` directly: it does not resolve the
+  extensionless relative imports. Use `yarn start` (tsx) or the compiled `lib/`.
 - `getProjectConfig()` and `getPossibleNextVersions()` / `getAutomaticNextVersion()` read
   `.strangelogrc` and `package.json` from `process.cwd()`, not from the changelog path.
 - A project without `info.yml` but with entry files is treated as pre-`info.yml` (format version

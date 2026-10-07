@@ -1,0 +1,182 @@
+import { join as joinPath } from 'path';
+
+import { removeSync, readFileSync, mkdirsSync, statSync } from 'fs-extra';
+import { load } from 'js-yaml';
+
+import { connectChangelog, CURRENT_VERSION } from '../../../src/api';
+import { createTestProject } from '../../factories/testProject';
+import { joinAndOutputYAMLFile, joinAndGlob } from '../../utils';
+
+describe('migrate', () => {
+
+  let currentRootPath: string;
+
+  afterEach(() => {
+    removeSync(currentRootPath);
+  });
+
+  function setup() {
+    const { rootPath, changelogPath, infoFilePath } = createTestProject();
+
+    currentRootPath = rootPath;
+
+    const changelog = connectChangelog({
+      path: changelogPath,
+      components: {
+        comp1: 'Comp 1',
+        comp2: 'Comp 2'
+      }
+    });
+
+    return {
+      rootPath,
+      infoFilePath,
+      changelogPath,
+      changelog
+    };
+  }
+
+  describe('when current version is already latest', () => {
+    test('does not run any migration', () => {
+      const { changelog } = setup();
+
+      expect(changelog.migrate()).toEqual({
+        from: CURRENT_VERSION,
+        to: CURRENT_VERSION
+      });
+    });
+  });
+
+  describe('with at least one changelog entry but no info.yml', () => {
+    test('migrates to CURRENT_VERSION', () => {
+      const { changelog, infoFilePath, changelogPath } = setup();
+
+      removeSync(infoFilePath);
+      joinAndOutputYAMLFile([changelogPath, 'next/some_entry.yml'], {});
+
+      expect(changelog.migrate()).toEqual({
+        from: -1,
+        to: CURRENT_VERSION
+      });
+      expect(load(readFileSync(infoFilePath).toString())).toEqual({
+        version: CURRENT_VERSION
+      });
+    });
+  });
+
+  describe('without any changelog entries yet', () => {
+    test('writes info.yml with CURRENT_VERSION and does not migrate', () => {
+      const { changelog, infoFilePath } = setup();
+
+      removeSync(infoFilePath);
+
+      expect(changelog.migrate()).toEqual({
+        from: CURRENT_VERSION,
+        to: CURRENT_VERSION
+      });
+      expect(load(readFileSync(infoFilePath).toString())).toEqual({
+        version: CURRENT_VERSION
+      });
+    });
+  });
+
+  describe('when the first entry was added via the API without info.yml', () => {
+    test('does not run any migration', () => {
+      const { changelog, infoFilePath } = setup();
+
+      removeSync(infoFilePath);
+      changelog.addEntry({
+        component: null,
+        kind: 'fix',
+        description: 'the first entry'
+      });
+
+      expect(changelog.migrate()).toEqual({
+        from: CURRENT_VERSION,
+        to: CURRENT_VERSION
+      });
+    });
+  });
+
+  describe('when an entry is added to a project with old entries but no info.yml', () => {
+    test('still migrates from version -1', () => {
+      const { changelog, infoFilePath, changelogPath } = setup();
+
+      removeSync(infoFilePath);
+      joinAndOutputYAMLFile([changelogPath, '1.0.0/some_entry.yml'], {});
+      changelog.addEntry({
+        component: null,
+        kind: 'fix',
+        description: 'a new entry'
+      });
+
+      expect(changelog.migrate()).toEqual({
+        from: -1,
+        to: CURRENT_VERSION
+      });
+    });
+  });
+
+  describe('when the changelog only contains an empty "next" directory and no info.yml', () => {
+    test('does not run any migration', () => {
+      const { changelog, infoFilePath, changelogPath } = setup();
+
+      removeSync(infoFilePath);
+      mkdirsSync(joinPath(changelogPath, 'next'));
+
+      expect(changelog.migrate()).toEqual({
+        from: CURRENT_VERSION,
+        to: CURRENT_VERSION
+      });
+    });
+  });
+
+  describe('to version 1', () => {
+    test('transforms `x.y` version directory style to SemVer (`x.,y.z`)', () => {
+      const { changelog, changelogPath } = setup();
+      const oldPath = joinPath(changelogPath, '1.0');
+      const newPath = joinPath(changelogPath, '1.0.0');
+
+      mkdirsSync(oldPath);
+      changelog.saveChangelogInfo({ version: 0 });
+
+      changelog.migrate();
+
+      expect(() => statSync(oldPath)).toThrow();
+      expect(() => statSync(newPath)).not.toThrow();
+    });
+  });
+
+  describe('to version 2', () => {
+    test('transforms entries with ISO-8601 date time string to FS-friendly name', () => {
+      const { changelog, changelogPath } = setup();
+      const oldDateString = '2016-12-24T01:02:03.000Z';
+      const newDateString = '2016-12-24T01-02-03.000Z';
+
+      changelog.saveChangelogInfo({ version: 1 });
+      joinAndOutputYAMLFile([changelogPath, `next/${oldDateString}_whatever.yml`], {});
+
+      changelog.migrate();
+
+      const entryFileMatch = joinAndGlob(changelogPath, 'next/*.yml');
+
+      expect(entryFileMatch.length).toEqual(1);
+      expect(entryFileMatch[0]).toMatch(new RegExp(`next/${newDateString}_whatever.yml$`));
+    });
+
+    test('ignores entry files with different format', () => {
+      const { changelog, changelogPath } = setup();
+
+      changelog.saveChangelogInfo({ version: 1 });
+      joinAndOutputYAMLFile([changelogPath, 'next/whatever.yml'], {});
+
+      changelog.migrate();
+
+      const entryFileMatch = joinAndGlob(changelogPath, 'next/*.yml');
+
+      expect(entryFileMatch.length).toEqual(1);
+      expect(entryFileMatch[0]).toMatch(new RegExp('next/whatever.yml$'));
+    });
+  });
+
+});

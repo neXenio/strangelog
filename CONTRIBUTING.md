@@ -1,7 +1,7 @@
-# AGENTS.md
+# Contributing
 
-Instructions for AI coding agents (and humans) working on this repository. `README.md` describes
-strangelog for its users; this file describes how to change it.
+How to work on this repository, for humans and AI coding agents. `README.md` describes strangelog
+for its users; this file describes how to change it.
 
 ## What this project is
 

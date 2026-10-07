@@ -19,6 +19,7 @@ try {
   assert.deepStrictEqual(data.map(({ version }) => version), [null, '1.0.0']);
   assert.strictEqual(data[0].entries.fix[0].description, 'second entry');
   assert.strictEqual(data[1].entries.addition[0].component, 'api');
+  assert.deepStrictEqual(changelog.migrate(), { from: 2, to: 2 });
   assert.match(changelog.generate(), /## Version `1\.0\.0`\n\n### Added\n- \*\*API:\*\* first entry/);
 
   console.log('Smoke test passed');

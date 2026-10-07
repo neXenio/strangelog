@@ -1,6 +1,7 @@
 [ignore]
 lib/
 tmpTest/
+.claude/
 
 [untyped]
 node_modules/

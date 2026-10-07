@@ -53,6 +53,15 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType) {
       }, {
         name: 'Bug Fix',
         value: 'fix'
+      }, {
+        name: 'Removal (e.g. removed feature or option)',
+        value: 'removal'
+      }, {
+        name: 'Deprecation (e.g. feature or option that will be removed)',
+        value: 'deprecation'
+      }, {
+        name: 'Security (e.g. fixed vulnerability)',
+        value: 'security'
       }]
     }, {
       name: 'description',

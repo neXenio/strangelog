@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T16:55:48.507Z'
+component: api
+kind: fix
+description: >-
+  `addEntry()` writes `info.yml` for new projects, so `migrate()` no longer
+  reports version -1

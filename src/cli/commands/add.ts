@@ -41,7 +41,7 @@ export default async function runAdd(
     component: component || null,
     // validated by getInvalidFlagErrors()
     kind: kind as EntryKindType,
-    description: description || ''
+    description: (description || '').trim()
   });
 
   console.log(`Added changelog entry ${entryFilePath}`);
@@ -54,8 +54,17 @@ function getEnabledComponentIDs(componentsConfig: ComponentsConfigType): string[
 
 function getInvalidFlagErrors(
   componentsConfig: ComponentsConfigType,
-  { kind, component, description }: CLIAddOptionsType
+  flags: CLIAddOptionsType
 ): string[] {
+  // yargs turns a repeated flag into an array
+  const repeatedFlagNames = (['kind', 'component', 'description'] as const)
+    .filter((flagName) => Array.isArray(flags[flagName]));
+
+  if (repeatedFlagNames.length > 0) {
+    return repeatedFlagNames.map((flagName) => `--${flagName} is given more than once`);
+  }
+
+  const { kind, component, description } = flags;
   const errors: string[] = [];
   const enabledComponentIDs = getEnabledComponentIDs(componentsConfig);
 

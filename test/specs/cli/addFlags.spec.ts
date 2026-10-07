@@ -90,4 +90,54 @@ describe('$ add --kind --component --description', () => {
     expect(stderr).toMatch('--component is missing');
   });
 
+  it('exits with code 2 when a flag is given more than once', async () => {
+    const testProject = createTestProject();
+
+    const { stderr, exitCode } = await runCLIWithResult(
+      testProject.rootPath,
+      ['add', '-k', 'fix', '-c', 'comp1', '-d', 'the description', '-d', 'another description'],
+      []
+    );
+
+    expect(exitCode).toBe(2);
+    expect(stderr).toMatch('--description is given more than once');
+    expect(joinAndGlob(testProject.changelogPath, 'next/*.yml')).toEqual([]);
+  });
+
+  it('exits with code 2 for --component when no components are defined', async () => {
+    const testProject = createTestProject('changelog', {});
+
+    const { stderr, exitCode } = await runCLIWithResult(
+      testProject.rootPath,
+      ['add', '-k', 'fix', '-c', 'comp1', '-d', 'the description'],
+      []
+    );
+
+    expect(exitCode).toBe(2);
+    expect(stderr).toMatch('--component "comp1" is not defined in .strangelogrc');
+    expect(stderr).toMatch('No components are defined in .strangelogrc: leave out --component');
+  });
+
+  it('rejects whitespace-only descriptions and stores descriptions trimmed', async () => {
+    const testProject = createTestProject();
+
+    const invalidResult = await runCLIWithResult(
+      testProject.rootPath,
+      ['add', '-k', 'fix', '-c', 'comp1', '-d', '            '],
+      []
+    );
+
+    expect(invalidResult.exitCode).toBe(2);
+
+    const { exitCode } = await runCLIWithResult(
+      testProject.rootPath,
+      ['add', '-k', 'fix', '-c', 'comp1', '-d', '  the description  '],
+      []
+    );
+
+    expect(exitCode).toBe(0);
+    expect(readSingleYAMLFileFromGlob(testProject.changelogPath, 'next/*.yml').description)
+      .toEqual('the description');
+  });
+
 });

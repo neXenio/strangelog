@@ -35,7 +35,8 @@ npx strangelog add --kind fix --component api --description "Login no longer fai
 - `--component` (`-c`): a component ID from `components` in `.strangelogrc` in the project root.
   Use the ID (the key), not the title. Components with `enabled: false` are retired: do not use
   them. Leave out `--component` only if `.strangelogrc` defines no components.
-- `--description` (`-d`): at least 10 characters.
+- `--description` (`-d`): at least 10 characters. If it starts with `-`, write it as
+  `--description="-..."` so it is not read as a flag.
 
 The command prints the path of the created file and exits with code 0. On invalid input it exits
 with code 2 and prints the valid kinds and components; fix the flags and run it again.

@@ -11,17 +11,8 @@ import type {
   EntryKindType
 } from '../types';
 
-import { getComponentTitle, globPaths, stringifyVersion } from './utils';
+import { ENTRY_KINDS, getComponentTitle, globPaths, stringifyVersion } from './utils';
 import getSortedChangelogVersions from './getSortedChangelogVersions';
-
-const entryKinds: EntryKindType[] = [
-  'addition',
-  'change',
-  'fix',
-  'removal',
-  'deprecation',
-  'security',
-];
 
 export default function getChangelogData(
   config: ConfigType
@@ -39,7 +30,7 @@ function getVersionChangelog(
 ): VersionChangelogType {
   const entries = {} as Record<EntryKindType, EntryType[]>;
 
-  entryKinds.forEach((entryKind) => {
+  ENTRY_KINDS.forEach((entryKind) => {
     entries[entryKind] = [];
   });
 

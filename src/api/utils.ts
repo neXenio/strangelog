@@ -1,6 +1,16 @@
 import { globSync } from 'glob';
 
-import type { ComponentConfigType } from '../types';
+import type { ComponentConfigType, EntryKindType } from '../types';
+
+// In the order of the `add` prompt and of the generated changelog
+export const ENTRY_KINDS: EntryKindType[] = [
+  'addition',
+  'change',
+  'fix',
+  'removal',
+  'deprecation',
+  'security'
+];
 
 // glob >= 9 treats `\` as an escape character; keep `path.join()`-built patterns working on Windows
 export function globPaths(pattern: string): string[] {

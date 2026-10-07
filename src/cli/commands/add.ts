@@ -1,19 +1,107 @@
 import inquirer, { type DistinctQuestion } from 'inquirer';
 
-import { getComponentTitle, isComponentEnabled } from '../../api/utils';
+import { ENTRY_KINDS, getComponentTitle, isComponentEnabled } from '../../api/utils';
 import type {
   ChangelogAPIType,
   ComponentsConfigType,
   EntryKindType,
   EntryType
 } from '../../types';
+import type { CLIAddOptionsType } from '../types';
+
+// Exit code for invalid `add` flags, so that scripts and coding agents can tell it from failures
+const INVALID_INPUT_EXIT_CODE = 2;
+const MIN_DESCRIPTION_LENGTH = 10;
 
 export default async function runAdd(
-  { addEntry, getComponentsConfig }: ChangelogAPIType
+  { addEntry, getComponentsConfig }: ChangelogAPIType,
+  flags: CLIAddOptionsType
 ) {
-  const answers = await promptEntryInformation(getComponentsConfig());
+  const { kind, component, description } = flags;
+  const componentsConfig = getComponentsConfig();
+  const isInteractive = [kind, component, description]
+    .every((flag) => typeof flag === 'undefined');
 
-  addEntry(answers);
+  if (isInteractive) {
+    addEntry(await promptEntryInformation(componentsConfig));
+
+    return;
+  }
+
+  const errors = getInvalidFlagErrors(componentsConfig, flags);
+
+  if (errors.length > 0) {
+    printInvalidFlags(componentsConfig, errors);
+    process.exitCode = INVALID_INPUT_EXIT_CODE;
+
+    return;
+  }
+
+  const entryFilePath = addEntry({
+    component: component || null,
+    // validated by getInvalidFlagErrors()
+    kind: kind as EntryKindType,
+    description: (description || '').trim()
+  });
+
+  console.log(`Added changelog entry ${entryFilePath}`);
+}
+
+function getEnabledComponentIDs(componentsConfig: ComponentsConfigType): string[] {
+  return Object.keys(componentsConfig)
+    .filter((componentName) => isComponentEnabled(componentsConfig[componentName]));
+}
+
+function getInvalidFlagErrors(
+  componentsConfig: ComponentsConfigType,
+  flags: CLIAddOptionsType
+): string[] {
+  // yargs turns a repeated flag into an array
+  const repeatedFlagNames = (['kind', 'component', 'description'] as const)
+    .filter((flagName) => Array.isArray(flags[flagName]));
+
+  if (repeatedFlagNames.length > 0) {
+    return repeatedFlagNames.map((flagName) => `--${flagName} is given more than once`);
+  }
+
+  const { kind, component, description } = flags;
+  const errors: string[] = [];
+  const enabledComponentIDs = getEnabledComponentIDs(componentsConfig);
+
+  if (!kind) {
+    errors.push('--kind is missing');
+  } else if (!(ENTRY_KINDS as string[]).includes(kind)) {
+    errors.push(`--kind "${kind}" is not a valid kind`);
+  }
+
+  if (!component) {
+    if (enabledComponentIDs.length > 0) {
+      errors.push('--component is missing');
+    }
+  } else if (!Object.keys(componentsConfig).includes(component)) {
+    errors.push(`--component "${component}" is not defined in .strangelogrc`);
+  } else if (!enabledComponentIDs.includes(component)) {
+    errors.push(`--component "${component}" is disabled in .strangelogrc`);
+  }
+
+  if (!description || description.trim().length < MIN_DESCRIPTION_LENGTH) {
+    errors.push(`--description must have at least ${MIN_DESCRIPTION_LENGTH} characters`);
+  }
+
+  return errors;
+}
+
+function printInvalidFlags(componentsConfig: ComponentsConfigType, errors: string[]) {
+  const enabledComponentIDs = getEnabledComponentIDs(componentsConfig);
+
+  console.error([
+    'Cannot add the changelog entry:',
+    ...errors.map((error) => `  - ${error}`),
+    `Valid kinds: ${ENTRY_KINDS.join(', ')}`,
+    enabledComponentIDs.length > 0
+      ? `Valid components: ${enabledComponentIDs.join(', ')}`
+      : 'No components are defined in .strangelogrc: leave out --component'
+  ].join('\n'));
 }
 
 const descriptionQuestions = {
@@ -26,8 +114,7 @@ const descriptionQuestions = {
 };
 
 function promptEntryInformation(componentsConfig: ComponentsConfigType): Promise<EntryType> {
-  const componentKeys = Object.keys(componentsConfig)
-    .filter((componentName) => isComponentEnabled(componentsConfig[componentName]));
+  const componentKeys = getEnabledComponentIDs(componentsConfig);
 
   const componentQuestions: DistinctQuestion<EntryType>[] = componentKeys.length === 0
     ? []
@@ -71,8 +158,8 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType): Promise
       type: 'input',
       // `kind` is always answered, it is asked right before
       message: ({ kind }) => descriptionQuestions[kind as EntryKindType],
-      validate: (input: string) => (input.length < 10)
-        ? 'Describe the change in at least 10 characters'
+      validate: (input: string) => (input.length < MIN_DESCRIPTION_LENGTH)
+        ? `Describe the change in at least ${MIN_DESCRIPTION_LENGTH} characters`
         : true
     }
   ];

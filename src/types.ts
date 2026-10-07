@@ -41,7 +41,8 @@ export type VersionChangelogType = {
 export type ChangelogType = VersionChangelogType[];
 
 export type ChangelogAPIType = {
-  addEntry: (entry: EntryType) => void;
+  // returns the path of the written entry file
+  addEntry: (entry: EntryType) => string;
   bumpNextVersion: (nextVersion: string) => void;
   generate: () => string;
   getChangelogData: () => ChangelogType;

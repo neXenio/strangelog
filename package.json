@@ -4,6 +4,12 @@
   "description": "Painless file-based changelog management via CLI.",
   "main": "index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "index.js",
+    "lib/",
+    "AGENTS.md",
+    "CHANGELOG.md"
+  ],
   "repository": "git@github.com:neXenio/strangelog.git",
   "author": "neXenio GmbH <contact@nexenio.com>",
   "license": "MIT",

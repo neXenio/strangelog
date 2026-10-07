@@ -2,10 +2,12 @@ import yargs from 'yargs';
 
 import { connectChangelog } from '../api';
 import getProjectConfig from '../getProjectConfig';
+import { ENTRY_KINDS } from '../api/utils';
 import type { ChangelogAPIType } from '../types';
 
 import type {
   CLIOptionsType,
+  CLIAddOptionsType,
   CLIGenerateOptionsType,
   CLIBumpOptionsType,
   CLIRenameComponentOptionsType
@@ -21,11 +23,28 @@ export default function cli(args: string[]) {
     args = ['--help'];
 
   yargs(args)
-    .command<CLIOptionsType>(
+    .command<CLIAddOptionsType>(
       'add',
-      'adds a changelog entry',
-      () => {},
-      withAPI((changelog) => runAdd(changelog))
+      'adds a changelog entry (prompts unless --kind, --component or --description is given)',
+      (yargs) => {
+        yargs
+          .option('kind', {
+            alias: 'k',
+            type: 'string',
+            describe: `kind of change: ${ENTRY_KINDS.join(', ')}`
+          })
+          .option('component', {
+            alias: 'c',
+            type: 'string',
+            describe: 'ID of the affected component from .strangelogrc'
+          })
+          .option('description', {
+            alias: 'd',
+            type: 'string',
+            describe: 'what changed, at least 10 characters'
+          });
+      },
+      withAPI((changelog, argv: CLIAddOptionsType) => runAdd(changelog, argv))
     )
     .command<CLIBumpOptionsType>(
       'bump',

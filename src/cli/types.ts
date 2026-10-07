@@ -11,6 +11,12 @@ export type CLIRenameComponentOptionsType = CLIOptionsType & {
   to: string
 };
 
+export type CLIAddOptionsType = CLIOptionsType & {
+  kind?: string,
+  component?: string,
+  description?: string
+};
+
 export type CLIBumpOptionsType = CLIOptionsType & {
  version: string,
  auto: boolean

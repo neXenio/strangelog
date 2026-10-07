@@ -1,0 +1,4 @@
+dateTime: '2026-10-07T17:28:45.501Z'
+component: api
+kind: change
+description: '`addEntry()` returns the path of the written entry file'

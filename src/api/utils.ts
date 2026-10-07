@@ -1,9 +1,14 @@
 import { globSync } from 'glob';
 
-import type { ComponentConfigType, ConfigType, EntryKindType } from '../types.ts';
+import type {
+  BuiltInEntryKindType,
+  ComponentConfigType,
+  ConfigType,
+  EntryKindType
+} from '../types.ts';
 
 // In the order of the `add` prompt and of the generated changelog
-export const ENTRY_KINDS: EntryKindType[] = [
+export const ENTRY_KINDS: BuiltInEntryKindType[] = [
   'addition',
   'change',
   'fix',
@@ -12,9 +17,27 @@ export const ENTRY_KINDS: EntryKindType[] = [
   'security'
 ];
 
-// The kinds new entries may have (`kinds` in .strangelogrc), in the order of ENTRY_KINDS
+export function isBuiltInKind(kind: EntryKindType): kind is BuiltInEntryKindType {
+  return (ENTRY_KINDS as string[]).includes(kind);
+}
+
+// The kinds new entries may have (`kinds` in .strangelogrc): built-in kinds in the order of
+// ENTRY_KINDS, then custom kinds (e.g. `chore`) in the order of `kinds`
 export function getAllowedKinds({ kinds }: ConfigType): EntryKindType[] {
-  return kinds ? ENTRY_KINDS.filter((kind) => kinds.includes(kind)) : ENTRY_KINDS;
+  if (!kinds) {
+    return ENTRY_KINDS;
+  }
+
+  return [
+    ...ENTRY_KINDS.filter((kind) => kinds.includes(kind)),
+    ...new Set(kinds.filter((kind) => !isBuiltInKind(kind)))
+  ];
+}
+
+// Label of a kind in the compact template and the default template's section heading of a
+// custom kind: `kindLabels` first, the kind's own name otherwise
+export function getCustomKindLabel({ kindLabels }: ConfigType, kind: EntryKindType): string {
+  return (kindLabels && Object.hasOwn(kindLabels, kind) && kindLabels[kind]) || kind;
 }
 
 // glob >= 9 treats `\` as an escape character; keep `path.join()`-built patterns working on Windows

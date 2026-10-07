@@ -19,7 +19,8 @@ describe('getAutomaticNextVersion', () => {
     const testProject = createTestProject();
     const changelog = connectChangelog({
       path: testProject.changelogPath,
-      components: {}
+      components: {},
+      kinds: ['addition', 'change', 'fix', 'removal', 'chore']
     });
 
     entryKinds.forEach((kind) =>
@@ -61,5 +62,17 @@ describe('getAutomaticNextVersion', () => {
     removeSync(joinPath(testProject.rootPath, 'package.json'));
 
     expect(changelog.getAutomaticNextVersion()).toBe(null);
+  });
+
+  it('treats custom kinds such as chore as patch changes', () => {
+    const { changelog } = setup(['chore']);
+
+    expect(changelog.getAutomaticNextVersion()).toBe('1.0.1');
+  });
+
+  it('still selects the next minor version for an addition next to a chore', () => {
+    const { changelog } = setup(['chore', 'addition']);
+
+    expect(changelog.getAutomaticNextVersion()).toBe('1.1.0');
   });
 });

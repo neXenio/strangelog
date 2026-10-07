@@ -1,6 +1,11 @@
 import inquirer, { type DistinctQuestion } from 'inquirer';
 
-import { getAllowedKinds, getComponentTitle, isComponentEnabled } from '../../api/utils.ts';
+import {
+  getAllowedKinds,
+  getComponentTitle,
+  getCustomKindLabel,
+  isComponentEnabled
+} from '../../api/utils.ts';
 import type { ChangelogAPIType, ConfigType, EntryKindType, EntryType } from '../../types.ts';
 import type { CLIAddOptionsType } from '../types.ts';
 
@@ -207,13 +212,20 @@ function promptEntryInformation(config: ConfigType): Promise<PromptAnswersType> 
       name: 'kind',
       type: 'select',
       message: 'What kind of change are you documenting?',
-      choices: kindChoices.filter(({ value }) => allowedKinds.includes(value))
+      choices: allowedKinds.map(
+        (kind) =>
+          kindChoices.find(({ value }) => value === kind) || {
+            name: getCustomKindLabel(config, kind),
+            value: kind
+          }
+      )
     },
     {
       name: 'description',
       type: 'input',
       // `kind` is always answered, it is asked right before
-      message: ({ kind }) => descriptionQuestions[kind as EntryKindType],
+      message: ({ kind }) =>
+        descriptionQuestions[kind as keyof typeof descriptionQuestions] || 'What changed?',
       validate: (input: string) =>
         input.length < MIN_DESCRIPTION_LENGTH
           ? `Describe the change in at least ${MIN_DESCRIPTION_LENGTH} characters`

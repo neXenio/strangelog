@@ -113,4 +113,16 @@ describe('generate', () => {
       expect(changelogAPI.generate()).toMatchSnapshot();
     });
   });
+
+  it('renders a section for a custom kind', () => {
+    const changelogAPI = connectChangelog({
+      path: testPath,
+      components: { comp1: 'Comp 1' },
+      kinds: ['fix', 'chore']
+    });
+
+    changelogAPI.addEntry({ component: 'comp1', kind: 'chore', description: 'chore entry' });
+
+    expect(changelogAPI.generate()).toMatch('### Chore\n- **Comp 1:** chore entry');
+  });
 });

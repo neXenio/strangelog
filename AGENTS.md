@@ -31,7 +31,8 @@ prompts and waits for a terminal.
 npx strangelog add --kind fix --component api --description "Login no longer fails for e-mail addresses with a plus sign"
 ```
 
-- `--kind` (`-k`): one of `addition`, `change`, `fix`, `removal`, `deprecation`, `security`.
+- `--kind` (`-k`): one of `addition`, `change`, `fix`, `removal`, `deprecation`, `security`, or a
+  custom kind the project lists in `kinds` in `.strangelogrc` (for example `chore`).
 - `--component` (`-c`): a component ID from `components` in `.strangelogrc` in the project root.
   Use the ID (the key), not the title. Components with `enabled: false` are retired: do not use
   them. Leave out `--component` only if `.strangelogrc` defines no components.
@@ -41,7 +42,8 @@ npx strangelog add --kind fix --component api --description "Login no longer fai
   with commas for several tickets. If `.strangelogrc` has a `ticketPattern`, the IDs must match it.
 
 Read `.strangelogrc` before adding an entry: if it has a `kinds` list, only those kinds are
-allowed (for example only `addition` and `fix`). Pick the closest allowed kind.
+allowed (for example `addition`, `fix` and a custom `chore`). Pick the closest allowed kind; use a
+custom kind such as `chore` only for the changes the project uses it for.
 
 The command prints the path of the created file and exits with code 0. On invalid input it exits
 with code 2 and prints the valid kinds and components; fix the flags and run it again.

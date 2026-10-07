@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T22:50:37.210Z'
+component: all
+kind: addition
+description: >-
+  `kinds` in `.strangelogrc` may list custom kinds such as `chore`; they render
+  with their name (or `kindLabels`) and count as patch changes for `bump --auto`

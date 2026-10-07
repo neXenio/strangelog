@@ -6,7 +6,7 @@ import type {
   EntryKindType
 } from '../types.ts';
 
-const entryKindToReadable = {
+const entryKindToReadable: Partial<Record<EntryKindType, string>> = {
   change: 'Changed',
   addition: 'Added',
   fix: 'Fixed',
@@ -57,7 +57,7 @@ function renderEntriesOfKind(
   }
 
   return [
-    `### ${entryKindToReadable[kind]}`,
+    `### ${getSectionTitle(helpers, kind)}`,
     ...entries.map(({ component, description, tickets }) => {
       const componentLabel = component ? `**${helpers.readableComponent(component)}:** ` : '';
       const renderedTickets = helpers.renderTickets(tickets);
@@ -65,4 +65,17 @@ function renderEntriesOfKind(
       return `- ${componentLabel}${description}${renderedTickets ? ` (${renderedTickets})` : ''}`;
     })
   ].join('\n');
+}
+
+// Built-in headings stay fixed; custom kinds use `kindLabels` or their capitalized name
+function getSectionTitle(helpers: TemplateHelpersType, kind: EntryKindType): string {
+  if (Object.hasOwn(entryKindToReadable, kind) && entryKindToReadable[kind]) {
+    return entryKindToReadable[kind];
+  }
+
+  return (Object.hasOwn(helpers.kindLabels, kind) && helpers.kindLabels[kind]) || capitalize(kind);
+}
+
+function capitalize(text: string): string {
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 }

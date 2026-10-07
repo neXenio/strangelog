@@ -43,7 +43,16 @@ export type ComponentsConfigType = {
   [name: string]: ComponentConfigType;
 };
 
-export type EntryKindType = 'addition' | 'change' | 'fix' | 'security' | 'removal' | 'deprecation';
+export type BuiltInEntryKindType =
+  | 'addition'
+  | 'change'
+  | 'fix'
+  | 'security'
+  | 'removal'
+  | 'deprecation';
+
+// Built-in kinds plus custom ones listed in `kinds` (e.g. `chore`)
+export type EntryKindType = BuiltInEntryKindType | (string & {});
 
 export type EntryType = {
   component: string | null | undefined;

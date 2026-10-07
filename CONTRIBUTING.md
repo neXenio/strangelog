@@ -84,7 +84,7 @@ changelog/                  this project's own changelog (strangelog dogfoods it
   uses `-` instead of `:` so that Windows can check out the files.
 - Kinds: `addition`, `change`, `fix`, `removal`, `deprecation`, `security`. They are listed in
   `src/types.js` (`EntryKindType`), `src/api/getChangelogData.js`, `src/templates/defaultTemplate.js`
-  and `src/cli/commands/add.js`. Keep all four in sync.
+  and `src/cli/commands/add.js`. Keep these four places in sync.
 - `info.yml` in the changelog path stores the format version (`version: <n>`). `n` is the number of
   migrations in `src/api/migrations/index.js` (`CURRENT_VERSION`).
 

@@ -71,4 +71,19 @@ describe('getPossibleNextVersions', () => {
 
   });
 
+  describe('when called with a prerelease version in package.json', () => {
+
+    it('offers the release of that version as patch version', () => {
+      const { changelog, testProject } = setup();
+
+      outputFileSync(
+        joinPath(testProject.rootPath, 'package.json'),
+        JSON.stringify({ version: '1.2.3-beta.1' })
+      );
+
+      expect(changelog.getPossibleNextVersions()).toEqual(['1.2.3', '1.3.0', '2.0.0']);
+    });
+
+  });
+
 });

@@ -40,7 +40,7 @@ export function ensureInitializedProject(config: ConfigType): void {
     return;
   }
 
-  const hasEntries = globPaths(joinPath(config.path, '**/*')).length > 0;
+  const hasEntries = globPaths(joinPath(config.path, '*', '*.yml')).length > 0;
 
   saveChangelogInfo(config, {
     version: hasEntries

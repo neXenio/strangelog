@@ -100,6 +100,39 @@ describe('migrate', () => {
     });
   });
 
+  describe('when an entry is added to a project with old entries but no info.yml', () => {
+    test('still migrates from version -1', () => {
+      const { changelog, infoFilePath, changelogPath } = setup();
+
+      removeSync(infoFilePath);
+      joinAndOutputYAMLFile([changelogPath, '1.0.0/some_entry.yml'], {});
+      changelog.addEntry({
+        component: null,
+        kind: 'fix',
+        description: 'a new entry'
+      });
+
+      expect(changelog.migrate()).toEqual({
+        from: -1,
+        to: CURRENT_VERSION
+      });
+    });
+  });
+
+  describe('when the changelog only contains an empty "next" directory and no info.yml', () => {
+    test('does not run any migration', () => {
+      const { changelog, infoFilePath, changelogPath } = setup();
+
+      removeSync(infoFilePath);
+      mkdirsSync(joinPath(changelogPath, 'next'));
+
+      expect(changelog.migrate()).toEqual({
+        from: CURRENT_VERSION,
+        to: CURRENT_VERSION
+      });
+    });
+  });
+
   describe('to version 1', () => {
     test('transforms `x.y` version directory style to SemVer (`x.,y.z`)', () => {
       const { changelog, changelogPath } = setup();

@@ -1,21 +1,17 @@
 // @flow
 
-import { install as installClock } from 'lolex';
-
 import { connectChangelog } from '../../../src/api';
 import { createTestProject } from '../../factories/testProject';
 import { readSingleYAMLFileFromGlob } from '../../utils';
 
 describe('addEntry', () => {
 
-  let clock;
-
   beforeEach(() => {
-    clock = installClock(new Date('2017-06-24T00:01:02.000Z'));
+    jest.useFakeTimers({ now: new Date('2017-06-24T00:01:02.000Z') });
   });
 
   afterEach(() => {
-    clock.uninstall();
+    jest.useRealTimers();
   });
 
   function setup() {

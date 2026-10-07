@@ -1,7 +1,7 @@
 // @flow
 
 import { outputFileSync } from 'fs-extra';
-import jsYaml from 'js-yaml';
+import { dump } from 'js-yaml';
 
 import type { ConfigType, EntryType } from '../types';
 
@@ -9,8 +9,10 @@ export default function addEntry(
   { path, components }: ConfigType,
   entry: EntryType
 ): void {
-  if (entry.component && !Object.keys(components).includes(entry.component)) {
-    throw new Error(`Unknown component "${entry.component || ''}"`);
+  const { component } = entry;
+
+  if (component && !Object.keys(components).includes(component)) {
+    throw new Error(`Unknown component "${component}"`);
   }
 
   const date = new Date();
@@ -20,7 +22,7 @@ export default function addEntry(
 
   outputFileSync(
     `${path}/next/${fileName}`,
-    jsYaml.safeDump({
+    dump({
       dateTime: date.toISOString(),
       ...entry
     })

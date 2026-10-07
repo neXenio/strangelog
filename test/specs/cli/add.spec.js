@@ -5,10 +5,9 @@ import { readSingleYAMLFileFromGlob, runCLI, CLIButtons } from '../../utils';
 
 describe('$ add', () => {
 
-  beforeEach(() => jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000);
-  afterEach(() => jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000);
+  jest.setTimeout(20000);
 
-  function setup(customPath) {
+  function setup(customPath?: string) {
     return createTestProject(customPath);
   }
 
@@ -38,7 +37,7 @@ describe('$ add', () => {
     expect(persistedEntry.kind).toEqual('change');
   });
 
-  describe('when .strangelogrc contains "path"', async () => {
+  describe('when .strangelogrc contains "path"', () => {
 
     it('adds the YAML file in the correct path to the "next"-version', async () => {
       const testProject = setup('customChangelogPath');

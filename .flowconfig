@@ -1,9 +1,14 @@
 [ignore]
 lib/
+tmpTest/
 
-[include]
-flow-typed/
+[untyped]
 node_modules/
 
+[libs]
+flow-typed/
+
+[lints]
+unclear-type=error
+
 [options]
-suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe

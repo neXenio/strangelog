@@ -2,18 +2,18 @@
 
 import { join as joinPath } from 'path';
 
-import { sync as globSync } from 'glob';
 import { outputFileSync, existsSync, readFileSync } from 'fs-extra';
-import jsYaml from 'js-yaml';
+import { dump, load } from 'js-yaml';
 
 import type { ChangelogInfoType, ConfigType } from '../types';
 
 import { CURRENT_VERSION } from './migrations';
+import { globPaths } from './utils';
 
 export function getChangelogInfo(config: ConfigType): ChangelogInfoType {
   ensureInitializedProject(config);
 
-  return jsYaml.safeLoad(readFileSync(getInfoFilePath(config)));
+  return load(readFileSync(getInfoFilePath(config)).toString());
 }
 
 export function saveChangelogInfo(
@@ -24,7 +24,7 @@ export function saveChangelogInfo(
 
   return outputFileSync(
     infoFilePath,
-    jsYaml.safeDump(newChangelogInfo)
+    dump(newChangelogInfo)
   );
 }
 
@@ -34,13 +34,13 @@ export function saveChangelogInfo(
 //      initial config and set migration version to latest since it's implicitly up-to-date
 //   3. info.yml does not exist but we have changelog entry files already -> old project, with
 //      implicit migration version -1 (since info.yml was introduced with the first migration)
-function ensureInitializedProject(config) {
+function ensureInitializedProject(config: ConfigType): void {
   if (existsSync(getInfoFilePath(config))) {
     // Case 1
     return;
   }
 
-  const hasEntries = globSync(joinPath(config.path, '**/*')).length > 0;
+  const hasEntries = globPaths(joinPath(config.path, '**/*')).length > 0;
 
   saveChangelogInfo(config, {
     version: hasEntries
@@ -51,6 +51,6 @@ function ensureInitializedProject(config) {
   });
 }
 
-function getInfoFilePath(config) {
+function getInfoFilePath(config: ConfigType): string {
   return joinPath(config.path, 'info.yml');
 }

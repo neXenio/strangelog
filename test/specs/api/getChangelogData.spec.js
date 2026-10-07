@@ -1,7 +1,6 @@
 // @flow
 
 import { removeSync } from 'fs-extra';
-import { install as installClock } from 'lolex';
 
 import { connectChangelog } from '../../../src/api';
 import { addTestVersionsWithEntries } from '../../factories/changelog';
@@ -11,16 +10,14 @@ const testPath = getOwnTestPath();
 
 describe('getChangelogData', () => {
 
-  let clock;
-
   beforeEach(() => {
     removeSync(testPath);
-    clock = installClock(new Date('2017-06-24T00:01:02.000Z'));
+    jest.useFakeTimers({ now: new Date('2017-06-24T00:01:02.000Z') });
   });
 
   afterEach(() => {
     removeSync(testPath);
-    clock.uninstall();
+    jest.useRealTimers();
   });
 
   function setup() {

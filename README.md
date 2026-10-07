@@ -1,10 +1,12 @@
 # strangelog
 
-[![Build Status](https://travis-ci.org/neXenio/strangelog.svg?branch=master)](https://travis-ci.org/neXenio/strangelog)
+[![CI](https://github.com/neXenio/strangelog/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/neXenio/strangelog/actions/workflows/ci.yml)
 
 Manage your changelog via CLI – painless, merge-conflict free, CI-friendly.
 
 ## Getting Started
+
+Requires Node.js `^22.18.0` or `>=24.11.0`.
 
 For yarn users: `yarn add --dev strangelog`
 
@@ -35,8 +37,19 @@ Takes all the entries in the `next` directory and moves them to a new version di
 
 ### `strangelog generate`
 
-Takes all changelog entries ever made in your project and generates a Markdown file `CHANGELOG.md` in your project root.
+Takes all changelog entries ever made in your project and generates a Markdown file at the path given via `--outFile` (e.g. `CHANGELOG.md`).
 
-**Example:** `yarn run strangelog generate`
+**Example:** `yarn run strangelog generate --outFile CHANGELOG.md`
 
 **Note:** Since that `CHANGELOG.md` file would produce merge conflicts when working with multiple people in parallel, it is recommended that you do not commit this file (at least not in feature branches). The recommended solution is to generate the `CHANGELOG.md`-file during your CI build and publish it as an artifact.
+
+## Development
+
+Requires Yarn classic (`1.22.22`, see `packageManager` in `package.json`). `.nvmrc` pins the recommended Node.js version.
+
+- `yarn install`: installs dependencies and compiles `src/` to `lib/`
+- `yarn test-ci`: runs the Jest test suite
+- `yarn lint`: runs ESLint
+- `yarn flow`: runs the Flow type check
+- `yarn ci-pipeline`: runs all of the above, as CI does
+- `yarn start [command]`: runs the CLI from source

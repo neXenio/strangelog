@@ -5,10 +5,10 @@ import type { MigratorType } from '../../types';
 import migration0 from './0_toSemVerDirectories';
 import migration1 from './1_toFSFriendlyEntryFileName';
 
-const migrations = ([
+const migrations: MigratorType[] = [
   migration0,
   migration1
-]: MigratorType[]);
+];
 
 export default migrations;
 

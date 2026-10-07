@@ -1,7 +1,7 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`addEntry when called with no component adds entry with null component 1`] = `
-Object {
+{
   "component": null,
   "dateTime": "2017-06-24T00:01:02.000Z",
   "description": "",

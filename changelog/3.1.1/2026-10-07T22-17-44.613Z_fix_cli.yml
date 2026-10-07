@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T22:17:44.613Z'
+component: cli
+kind: fix
+description: >-
+  The `strangelog` command is installed again: 3.1.0 was published without it,
+  because npm dropped the `./`-prefixed bin path

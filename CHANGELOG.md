@@ -1,5 +1,10 @@
 # Changelog
 
+## Version `3.1.1`
+
+### Fixed
+- **CLI:** The `strangelog` command is installed again: 3.1.0 was published without it, because npm dropped the `./`-prefixed bin path
+
 ## Version `3.1.0`
 
 ### Added

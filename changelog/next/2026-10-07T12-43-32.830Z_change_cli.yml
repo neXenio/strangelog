@@ -1,0 +1,4 @@
+dateTime: '2026-10-07T12:43:32.830Z'
+component: cli
+kind: change
+description: Running `strangelog` without a command prints the usage help

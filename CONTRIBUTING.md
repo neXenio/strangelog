@@ -9,7 +9,7 @@ strangelog is a small npm package (CLI + JavaScript API) for file-based changelo
 one YAML file in `changelog/next/`, so parallel branches never conflict on a changelog file.
 `bump` moves `next/` into a version directory and `generate` renders all entries to Markdown.
 
-- Public JS API: `require('strangelog')` -> `index.js` -> `lib/index.js` -> `connectChangelog(config)`
+- Public JS API: `require('@nexenio/strangelog')` -> `index.js` -> `lib/index.js` -> `connectChangelog(config)`
   plus `CURRENT_VERSION` and the TypeScript types from `src/types.ts`. TypeScript consumers get
   them through the generated declarations (`types` in `package.json` -> `lib/index.d.ts`).
 - CLI binary: `strangelog` -> `lib/cli/index.js`.
@@ -195,7 +195,8 @@ yarn start add --kind fix --component cli --description "Describe the change for
 
 Commit the generated YAML file. Never edit entries in released version directories, and never run
 `strangelog bump` or change the `version` in `package.json`: releases are a maintainer decision.
-Maintainers release from a clean checkout of `master` with `npm publish`, not `yarn publish`:
+Maintainers release from a clean checkout of `master` with `npm publish` (the package is `@nexenio/strangelog`, public via `publishConfig`), not
+`yarn publish`:
 Yarn classic always adds files and directories named `changelog*` to the package, `files` in
 `package.json` notwithstanding (and a `!` entry there makes it ignore `files` altogether). Check
 the contents with `npm pack --dry-run` first.

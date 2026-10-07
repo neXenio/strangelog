@@ -1,7 +1,7 @@
 # strangelog: instructions for AI coding agents
 
 This file tells coding agents how to work with strangelog in a project that uses it. It ships with
-the npm package (`node_modules/strangelog/AGENTS.md`). Working on strangelog itself? Read
+the npm package (`node_modules/@nexenio/strangelog/AGENTS.md`). Working on strangelog itself? Read
 `CONTRIBUTING.md` in the strangelog repository instead.
 
 The project keeps its changelog with [strangelog](https://github.com/neXenio/strangelog). Every

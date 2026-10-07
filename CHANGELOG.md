@@ -13,6 +13,7 @@
 
 ### Changed
 - **All:** Requires Node.js `^22.18.0` or `>=24.11.0`; all dependencies are updated to their latest major versions
+- **All:** The package is published as `@nexenio/strangelog`; the `strangelog` command keeps its name
 - **API:** `addEntry()` returns the path of the written entry file
 - **CLI:** Interactive prompts are rendered by Inquirer 14
 - **CLI:** `strangelog add` phrases the description question by kind of change (e.g. "What is fixed?")

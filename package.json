@@ -1,5 +1,5 @@
 {
-  "name": "strangelog",
+  "name": "@nexenio/strangelog",
   "version": "3.0.0",
   "description": "Painless file-based changelog management via CLI.",
   "main": "index.js",
@@ -56,5 +56,8 @@
   },
   "bin": {
     "strangelog": "./lib/cli/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

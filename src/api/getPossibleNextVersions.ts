@@ -2,9 +2,10 @@ import { readFileSync, existsSync } from 'fs-extra';
 import { inc as incrementSemVer, valid as validSemVer } from 'semver';
 
 export default function getPossibleNextVersions(): string[] | null {
-  const packageVersion = existsSync('package.json')
-    ? validSemVer(JSON.parse(readFileSync('package.json').toString()).version)
+  const packageJSON = existsSync('package.json')
+    ? JSON.parse(readFileSync('package.json').toString()) as { version: string }
     : null;
+  const packageVersion = packageJSON ? validSemVer(packageJSON.version) : null;
 
   if (!packageVersion) {
     return null;

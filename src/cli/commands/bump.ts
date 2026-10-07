@@ -45,7 +45,7 @@ async function promptNewVersionInformation(
       value: '0.0.1'
     }];
 
-  return inquirer.prompt([{
+  return inquirer.prompt<{ nextVersion: string }>([{
     name: 'nextVersion',
     type: 'select',
     message: 'How should the new version be called?',

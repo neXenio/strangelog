@@ -22,7 +22,7 @@ export default function cli(args: string[]) {
   if (!args.length)
     args = ['--help'];
 
-  yargs(args)
+  void yargs(args)
     .command<CLIAddOptionsType>(
       'add',
       'adds a changelog entry (prompts unless --kind, --component or --description is given)',

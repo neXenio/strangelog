@@ -8,7 +8,9 @@ describe('$ --version', { timeout: 20000 }, () => {
 
   it('prints the strangelog version', async () => {
     const testProject = createTestProject();
-    const { version } = JSON.parse(readFileSync(`${__dirname}/../../../package.json`).toString());
+    const { version } = JSON.parse(
+      readFileSync(`${__dirname}/../../../package.json`).toString()
+    ) as { version: string };
 
     const output = await runCLI(testProject.rootPath, ['--version'], []);
 

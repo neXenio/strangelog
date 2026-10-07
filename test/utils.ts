@@ -92,7 +92,7 @@ export function runCLIWithResult(
 
   return new Promise((resolve) => {
     if (process.env.DEBUG_CLI_TESTS) {
-      childProcess.stdout.on('data', (chunk) => {
+      childProcess.stdout.on('data', (chunk: Buffer) => {
         console.log(`Received output from command "${command.join(' ')}":`, chunk.toString());
       });
     }
@@ -100,10 +100,10 @@ export function runCLIWithResult(
     const stdoutChunks: Buffer[] = [];
     const stderrChunks: Buffer[] = [];
 
-    childProcess.stdout.on('data', (chunk) => {
+    childProcess.stdout.on('data', (chunk: Buffer) => {
       stdoutChunks.push(chunk);
     });
-    childProcess.stderr.on('data', (chunk) => {
+    childProcess.stderr.on('data', (chunk: Buffer) => {
       stderrChunks.push(chunk);
     });
     childProcess.on('close', (exitCode) => {

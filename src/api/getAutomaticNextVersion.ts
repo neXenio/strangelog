@@ -12,7 +12,7 @@ export default function getAutomaticNextVersion(config: ConfigType): string | nu
     return null;
   }
 
-  const { version } = JSON.parse(readFileSync('package.json').toString());
+  const { version } = JSON.parse(readFileSync('package.json').toString()) as { version: string };
   const { entries } = getChangelogData(config)[0];
 
   if (entries.change.length > 0) {

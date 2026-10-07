@@ -1,0 +1,30 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "quoteProps": "consistent",
+  "trailingComma": "none",
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "endOfLine": "lf",
+  "experimentalOperatorPosition": "start",
+  "sortImports": {
+    "groups": ["builtin", "external", "parent", "sibling", "index"],
+    "newlinesBetween": true
+  },
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "lib/",
+    "tmpTest/",
+    ".claude/",
+    "changelog/",
+    "CHANGELOG.md",
+    "**/__snapshots__/",
+    "**/*.md",
+    "**/*.yml",
+    "**/*.yaml"
+  ]
+}

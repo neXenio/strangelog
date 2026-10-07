@@ -1,6 +1,6 @@
 {
   "name": "@nexenio/strangelog",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Painless file-based changelog management via CLI.",
   "main": "index.js",
   "types": "lib/index.d.ts",

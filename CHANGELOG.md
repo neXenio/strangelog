@@ -1,5 +1,10 @@
 # Changelog
 
+## Version `3.2.1`
+
+### Fixed
+- **CLI:** `strangelog --version` prints the strangelog version instead of the version of the project it runs in
+
 ## Version `3.2.0`
 
 ### Added

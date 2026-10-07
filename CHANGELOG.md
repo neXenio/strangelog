@@ -1,5 +1,10 @@
 # Changelog
 
+## Version `3.2.0`
+
+### Added
+- **All:** `kinds` in `.strangelogrc` may list custom kinds such as `chore`; they render with their name (or `kindLabels`) and count as patch changes for `bump --auto`
+
 ## Version `3.1.1`
 
 ### Fixed

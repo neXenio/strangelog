@@ -41,6 +41,25 @@ describe('generate', () => {
     ).toMatchSnapshot();
   });
 
+  describe('when components are configured as objects', () => {
+    it('renders their titles, including disabled components', () => {
+      const changelogAPI = setup({
+        comp1: { title: 'Comp 1' },
+        comp2: {
+          title: 'Comp 2',
+          enabled: false
+        }
+      });
+
+      addTestVersionsWithEntries(changelogAPI);
+
+      const markdown = changelogAPI.generate();
+
+      expect(markdown).toMatch('- **Comp 1:** comp1 addition description');
+      expect(markdown).toMatch('- **Comp 2:** comp2 fix description');
+    });
+  });
+
   describe('when there are no configured components', () => {
     it('renders "All" for the entries with null as component', () => {
       const changelogAPI = setup({});

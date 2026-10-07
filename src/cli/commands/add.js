@@ -2,6 +2,7 @@
 
 import inquirer from 'inquirer';
 
+import { getComponentTitle, isComponentEnabled } from '../../api/utils';
 import type { ChangelogAPIType, ComponentsConfigType } from '../../types';
 
 export default async function runAdd(
@@ -13,7 +14,8 @@ export default async function runAdd(
 }
 
 function promptEntryInformation(componentsConfig: ComponentsConfigType) {
-  const componentKeys = Object.keys(componentsConfig);
+  const componentKeys = Object.keys(componentsConfig)
+    .filter((componentName) => isComponentEnabled(componentsConfig[componentName]));
 
   const componentQuestions = componentKeys.length === 0
     ? []
@@ -22,7 +24,7 @@ function promptEntryInformation(componentsConfig: ComponentsConfigType) {
       type: 'select',
       message: 'Which component is your change affecting?',
       choices: componentKeys.map((componentName) => ({
-        name: componentsConfig[componentName],
+        name: getComponentTitle(componentsConfig[componentName]),
         value: componentName
       }))
     }];

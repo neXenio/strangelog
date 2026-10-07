@@ -14,6 +14,24 @@ For npm users: `npm install --save-dev strangelog`
 
 Done.
 
+## Configuration
+
+strangelog reads an optional `.strangelogrc` (YAML) from your project root:
+
+```yaml
+# where changelog entries are stored (default: ./changelog)
+path: ./changelog
+# optional components an entry can refer to: ID -> title
+components:
+  api: API
+  cli: CLI
+  # a component can also be an object; `enabled: false` keeps it for rendering
+  # existing entries but no longer offers it in `strangelog add`
+  legacy:
+    title: Legacy UI
+    enabled: false
+```
+
 ## Usage
 
 Once installed, the strangelog command is available via `yarn run strangelog [command]` or `npm run strangelog [command]`.

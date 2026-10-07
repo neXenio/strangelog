@@ -9,3 +9,5 @@
 /.nvmrc
 /eslint.config.mjs
 /jest.config.json
+/AGENTS.md
+/CLAUDE.md

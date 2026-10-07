@@ -35,6 +35,7 @@ Requirements: Node.js `^22.18.0 || >=24.11.0` (`.nvmrc` = 24) and Yarn classic `
 | `yarn typecheck` | TypeScript type check of `src/` and `test/` (`tsc --noEmit`) |
 | `yarn ci-pipeline` | tests + lint + format-check + typecheck, exactly what CI runs |
 | `node test/smoke.cjs` | smoke test of the compiled `lib/` (run `yarn compile` first) |
+| `yarn version --new-version <v>` | sets the version in `package.json` and `src/version.ts` |
 | `yarn start <command>` | run the CLI from source with Node.js' type stripping, e.g. `yarn start --help` |
 
 A change is done when `yarn ci-pipeline` passes, `yarn compile && node test/smoke.cjs` passes, and

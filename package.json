@@ -37,7 +37,8 @@
     "prepare": "yarn run compile",
     "start": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/cli/index.ts",
     "changelog": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/cli/index.ts",
-    "changelog-generate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/cli/index.ts generate --outFile CHANGELOG.md"
+    "changelog-generate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/cli/index.ts generate --outFile CHANGELOG.md",
+    "version": "node scripts/syncVersion.cjs && git add src/version.ts"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",

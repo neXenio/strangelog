@@ -1,0 +1,6 @@
+dateTime: '2026-10-07T23:11:56.290Z'
+component: cli
+kind: fix
+description: >-
+  `strangelog --version` prints the strangelog version instead of the version of
+  the project it runs in

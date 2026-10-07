@@ -13,12 +13,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
         node-version: [22.x, 24.x, 26.x]
-        include:
-          - os: windows-latest
-            node-version: 24.x
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     env:
       DEBUG_CLI_TESTS: 'true'
     steps:
@@ -30,5 +26,20 @@ jobs:
       - run: npm install --global yarn@1.22.22
       - run: yarn install --frozen-lockfile
       - run: yarn ci-pipeline
-      - name: Smoke test the compiled CLI
-        run: node lib/cli/index.js --help
+      - name: Smoke test the compiled CLI and library
+        run: |
+          node lib/cli/index.js --help
+          node test/smoke.cjs
+
+  # The Jest suite relies on POSIX file names, so Windows only runs the compiled-library smoke test
+  windows-smoke:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+      - run: npm install --global yarn@1.22.22
+      - run: yarn install --frozen-lockfile
+      - run: node lib/cli/index.js --help
+      - run: node test/smoke.cjs

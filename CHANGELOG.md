@@ -1,5 +1,11 @@
 # Changelog
 
+## Version `3.2.2`
+
+### Fixed
+- **All:** `generate` and `bump --auto` fail with the file path for an entry file without kind or description, instead of rendering `undefined`
+- **All:** The bundled `AGENTS.md` and the README snippet use `yarn strangelog` instead of `npx strangelog`, which can fetch the unrelated unscoped `strangelog` package
+
 ## Version `3.2.1`
 
 ### Fixed

@@ -44,7 +44,7 @@ function getVersionChangelog(
   });
 
   getVersionChangelogFileNames(config, stringifyVersion(version))
-    .map((entryFileName) => load(readFileSync(entryFileName).toString()) as EntryType)
+    .map((entryFileName) => readEntryFile(entryFileName))
     .sort(sortByComponent.bind(null, config))
     .forEach((entry) => {
       entries[entry.kind] = [...(entries[entry.kind] || []), entry];
@@ -55,6 +55,22 @@ function getVersionChangelog(
     ...getReleaseInfo(config, version),
     entries
   };
+}
+
+// An entry file without a kind or description would render as `undefined`; fail with its path
+function readEntryFile(entryFileName: string): EntryType {
+  const entry = load(readFileSync(entryFileName).toString()) as Partial<EntryType> | null;
+
+  if (
+    !entry
+    || typeof entry !== 'object'
+    || typeof entry.kind !== 'string'
+    || typeof entry.description !== 'string'
+  ) {
+    throw new Error(`Invalid changelog entry ${entryFileName}: kind and description are required`);
+  }
+
+  return entry as EntryType;
 }
 
 // `bump` writes the release date to <version>/.release.yml; older versions have none

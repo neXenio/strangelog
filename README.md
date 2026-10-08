@@ -155,7 +155,7 @@ strangelog ships instructions for coding agents (Claude Code, Codex, Cursor, Cop
 ## Changelog
 
 This project uses strangelog. For every user-visible change, add an entry with
-`npx strangelog add --kind <kind> --component <component> --description "<what changed>"`
+`yarn strangelog add --kind <kind> --component <component> --description "<what changed>"`
 and commit the created file. Never run `strangelog add` without flags.
 Full rules: node_modules/@nexenio/strangelog/AGENTS.md
 ```

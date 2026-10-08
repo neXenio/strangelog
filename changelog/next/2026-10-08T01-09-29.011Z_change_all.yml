@@ -1,0 +1,7 @@
+dateTime: '2026-10-08T01:09:29.011Z'
+component: all
+kind: change
+description: >-
+  The bundled `AGENTS.md` and the README snippet use `yarn strangelog` instead
+  of `npx strangelog`, which can fetch the unrelated unscoped `strangelog`
+  package

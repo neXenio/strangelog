@@ -1,0 +1,6 @@
+dateTime: '2026-10-08T01:09:28.317Z'
+component: all
+kind: fix
+description: >-
+  `generate` and `bump --auto` fail with the file path for an entry file without
+  kind or description, instead of rendering `undefined`

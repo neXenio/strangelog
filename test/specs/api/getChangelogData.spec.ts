@@ -156,4 +156,13 @@ describe('getChangelogData', () => {
       expect(changelogAPI.getChangelogData()[0].entries.deprecation).toEqual([]);
     });
   });
+  it('fails with the file path for an entry without kind or description', () => {
+    const changelogAPI = setup();
+
+    outputFileSync(`${testPath}/next/broken.yml`, 'component: comp1\n');
+
+    expect(() => changelogAPI.getChangelogData()).toThrow(
+      /Invalid changelog entry .*next\/broken\.yml: kind and description are required/
+    );
+  });
 });

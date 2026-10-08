@@ -24,11 +24,12 @@ branch contains several independent user-visible changes, add one entry for each
 
 ## How to add an entry
 
-Run the non-interactive form. Never run `strangelog add` without flags: it opens interactive
+Run the non-interactive form through the project's package manager (`yarn strangelog`,
+`npm exec strangelog` or `pnpm strangelog`); the examples use yarn. Never run `strangelog add` without flags: it opens interactive
 prompts and waits for a terminal.
 
 ```sh
-npx strangelog add --kind fix --component api --description "Login no longer fails for e-mail addresses with a plus sign"
+yarn strangelog add --kind fix --component api --description "Login no longer fails for e-mail addresses with a plus sign"
 ```
 
 - `--kind` (`-k`): one of `addition`, `change`, `fix`, `removal`, `deprecation`, `security`, or a
@@ -67,16 +68,16 @@ with your change.
 - Do not run `strangelog bump` or change the project version unless you are explicitly asked to
   prepare a release.
 - Do not edit a generated `CHANGELOG.md` by hand. If the project commits it, regenerate it with
-  `npx strangelog generate --outFile CHANGELOG.md` only when asked.
+  `yarn strangelog generate --outFile CHANGELOG.md` only when asked.
 - Do not create entry files by hand; the file name format is part of the tool's contract.
 
 ## Other commands
 
-- `npx strangelog generate --outFile CHANGELOG.md`: render all entries to Markdown.
-  `npx strangelog generate --version 1.2.3 --outFile -` prints the section of one version.
-- `npx strangelog bump --auto`: release `next/` as the next SemVer version (major for any `change`,
+- `yarn strangelog generate --outFile CHANGELOG.md`: render all entries to Markdown.
+  `yarn strangelog generate --version 1.2.3 --outFile -` prints the section of one version.
+- `yarn strangelog bump --auto`: release `next/` as the next SemVer version (major for any `change`,
   minor for any `addition`, patch otherwise), based on the `version` in `package.json`. Only when
   asked to release.
-- `npx strangelog rename-component <from> <to>`: move all entries of a component to another one
+- `yarn strangelog rename-component <from> <to>`: move all entries of a component to another one
   (`<to>` must exist in `.strangelogrc`). Only when asked to rename or merge components.
-- `npx strangelog migrate`: update old changelog files after upgrading strangelog.
+- `yarn strangelog migrate`: update old changelog files after upgrading strangelog.
